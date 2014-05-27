@@ -14,6 +14,8 @@ class Submission < ActiveRecord::Base
   has_many :submission_metrics, dependent: :delete_all
   accepts_nested_attributes_for :submission_metrics
 
+  before_create :seed_metrics!
+
   def seed_metrics!
     return if self.submission_metrics.any?
 

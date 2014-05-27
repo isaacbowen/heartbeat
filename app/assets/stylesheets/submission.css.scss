@@ -38,11 +38,24 @@
     margin: 0.5em;
   }
 
+  .rating-bookend {
+    display: inline-block;
+    font-size: 1.4em;
+    color: #888;
+
+    &:first-child {
+      margin-right: 0.5em;
+    }
+
+    &:last-child {
+      margin-left: 0.5em;
+    }
+  }
+
   .rating-option {
     display: inline-block;
     position: relative;
     vertical-align: middle;
-    width: 20%;
 
     input {
       opacity: 0;
@@ -65,7 +78,7 @@
       z-index: 100;
       background: #266ACC;
       border-radius: 2px;
-      color: rgba(#fff, 0.9);
+      color: rgba(#fff, 0.8);
       font-weight: bold;
       font-size: 1.4em;
       padding: 0 1em;
@@ -86,6 +99,7 @@
       height: 50px;
       line-height: 50px;
       text-shadow: 0 1px 1px rgba(#000, 0.5);
+      color: rgba(#fff, 0.95);
     }
   }
 
