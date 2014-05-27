@@ -3,7 +3,7 @@
 # Table name: users
 #
 #  id              :uuid             not null, primary key
-#  name            :text             not null
+#  name            :text
 #  email           :text             not null
 #  manager_user_id :uuid
 #  manager_email   :text

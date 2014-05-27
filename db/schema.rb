@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140527163553) do
 
   create_table "submissions", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "user_id"
+    t.string   "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

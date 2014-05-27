@@ -35,6 +35,8 @@ class Bootstrap < ActiveRecord::Migration
       t.uuid :user_id
       t.foreign_key :users
 
+      t.string :comments
+
       t.timestamps
     end
 
