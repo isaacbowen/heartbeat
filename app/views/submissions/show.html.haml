@@ -8,12 +8,15 @@
       %a Forget something?
 
   = form_for current_submission, html: {class: ['submission-form', ('complete' if current_submission.complete?)].join(' ')} do |f|
-    %p.submission-prompt How are we doing?
+    %p.submission-prompt
+      #{f.object.submission_metrics.count.to_words.capitalize} metrics. How are we doing?
 
-    = f.fields_for :submission_metrics do |mf|
+    = f.fields_for :submission_metrics, f.object.submission_metrics.join(:metrics).order('metrics.order') do |mf|
       .metric
-        .metric-name= mf.object.name
-        .rating
+        .metric-name
+          = mf.object.name
+        .metric-description= mf.object.description
+        %div{class: "rating #{'rated' if mf.object.rating.present?}"}
           .rating-bookend
             = icon 'thumbs-o-down fa-flip-horizontal'
           .rating-option

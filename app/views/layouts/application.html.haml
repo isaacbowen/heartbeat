@@ -15,5 +15,5 @@
       %header
         %div.logo Heartbeat
         - if current_user
-          %div.user for #{current_user.name}
+          %div.user for #{current_user.name.presence || current_user.email}
       .content= yield

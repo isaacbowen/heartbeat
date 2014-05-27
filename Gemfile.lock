@@ -71,6 +71,9 @@ GEM
     mime-types (1.25.1)
     minitest (5.3.4)
     multi_json (1.10.1)
+    numbers_and_words (0.10.0)
+      activesupport
+      i18n
     pg (0.17.1)
     polyglot (0.3.4)
     rack (1.5.2)
@@ -153,6 +156,7 @@ DEPENDENCIES
   groupdate
   haml
   jquery-rails
+  numbers_and_words
   pg
   rails (= 4.1.1)
   rspec-rails

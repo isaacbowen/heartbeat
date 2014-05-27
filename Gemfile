@@ -12,6 +12,7 @@ gem 'haml'
 gem 'chartkick'
 gem 'groupdate'
 gem 'stamp'
+gem 'numbers_and_words'
 
 gem 'jquery-rails'
 

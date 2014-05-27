@@ -30,6 +30,17 @@
   .metric-name {
     font-size: 1.2em;
     color: #555;
+
+    .count {
+      color: #bbb;
+      font-size: 0.9em;
+      margin-left: 0.5em;
+      display: inline;
+    }
+  }
+
+  .metric-description {
+    color: #999;
   }
 
   .rating {
@@ -56,6 +67,8 @@
     display: inline-block;
     position: relative;
     vertical-align: middle;
+
+    transition: all 0.1s;
 
     input {
       opacity: 0;
@@ -94,12 +107,21 @@
     }
 
     input:checked + label {
-      background: lighten(#266ACC, 10%);
-      border-color: #266ACC;
       height: 50px;
       line-height: 50px;
       text-shadow: 0 1px 1px rgba(#000, 0.5);
       color: rgba(#fff, 0.95);
+      box-shadow: inset 0 -4px 5px -3px rgba(#000, 0.2);
+    }
+  }
+
+  .rating.rated .rating-option {
+    label {
+      opacity: 0.6;
+    }
+
+    input:checked + label {
+      opacity: 1;
     }
   }
 
