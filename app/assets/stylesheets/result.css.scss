@@ -1,0 +1,23 @@
+.result {
+  .timeframe {
+    font-style: italic;
+    margin-bottom: 1em;
+  }
+}
+
+.result-metric {
+  h1 {
+    font-weight: bold;
+  }
+
+  .count {
+    font-style: italic;
+    color: #888;
+  }
+}
+
+.result-metric + .result-metric {
+  padding-top: 2em;
+  margin-top: 2em;
+  border-top: 1px #ccc solid;
+}

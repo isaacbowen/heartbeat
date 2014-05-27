@@ -1,0 +1,9 @@
+.result
+  %p.timeframe Week of #{@result.start_time.format_like 'August 4, 2014'}
+
+  - @result.ratings_by_metric.each do |metric, counts|
+    %section.result-metric
+      %h1= metric.name
+      %p.count= pluralize counts.map(&:last).sum, 'rating'
+
+      = column_chart counts

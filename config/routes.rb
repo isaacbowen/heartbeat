@@ -4,4 +4,7 @@ Rails.application.routes.draw do
 
   resources :submissions, only: [:show, :update]
 
+  get 'results', to: 'results#index'
+  get 'results/:start_date-:end_date', to: 'results#show'
+
 end

@@ -12,6 +12,8 @@ class Submission < ActiveRecord::Base
 
   belongs_to :user
   has_many :submission_metrics, dependent: :delete_all
+  has_many :metrics, through: :submission_metrics
+
   accepts_nested_attributes_for :submission_metrics
 
   before_create :seed_metrics!
