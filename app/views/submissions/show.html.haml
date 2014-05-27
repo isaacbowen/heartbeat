@@ -37,6 +37,22 @@
           .comments-input
             = mf.text_area :comments, placeholder: 'More to say about this one?'
 
+    - unless current_submission.user.name.present?
+      = f.fields_for :user do |uf|
+        .user-name
+          %label
+            What's your name?
+            %em You'll only get asked this once.
+          = uf.text_field :name
+
+    - unless current_submission.user.manager_email.present?
+      = f.fields_for :user do |uf|
+        .user-manager
+          %label
+            What's your manager's email address?
+            %em You'll only get asked this once.
+          = uf.text_field :manager_email, placeholder: 'foo@bar.com', type: :email
+
     .submission-submit= f.submit 'Submit'
 
     .submission-disclaimer

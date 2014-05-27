@@ -3,7 +3,7 @@ class Bootstrap < ActiveRecord::Migration
     enable_extension 'uuid-ossp'
 
     create_table :users, id: :uuid do |t|
-      t.text :name, null: false
+      t.text :name
       t.text :email, null: false
 
       t.uuid :manager_user_id

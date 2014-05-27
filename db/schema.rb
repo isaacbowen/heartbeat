@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20140527163553) do
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.text     "name",                            null: false
+    t.text     "name"
     t.text     "email",                           null: false
     t.uuid     "manager_user_id"
     t.text     "manager_email"

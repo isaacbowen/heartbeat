@@ -15,6 +15,7 @@ class Submission < ActiveRecord::Base
   has_many :metrics, through: :submission_metrics
 
   accepts_nested_attributes_for :submission_metrics
+  accepts_nested_attributes_for :user, update_only: true
 
   before_create :seed_metrics!
 

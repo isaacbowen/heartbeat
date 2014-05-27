@@ -118,6 +118,20 @@
     padding: 0.5em 0;
   }
 
+  .user-manager, .user-name {
+    margin: 1em 0;
+
+    em {
+      display: block;
+      color: #888;
+      font-style: italic;
+    }
+
+    input {
+      margin-top: 0.5em;
+    }
+  }
+
   .submission-submit {
     margin: 1.5em 0 2em;
 

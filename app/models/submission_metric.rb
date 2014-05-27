@@ -20,4 +20,10 @@ class SubmissionMetric < ActiveRecord::Base
     rating.present?
   end
 
+  def rating= value
+    if [1, 2, 3, 4].include? value.to_i
+      self[:rating] = value.to_i
+    end
+  end
+
 end

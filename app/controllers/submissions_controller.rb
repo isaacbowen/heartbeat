@@ -6,7 +6,7 @@ class SubmissionsController < ApplicationController
   end
 
   def update
-    current_submission.update_attributes! params.require(:submission).permit(:comments, submission_metrics_attributes: [:id, :rating, :comments])
+    current_submission.update_attributes! submission_params
 
     redirect_to current_submission
   end
@@ -20,6 +20,12 @@ class SubmissionsController < ApplicationController
 
   def current_user
     current_submission.user
+  end
+
+  def submission_params
+    params.require(:submission).permit(:comments,
+                                       submission_metrics_attributes: [:id, :rating, :comments],
+                                       user_attributes: [:name, :manager_email])
   end
 
 end

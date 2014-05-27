@@ -6,4 +6,4 @@
       %h1= metric.name
       %p.count= pluralize counts.map(&:last).sum, 'rating'
 
-      = column_chart counts
+      = column_chart counts, library: {hAxis: {title: 'Ratings'}, vAxis: {title: 'Counts'}}

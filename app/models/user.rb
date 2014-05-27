@@ -15,5 +15,17 @@
 class User < ActiveRecord::Base
 
   has_many :submissions, dependent: :destroy
+  belongs_to :manager_user, class_name: 'User'
+
+  before_save :set_manager_user
+
+
+  protected
+
+  def set_manager_user
+    if manager_email.present?
+      self.manager_user = User.find_by_email(manager_email)
+    end
+  end
 
 end
