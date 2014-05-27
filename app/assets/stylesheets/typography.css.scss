@@ -1,0 +1,25 @@
+body {
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+body, select, input, textarea {
+  color: #333;
+}
+
+a {
+  color: #03f;
+  text-decoration: underline;
+
+  &:hover {
+    color: #69f;
+  }
+}
+
+p {
+  line-height: 1.4em;
+
+  & + p {
+    margin: 1em;
+  }
+}

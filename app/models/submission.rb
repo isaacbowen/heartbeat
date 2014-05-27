@@ -12,5 +12,18 @@ class Submission < ActiveRecord::Base
 
   belongs_to :user
   has_many :submission_metrics, dependent: :delete_all
+  accepts_nested_attributes_for :submission_metrics
+
+  def seed_metrics!
+    return if self.submission_metrics.any?
+
+    self.submission_metrics = Metric.active.map do |metric|
+      SubmissionMetric.new metric: metric
+    end
+  end
+
+  def complete?
+    submission_metrics.present? and submission_metrics.all? &:complete?
+  end
 
 end

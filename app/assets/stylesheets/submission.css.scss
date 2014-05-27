@@ -1,0 +1,125 @@
+.submission {
+}
+
+.submission-toggle {
+  cursor: pointer;
+  padding: 0.5em;
+
+  a {
+    color: #999;
+  }
+}
+
+.submission-form {
+  &.complete {
+    display: none;
+  }
+
+  .submission-prompt {
+    color: #555;
+    margin-bottom: 1.5em;
+    font-style: italic;
+  }
+
+  .metric + input[type=hidden] + .metric {
+    margin-top: 1em;
+    border-top: 1px #ddd solid;
+    padding-top: 1em;
+  }
+
+  .metric-name {
+    font-size: 1.2em;
+    color: #555;
+  }
+
+  .rating {
+    height: 50px;
+    line-height: 50px;
+    margin: 0.5em;
+  }
+
+  .rating-option {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    width: 20%;
+
+    input {
+      opacity: 0;
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 200;
+    }
+
+    label {
+      margin: 0;
+      padding: 1em;
+      display: block;
+      position: relative;
+      z-index: 100;
+      background: #266ACC;
+      border-radius: 2px;
+      color: rgba(#fff, 0.9);
+      font-weight: bold;
+      font-size: 1.4em;
+      padding: 0 1em;
+      border: 1px darken(#266ACC, 10%) solid;
+
+      height: 40px;
+      line-height: 40px;
+
+      transition: all 0.1s;
+
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+    }
+
+    input:checked + label {
+      background: lighten(#266ACC, 10%);
+      border-color: #266ACC;
+      height: 50px;
+      line-height: 50px;
+      text-shadow: 0 1px 1px rgba(#000, 0.5);
+    }
+  }
+
+  .comments-toggle {
+    cursor: pointer;
+    padding: 0.5em;
+
+    a {
+      color: #999;
+    }
+  }
+
+  .comments-toggle + .comments-input {
+    display: none;
+    overflow: hidden;
+    padding: 0.5em 0;
+  }
+
+  .submission-submit {
+    margin: 1.5em 0 2em;
+
+    input {
+      background: #48995C;
+      border: 1px darken(#48995C, 10%) solid;
+      color: rgba(#fff, 0.95);
+      font-weight: bold;
+      width: 50%;
+      padding: 1em;
+      text-shadow: 0 1px 1px rgba(#000, 0.5);
+    }
+  }
+
+  .submission-disclaimer {
+    color: #999;
+    font-size: 0.9em;
+  }
+}

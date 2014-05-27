@@ -1,0 +1,2 @@
+class MetaController < ApplicationController
+end

@@ -16,4 +16,6 @@ class Metric < ActiveRecord::Base
   has_many :submission_metrics
   has_many :submissions, through: :submission_metrics
 
+  scope :active, -> { where(active: true) }
+
 end

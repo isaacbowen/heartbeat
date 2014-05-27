@@ -14,4 +14,10 @@ class SubmissionMetric < ActiveRecord::Base
   belongs_to :submission
   belongs_to :metric
 
+  delegate :name, :description, to: :metric
+
+  def complete?
+    rating.present?
+  end
+
 end
