@@ -2,7 +2,5 @@ language: ruby
 rvm: 2.1.1
 bundler_args: --without production
 before_script:
-  - psql -c 'create user heartbeat;' -U postgres
-  - psql -c 'create database heartbeat_test;' -U postgres
-  - psql -c 'grant all privileges on database heartbeat_test to heartbeat;' -U postgres
-  - rake db:{migrate,seed}
+  - psql -c 'create user heartbeat with superuser;' -U postgres
+  - rake db:{create,migrate,seed}
