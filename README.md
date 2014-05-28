@@ -1,23 +1,19 @@
-heartbeat
-=========
+# Heartbeat
 
-metric
-- name
-- description
+Tool for getting simple health estimates for your organization from your users. Follow the data.
 
-user
-- name
-- email
-- manager_user_id
-- manager_email
+Released under the MIT License. Made possible by Enova (enova.com).
 
-submission
-- user_id
-- timestamps
-- comments
+## Roadmap
 
-submission_metrics
-- submission_id
-- metric_id
-- rating
-- comments
+### Done
+
+* Enable collection of user data
+
+### Not Done
+
+* Make it easy to request data from users
+* Map out and develop a useful presentation of the data by period
+* API for anonymized data?
+* Admin config for metrics
+* Generalize beyond Enova
