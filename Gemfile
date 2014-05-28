@@ -32,8 +32,5 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'webmock'
   gem 'vcr'
-end
-
-group :test do
-  gem 'codeclimate-test-reporter', group: :test, require: nil
+  gem 'codeclimate-test-reporter', require: nil
 end
