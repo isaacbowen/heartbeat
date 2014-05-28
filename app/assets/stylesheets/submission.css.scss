@@ -71,19 +71,11 @@
     transition: all 0.1s;
 
     input {
-      opacity: 0;
-      display: block;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 200;
+      display: none;
     }
 
     label {
+      cursor: pointer;
       margin: 0;
       padding: 1em;
       display: block;

@@ -27,4 +27,13 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'pry-rails'
+  gem 'capybara'
+  gem 'poltergeist'
+  gem 'database_cleaner'
+  gem 'webmock'
+  gem 'vcr'
+end
+
+group :test do
+  gem 'codeclimate-test-reporter', group: :test, require: nil
 end
