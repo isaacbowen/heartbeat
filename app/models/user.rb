@@ -15,16 +15,16 @@
 class User < ActiveRecord::Base
 
   has_many :submissions, dependent: :destroy
-  belongs_to :manager_user, class_name: 'User'
+  belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
 
-  before_save :set_manager_user
+  before_save :set_manager
 
 
   protected
 
-  def set_manager_user
+  def set_manager
     if manager_email.present?
-      self.manager_user = User.find_by_email(manager_email)
+      self.manager = User.find_by_email(manager_email)
     end
   end
 

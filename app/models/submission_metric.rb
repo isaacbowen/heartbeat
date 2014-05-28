@@ -11,8 +11,13 @@
 
 class SubmissionMetric < ActiveRecord::Base
 
+  VALID_RATINGS = [1, 2, 3, 4]
+
   belongs_to :submission
   belongs_to :metric
+
+  validates_presence_of :submission
+  validates_presence_of :metric
 
   delegate :name, :description, to: :metric
 
@@ -21,7 +26,7 @@ class SubmissionMetric < ActiveRecord::Base
   end
 
   def rating= value
-    if [1, 2, 3, 4].include? value.to_i
+    if VALID_RATINGS.include? value.to_i
       self[:rating] = value.to_i
     end
   end
