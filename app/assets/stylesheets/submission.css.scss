@@ -21,10 +21,10 @@
     font-style: italic;
   }
 
-  .metric + input[type=hidden] + .metric {
-    margin-top: 1em;
-    border-top: 1px #ddd solid;
-    padding-top: 1em;
+  .metric {
+    margin-bottom: 1.3em;
+    border-bottom: 1px #ddd solid;
+    padding-bottom: 1em;
   }
 
   .metric-name {
@@ -53,14 +53,8 @@
     display: inline-block;
     font-size: 1.4em;
     color: #888;
-
-    &:first-child {
-      margin-right: 0.5em;
-    }
-
-    &:last-child {
-      margin-left: 0.5em;
-    }
+    padding: 0 0.5em;
+    cursor: pointer;
   }
 
   .rating-option {
@@ -140,7 +134,7 @@
     padding: 0.5em 0;
   }
 
-  .user-manager, .user-name {
+  .user-manager, .user-name, .submission-comments {
     margin: 1em 0;
 
     em {
@@ -149,7 +143,7 @@
       font-style: italic;
     }
 
-    input {
+    input, textarea {
       margin-top: 0.5em;
     }
   }
@@ -165,6 +159,7 @@
       width: 50%;
       padding: 1em;
       text-shadow: 0 1px 1px rgba(#000, 0.5);
+      box-shadow: inset 0 -4px 5px -3px rgba(#000, 0.2);
     }
   }
 

@@ -17,7 +17,7 @@
           = mf.object.name
         .metric-description= mf.object.description
         %div{class: "rating #{'rated' if mf.object.rating.present?}"}
-          .rating-bookend
+          .rating-bookend.negative
             = icon 'thumbs-o-down fa-flip-horizontal'
           .rating-option
             = mf.radio_button :rating, 1
@@ -31,7 +31,7 @@
           .rating-option
             = mf.radio_button :rating, 4
             %label 4
-          .rating-bookend
+          .rating-bookend.positive
             = icon 'thumbs-o-up'
         .comments
           - if mf.object.comments.blank?
@@ -39,6 +39,11 @@
               %a More to say?
           .comments-input
             = mf.text_area :comments, placeholder: 'More to say about this one?'
+
+    .submission-comments
+      %label
+        Soapbox time. Any additional comments?
+        = f.text_area :comments
 
     - unless current_submission.user.name.present?
       = f.fields_for :user do |uf|
