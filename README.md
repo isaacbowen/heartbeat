@@ -1,5 +1,7 @@
 # Heartbeat
 
+Measure the health of your organization.
+
 1. Isolate/identify the core principles for your group.
    <br>_Transparency? Shared mission? Accountability?_
 2. Weekly heartbeat checks are sent every Friday morning. Or whatever.
@@ -16,11 +18,11 @@ Released under the [MIT License](LICENSE). Made possible by [Enova](http://enova
 
 ## Roadmap
 
-### Done
+### Did
 
 * Enable collection of user data
 
-### Not Done
+### Not Did
 
 * Make it easy to request data from users
 * Map out and develop a useful presentation of the data by period
