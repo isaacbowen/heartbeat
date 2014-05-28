@@ -1,4 +1,4 @@
-# Heartbeat [![Build Status](https://travis-ci.org/isaacbowen/heartbeat.svg?branch=master)](https://travis-ci.org/isaacbowen/heartbeat)
+# Heartbeat [![Build Status](https://travis-ci.org/isaacbowen/heartbeat.svg?branch=master)](https://travis-ci.org/isaacbowen/heartbeat) [![Code Climate](https://codeclimate.com/github/isaacbowen/heartbeat.png)](https://codeclimate.com/github/isaacbowen/heartbeat)
 
 Measure the health of your organization.
 
