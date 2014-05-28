@@ -1,0 +1,8 @@
+%h1 Import users
+
+%p We'll create user records for each email address. (Spam free, no email sent.)
+
+= form_tag [:import, :admin, :users] do |f|
+  = label_tag 'emails', 'Emails'
+  = text_area_tag 'emails', nil, rows: 5
+  .submit= submit_tag 'Submit'

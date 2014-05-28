@@ -9,7 +9,7 @@ feature 'User submits submission' do
     visit "/submissions/#{submission.id}"
 
     metrics.each do |metric|
-      expect(page).to have_text metric.name
+      page.should have_text metric.name
       find("label[title=\"Rate '#{metric.name}' a #{SubmissionMetric::VALID_RATINGS.sample}\"]").click
     end
 

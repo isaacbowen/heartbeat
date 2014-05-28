@@ -12,7 +12,13 @@ Rails.application.routes.draw do
   namespace :admin do
     root 'meta#root'
 
-    resources :users
+    resources :users do
+      collection do
+        get  'import', action: :import
+        post 'import', action: :import
+      end
+    end
+
     resources :metrics
   end
 

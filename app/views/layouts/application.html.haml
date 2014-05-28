@@ -16,4 +16,9 @@
         %div.logo Heartbeat
         - if current_user
           %div.user for #{current_user.name.presence || current_user.email}
+
+      - if flash.any?
+        - flash.each do |key, message|
+          %p{class: "flash flash-#{key}"}= message
+
       .content= yield
