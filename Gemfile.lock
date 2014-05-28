@@ -40,22 +40,14 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
-    diff-lcs (1.2.5)
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
     erubis (2.7.0)
     execjs (2.0.2)
-    factory_girl (4.4.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.4.1)
-      factory_girl (~> 4.4.0)
-      railties (>= 3.0.0)
     font-awesome-sass (4.1.0)
       sass (~> 3.2)
     foreigner (1.6.1)
-      activerecord (>= 3.0.0)
-    groupdate (2.1.1)
       activerecord (>= 3.0.0)
     haml (4.0.5)
       tilt
@@ -95,30 +87,12 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.3.2)
-    rspec-core (2.14.8)
-    rspec-expectations (2.14.5)
-      diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.14.6)
-    rspec-rails (2.14.2)
-      actionpack (>= 3.0)
-      activemodel (>= 3.0)
-      activesupport (>= 3.0)
-      railties (>= 3.0)
-      rspec-core (~> 2.14.0)
-      rspec-expectations (~> 2.14.0)
-      rspec-mocks (~> 2.14.0)
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.2.0)
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
-    shoulda (3.5.0)
-      shoulda-context (~> 1.0, >= 1.0.1)
-      shoulda-matchers (>= 1.4.1, < 3.0)
-    shoulda-context (1.2.1)
-    shoulda-matchers (2.6.1)
-      activesupport (>= 3.0.0)
     spring (1.1.3)
     sprockets (2.11.0)
       hike (~> 1.2)
@@ -150,18 +124,14 @@ DEPENDENCIES
   chartkick
   coffee-rails (~> 4.0.0)
   dotenv
-  factory_girl_rails
   font-awesome-sass
   foreigner
-  groupdate
   haml
   jquery-rails
   numbers_and_words
   pg
   rails (= 4.1.1)
-  rspec-rails
   sass-rails (~> 4.0.3)
-  shoulda
   spring
   stamp
   uglifier (>= 1.3.0)

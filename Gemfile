@@ -10,7 +10,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'haml'
 gem 'chartkick'
-gem 'groupdate'
 gem 'stamp'
 gem 'numbers_and_words'
 
@@ -23,7 +22,4 @@ end
 
 group :development, :test do
   gem 'dotenv'
-  gem 'rspec-rails'
-  gem 'shoulda'
-  gem 'factory_girl_rails'
 end
