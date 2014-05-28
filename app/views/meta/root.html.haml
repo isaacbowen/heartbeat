@@ -1,1 +1,6 @@
 %p Why hello there.
+
+= form_tag :hit_me do
+  %form
+    Email?
+    = email_field :user, :email, placeholder: 'foobar@enova.com'

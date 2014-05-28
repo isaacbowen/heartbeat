@@ -2,11 +2,11 @@ class UserMailer < ActionMailer::Base
 
   default from: 'ibowen@enova.com'
 
-  def submission_created user, submission
-    @user = user
+  def submission_created submission
+    @user = submission.user
     @submission = submission
 
-    mail to: user.email, subject: 'Invitation to Heartbeat'
+    mail to: @user.email, subject: 'Invitation to Heartbeat'
   end
 
 end
