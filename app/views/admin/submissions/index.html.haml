@@ -1,0 +1,6 @@
+%h1 Submissions
+
+%p Not a ton here. Mostly just this button which will email all #{User.count} of your users with a submission link.
+
+= form_tag [:batch, :admin, :submissions] do
+  = submit_tag 'Request from all users'

@@ -21,10 +21,10 @@ Released under the [MIT License](LICENSE). Made possible by [Enova](http://enova
 ### Did
 
 * Enable collection of user data
+* Make it easy to request data from users
 
 ### Not Did
 
-* Make it easy to request data from users
 * Map out and develop a useful presentation of the data by period
 * API for anonymized data?
 * Admin config for metrics

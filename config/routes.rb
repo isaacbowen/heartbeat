@@ -19,7 +19,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :metrics
+    resources :submissions do
+      collection do
+        post 'batch', action: :batch
+      end
+    end
   end
 
 end
