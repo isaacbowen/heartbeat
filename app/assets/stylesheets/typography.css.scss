@@ -18,8 +18,8 @@ a {
 }
 
 p {
-  & + p {
-    margin: 1em;
+  & + p, & + ul {
+    margin-top: 1em;
   }
 }
 
