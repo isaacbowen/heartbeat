@@ -1,6 +1,16 @@
-%p Why hello there.
+.prose
+  %p
+    %strong Goal: Monitor our own collective pulse on a few core metrics.
+
+  %p We'll do this by hitting you up every Friday morning for a ten-second review. Couple clicks, that's it. (You'll have the chance to add more comments too, if you want.)
+
+  %p The data belongs to you. We'll publish anonymized summaries every Monday morning.
+
+%hr
 
 = form_tag :hit_me do
+  .prose
+    %p You'll automatically be invited to contribute on Friday morning, but feel free to score the organization at any time. Start with your email address:
   %form
-    Email?
-    = email_field :user, :email, placeholder: 'foobar@enova.com'
+    %div= email_field :user, :email, placeholder: 'foobar@enova.com'
+    .submit= submit_tag 'Request a survey link'

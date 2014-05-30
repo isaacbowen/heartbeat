@@ -14,11 +14,21 @@
     .container
       %header
         %div.logo Heartbeat
-        - if current_user
-          %div.user for #{current_user.name.presence || current_user.email}
+        %div.user
+          for
+          - if current_user
+            #{current_user.name.presence || current_user.email}
+          - else
+            Enova
 
       - if flash.any?
-        - flash.each do |key, message|
-          %p{class: "flash flash-#{key}"}= message
+        .flashes
+          - flash.each do |key, message|
+            %div{class: "flash flash-#{key}"}
+              %p= message
+              .close= icon 'times'
 
       .content= yield
+
+      %footer
+        %p= link_to 'Heartbeat on Github', 'https://github.com/isaacbowen/github'

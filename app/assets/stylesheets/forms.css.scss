@@ -11,7 +11,7 @@ input[type=submit] {
   border: 1px darken(#48995C, 10%) solid;
   color: rgba(#fff, 0.95);
   font-weight: bold;
-  width: 50%;
+  min-width: 50%;
   padding: 1em;
   text-shadow: 0 1px 1px rgba(#000, 0.5);
   box-shadow: inset 0 -4px 5px -3px rgba(#000, 0.2);

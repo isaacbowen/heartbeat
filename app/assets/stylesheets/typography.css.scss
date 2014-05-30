@@ -28,3 +28,15 @@ h1 {
   color: #555;
   margin-bottom: 1em;
 }
+
+hr {
+  margin: 1.5em 0.5em 2em;
+  border: 0;
+  background: 0;
+  border-top: 1px #ccc solid;
+}
+
+.prose {
+  text-align: left;
+  margin-bottom: 1em;
+}

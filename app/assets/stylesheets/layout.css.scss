@@ -1,17 +1,20 @@
 body {
   background: #fafafa;
+  margin: 0;
+  padding: 0;
 }
 
 body > .container {
-  margin: 1em auto;
-  padding: 1em;
-  background: #fff;
   text-align: center;
-
-  max-width: 600px;
+  margin: 0 auto;
 
   > header {
-    margin-bottom: 1em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1em;
 
     .logo {
       font-size: 1.4em;
@@ -24,10 +27,46 @@ body > .container {
     }
   }
 
-  .flash {
-    background: #ffface;
-    padding: 0.5em;
-    margin: 1em 0;
-    box-radius: 3px;
+  .flashes {
+    .flash {
+      background: #ffface;
+      padding: 0.5em;
+      margin: 0 0 1em 0;
+      box-radius: 3px;
+    }
+  }
+
+  > .content {
+    position: relative;
+    z-index: 200;
+    padding: 1em 1em 2em;
+    margin-top: 60px;
+    background: #fff;
+    border-radius: 3px;
+    border-top: 1px #eee solid;
+    box-shadow: 0 0 2px rgba(#000, 0.1);
+  }
+
+  > footer {
+    padding: 1em;
+    font-size: 0.9em;
+
+    a {
+      color: #999;
+    }
+  }
+
+  @media (min-width: 600px) {
+    max-width: 600px;
+
+    > header {
+      position: static;
+    }
+
+    > .content {
+      position: static;
+      margin-top: 0;
+      border: 1px #eee solid;
+    }
   }
 }
