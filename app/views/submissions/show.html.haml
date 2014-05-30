@@ -53,7 +53,7 @@
             %em You'll only get asked this once.
           = uf.text_field :manager_email, placeholder: 'foo@bar.com', type: :email
 
-    .submission-submit= f.submit 'Submit'
+    .submission-submit= f.submit(f.object.complete? ? 'Update' : 'Submit')
 
     .submission-disclaimer
       %p On Monday, the aggregate and anonymized results (including any written notes) will be publicly posted.
