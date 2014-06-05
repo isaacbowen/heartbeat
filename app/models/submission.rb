@@ -20,9 +20,9 @@ class Submission < ActiveRecord::Base
 
   validates_presence_of :user
 
-  before_create :seed_metrics!
+  before_save :set_complete
 
-  def seed_metrics!
+  def seed_metrics
     return if self.submission_metrics.any?
 
     self.submission_metrics = Metric.active.map do |metric|
@@ -30,8 +30,11 @@ class Submission < ActiveRecord::Base
     end
   end
 
-  def complete?
-    submission_metrics.present? and submission_metrics.all? &:complete?
+  protected
+
+  def set_complete
+    self.completed = submission_metrics.required.all? &:complete?
+    self.completed_at = Time.zone.now
   end
 
 end

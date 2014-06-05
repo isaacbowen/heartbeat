@@ -4,15 +4,8 @@ class MetaController < ApplicationController
   end
 
   def hit_me
-    if params[:user][:email] =~ /@enova\.com$/
-      submission = User.where(email: params[:user][:email]).first_or_create.submissions.create
-
-      if Rails.env.production?
-        UserMailer.submission_created(submission).deliver
-        redirect_to :root
-      else
-        redirect_to submission
-      end
+    if Rails.env.development?
+      redirect_to User.where(email: params[:user][:email]).first_or_create.submissions.create
     else
       redirect_to :root
     end

@@ -6,11 +6,12 @@
 
   %p The data belongs to you. We'll publish anonymized summaries every Monday morning.
 
-%hr
+- if Rails.env.development?
+  %hr
 
-= form_tag :hit_me do
-  .prose
-    %p You'll automatically be invited to contribute on Friday morning, but feel free to score the organization at any time. Start with your email address:
-  %form
-    %div= email_field :user, :email, placeholder: 'foobar@enova.com'
-    .submit= submit_tag 'Request a survey link'
+  = form_tag :hit_me do
+    .prose
+      %p Dev mode! Need a survey?
+    %form
+      %div= email_field :user, :email, placeholder: 'foobar@enova.com'
+      .submit= submit_tag 'Yes.'

@@ -9,14 +9,11 @@ class Bootstrap < ActiveRecord::Migration
       t.uuid :manager_user_id
       t.text :manager_email
 
-      t.boolean :admin, default: false
-
       t.timestamps
     end
 
     add_index :users, :manager_user_id
     add_index :users, :email, unique: true
-    add_index :users, :admin
 
 
     create_table :metrics, id: :uuid do |t|
@@ -24,16 +21,20 @@ class Bootstrap < ActiveRecord::Migration
       t.text :description, null: false
       t.integer :order
       t.boolean :active, default: true
+      t.boolean :required, default: false
 
       t.timestamps
     end
 
-    add_index :metrics, [:active, :order]
+    add_index :metrics, [:active, :required, :order]
 
 
     create_table :submissions, id: :uuid do |t|
       t.uuid :user_id
       t.foreign_key :users
+
+      t.boolean :complete, default: false
+      t.timestamp :completed_at
 
       t.string :comments
 
