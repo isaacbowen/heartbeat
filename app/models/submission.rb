@@ -20,8 +20,17 @@ class Submission < ActiveRecord::Base
 
   validates_presence_of :user
 
-  before_save :set_completed
   before_create :seed_metrics!
+
+
+  include CompletedConcern
+
+  completed_with -> {
+    submission_metrics.present? and
+    submission_metrics.any? &:completed? and
+    submission_metrics.required.all? &:completed?
+  }
+
 
   def seed_metrics!
     return if self.submission_metrics.any?
@@ -29,22 +38,6 @@ class Submission < ActiveRecord::Base
     self.submission_metrics = Metric.active.map do |metric|
       SubmissionMetric.new metric: metric
     end
-  end
-
-  def completed?
-    submission_metrics.present? and submission_metrics.any? &:completed? and submission_metrics.required.all? &:completed?
-  end
-
-
-  protected
-
-  def set_completed
-    if self.completed = completed?
-      self.completed_at = Time.zone.now
-    end
-
-    # "onwards", said the callback
-    true
   end
 
 end

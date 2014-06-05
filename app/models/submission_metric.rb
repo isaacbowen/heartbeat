@@ -26,26 +26,14 @@ class SubmissionMetric < ActiveRecord::Base
 
   delegate :name, :description, :required?, to: :metric
 
+  include CompletedConcern
+  completed_with -> { rating.present? }
+
+
   def rating= value
     if VALID_RATINGS.include? value.to_i
       self[:rating] = value.to_i
     end
-  end
-
-  def completed?
-    rating.present?
-  end
-
-
-  protected
-
-  def set_completed
-    if self.completed = completed?
-      self.completed_at = Time.zone.now
-    end
-
-    # "onwards", said the callback
-    true
   end
 
 end
