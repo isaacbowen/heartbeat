@@ -16,7 +16,8 @@ class Metric < ActiveRecord::Base
   has_many :submission_metrics
   has_many :submissions, through: :submission_metrics
 
-  scope :active, -> { where(active: true) }
-  scope :ordered, -> { order('"order" asc') }
+  scope :active,   -> { where(active: true) }
+  scope :required, -> { where(required: true) }
+  scope :ordered,  -> { order('"order" asc') }
 
 end

@@ -16,8 +16,9 @@ gem 'numbers_and_words'
 gem 'jquery-rails'
 
 group :development do
-  gem 'spring'
   gem 'annotate'
+  gem 'spring'
+  gem 'spring-commands-rspec'
 end
 
 group :development, :test do

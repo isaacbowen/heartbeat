@@ -11,7 +11,7 @@
 
   = form_tag :hit_me do
     .prose
-      %p Dev mode! Need a survey?
+      %p <strong>Dev mode!</strong> Need a survey to test?
     %form
       %div= email_field :user, :email, placeholder: 'foobar@enova.com'
       .submit= submit_tag 'Yes.'

@@ -16,15 +16,6 @@ describe Submission do
       submission.submission_metrics.map(&:metric).should == Metric.active.all
     end
 
-    it 'should be invoked as part of creation' do
-      submission = build :submission
-      submission.submission_metrics.should be_empty
-
-      submission.save!
-
-      submission.submission_metrics.should_not be_empty
-    end
-
     context 'when submission metrics already exist' do
       it 'should do pretty much nothing' do
         submission = build :submission
@@ -37,32 +28,65 @@ describe Submission do
     end
   end
 
-  describe '#complete?' do
-
+  describe '#completed?' do
     it 'should jive with our factories' do
-      create(:submission).should_not be_complete
-      create(:completed_submission).should be_complete
+      create(:submission).should_not be_completed
+      create(:completed_submission).should be_completed
+    end
+
+    it 'should be committed when saved' do
+      submission = build :completed_submission
+      submission[:completed].should be_false
+
+      submission.should_receive(:set_completed).and_call_original
+
+      submission.save!
+      submission[:completed].should be_true
     end
 
     context 'with no submission metrics' do
       it 'should be incomplete' do
-        submission = build :submission, submission_metrics: []
+        submission = create :submission, submission_metrics: []
+
         submission.submission_metrics.should be_empty
-        submission.should_not be_complete
+        submission.should_not be_completed
       end
     end
 
-    context 'with some incomplete metrics' do
+    context 'with no required metrics' do
+      context 'with at least one complete metric' do
+        it 'should be complete' do
+          submission = create :submission, submission_metrics: build_list(:submission_metric, 5)
+          submission.submission_metrics << build(:completed_submission_metric)
+
+          submission.should be_completed
+        end
+      end
+
+      context 'with none complete' do
+        it 'should be incomplete' do
+          submission = create :submission, submission_metrics: build_list(:submission_metric, 5)
+
+          submission.should_not be_completed
+        end
+      end
+    end
+
+    context 'with some incomplete required metrics' do
       it 'should be incomplete' do
-        submission = build :submission, submission_metrics: build_list(:submission_metric, 5)
-        submission.should_not be_complete
+        submission = create :submission, submission_metrics: build_list(:submission_metric, 5)
+        submission.submission_metrics << build(:required_submission_metric)
+
+        submission.should_not be_completed
       end
     end
 
-    context 'with some complete metrics' do
+    context 'with some complete required metrics' do
       it 'should be complete' do
-        submission = build :submission, submission_metrics: build_list(:completed_submission_metric, 5)
-        submission.should be_complete
+        submission = create :submission, submission_metrics: build_list(:completed_submission_metric, 5)
+        submission.submission_metrics << create(:required_submission_metric, rating: 4)
+
+        submission.should be_completed
       end
     end
 

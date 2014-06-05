@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root 'meta#root'
 
   # temporary haaaack
-  post '/hit-me', to: 'meta#hit_me'
+  if Rails.env.development?
+    post '/hit-me', to: 'meta#hit_me'
+  end
 
   resources :submissions, only: [:show, :update]
 

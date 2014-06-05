@@ -20,8 +20,8 @@ class Bootstrap < ActiveRecord::Migration
       t.text :name, null: false
       t.text :description, null: false
       t.integer :order
-      t.boolean :active, default: true
-      t.boolean :required, default: false
+      t.boolean :active, null: false, default: true
+      t.boolean :required, null: false, default: false
 
       t.timestamps
     end
@@ -33,7 +33,7 @@ class Bootstrap < ActiveRecord::Migration
       t.uuid :user_id
       t.foreign_key :users
 
-      t.boolean :complete, default: false
+      t.boolean :completed, null: false, default: false
       t.timestamp :completed_at
 
       t.string :comments
@@ -54,6 +54,9 @@ class Bootstrap < ActiveRecord::Migration
 
       t.integer :rating
       t.text :comments
+
+      t.boolean :completed, null: false, default: false
+      t.timestamp :completed_at
     end
 
     add_index :submission_metrics, [:submission_id, :metric_id]

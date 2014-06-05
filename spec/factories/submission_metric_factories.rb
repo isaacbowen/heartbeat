@@ -7,5 +7,9 @@ FactoryGirl.define do
       rating { SubmissionMetric::VALID_RATINGS.sample }
       comments { Faker::Lorem.sentence }
     end
+
+    factory :required_submission_metric do
+      metric { build :metric, required: true }
+    end
   end
 end

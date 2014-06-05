@@ -13,22 +13,39 @@ class SubmissionMetric < ActiveRecord::Base
 
   VALID_RATINGS = [1, 2, 3, 4]
 
+  scope :required,  -> { joins(:metric).where(metrics: {required: true}) }
+  scope :completed, -> { where(completed: true) }
+
   belongs_to :submission
   belongs_to :metric
 
   validates_presence_of :submission
   validates_presence_of :metric
 
-  delegate :name, :description, to: :metric
+  before_save :set_completed
 
-  def complete?
-    rating.present?
-  end
+  delegate :name, :description, :required?, to: :metric
 
   def rating= value
     if VALID_RATINGS.include? value.to_i
       self[:rating] = value.to_i
     end
+  end
+
+  def completed?
+    rating.present?
+  end
+
+
+  protected
+
+  def set_completed
+    if self.completed = completed?
+      self.completed_at = Time.zone.now
+    end
+
+    # "onwards", said the callback
+    true
   end
 
 end

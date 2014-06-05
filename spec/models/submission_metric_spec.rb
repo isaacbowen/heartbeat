@@ -4,12 +4,12 @@ describe SubmissionMetric do
 
   subject { create :submission_metric }
 
-  describe '#complete?' do
+  describe '#completed?' do
     it 'should be based on rating' do
       subject.stub(:rating) { nil }
-      subject.should_not be_complete
+      subject.should_not be_completed
       subject.stub(:rating) { 5 }
-      subject.should be_complete
+      subject.should be_completed
     end
   end
 

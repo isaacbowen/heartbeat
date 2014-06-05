@@ -15,7 +15,7 @@ feature 'User submits submission' do
 
     click_button 'Submit'
 
-    submission.reload.should be_complete
+    submission.reload.should be_completed
   end
 
 end
