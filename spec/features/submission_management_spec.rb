@@ -19,7 +19,7 @@ feature 'Submission management' do
       end
     end
 
-    click_button 'Request from all users'
+    click_button 'Request from all 50 users'
 
     Submission.count.should == 50
     Submission.pluck(:user_id).uniq.size.should == 50
