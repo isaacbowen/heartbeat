@@ -3,6 +3,13 @@ $ ->
     $(this).hide();
     $('.submission-form').slideDown('fast')
 
+  $metricList = $('<ul class="metrics-list"></ul>').insertBefore('.metrics.optional')
+  $('.metrics.optional .metric').hide().each ->
+    $name = $('<li></li>').text($('.metric-name', this).text()).appendTo($metricList)
+    $name.click =>
+      $(this).slideToggle('fast')
+      $name.toggleClass('expanded')
+
   $('.submission-form .rating-option').click ->
     $(this).closest('.rating').add(this).addClass('rated')
 

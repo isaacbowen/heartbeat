@@ -11,26 +11,17 @@
     %p.submission-prompt
       #{f.object.submission_metrics.count.to_words.capitalize} metrics. How are we doing?
 
-    = f.fields_for :submission_metrics, f.object.submission_metrics.join(:metrics).order('metrics.order') do |mf|
-      .metric
-        .metric-name
-          = mf.object.name
-        .metric-description= mf.object.description
-        %div{class: "rating #{'rated' if mf.object.rating.present?}"}
-          .rating-bookend.negative
-            = icon 'thumbs-o-down fa-flip-horizontal'
-          - SubmissionMetric::VALID_RATINGS.each do |i|
-            .rating-option
-              = mf.radio_button :rating, i
-              = mf.label :rating, i, value: i, title: "Rate '#{mf.object.name}' a #{i}"
-          .rating-bookend.positive
-            = icon 'thumbs-o-up'
-        .comments
-          - if mf.object.comments.blank?
-            .comments-toggle
-              %a More to say?
-          .comments-input
-            = mf.text_area :comments, placeholder: 'More to say about this one?'
+    .metrics.required
+      = f.fields_for :submission_metrics, f.object.submission_metrics.required.ordered do |mf|
+        = render partial: 'submission_metric_form', locals: {mf: mf}
+
+    %h2 More?
+    %p
+      %em Rate these if they were an important part of the last week.
+
+    .metrics.optional
+      = f.fields_for :submission_metrics, f.object.submission_metrics.optional.ordered do |mf|
+        = render partial: 'submission_metric_form', locals: {mf: mf}
 
     .submission-comments
       %label

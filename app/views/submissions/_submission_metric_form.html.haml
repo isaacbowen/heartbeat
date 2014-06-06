@@ -1,0 +1,19 @@
+%div{class: "metric #{'optional' unless mf.object.required?}"}
+  .metric-name
+    = mf.object.name
+  .metric-description= mf.object.description
+  %div{class: "rating #{'rated' if mf.object.rating.present?}"}
+    .rating-bookend.negative
+      = icon 'thumbs-o-down fa-flip-horizontal'
+    - SubmissionMetric::VALID_RATINGS.each do |i|
+      .rating-option
+        = mf.radio_button :rating, i
+        = mf.label :rating, i, value: i, title: "Rate '#{mf.object.name}' a #{i}"
+    .rating-bookend.positive
+      = icon 'thumbs-o-up'
+  .comments
+    - if mf.object.comments.blank?
+      .comments-toggle
+        %a More to say?
+    .comments-input
+      = mf.text_area :comments, placeholder: 'More to say about this one?'

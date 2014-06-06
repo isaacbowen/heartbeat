@@ -14,7 +14,9 @@ class SubmissionMetric < ActiveRecord::Base
   VALID_RATINGS = [1, 2, 3, 4]
 
   scope :required,  -> { joins(:metric).where(metrics: {required: true}) }
+  scope :optional,  -> { joins(:metric).where(metrics: {required: false}) }
   scope :completed, -> { where(completed: true) }
+  scope :ordered,   -> { joins(:metric).order('metrics.order asc') }
 
   belongs_to :submission
   belongs_to :metric
