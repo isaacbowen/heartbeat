@@ -9,7 +9,7 @@
 
   = form_for current_submission, html: {class: ['submission-form', ('complete' if current_submission.completed?)].join(' ')} do |f|
     %p.submission-prompt
-      #{f.object.submission_metrics.count.to_words.capitalize} metrics. How are we doing?
+      Think about the past week. For each of these metrics, what was your experience?
 
     .metrics.required
       = f.fields_for :submission_metrics, f.object.submission_metrics.required.ordered do |mf|
@@ -25,8 +25,9 @@
 
     .submission-comments
       %label
-        Soapbox time. Any additional comments?
-        = f.text_area :comments
+        Anything else to add?
+        %em Could be about this week, could be about Heartbeat itself.
+        = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
 
     - unless current_submission.user.name.present?
       = f.fields_for :user do |uf|
@@ -47,6 +48,6 @@
     .submission-submit= f.submit(f.object.completed? ? 'Update' : 'Submit')
 
     .submission-disclaimer
-      %p On Monday, the aggregate and anonymized results (including any written notes) will be publicly posted.
-
+      %p On Monday, the aggregated/anonymized ratings will be publicly posted. Written notes will be included with your name attached.
       %p This data belongs to you, and the more accurate your signal, the better the results for everyone.
+      %p (We'll be tuning how this works over time - feedback on all of this is very welcome.)

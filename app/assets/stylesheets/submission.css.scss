@@ -34,11 +34,13 @@
     padding-bottom: 1em;
 
     li {
+      @include noselect;
+
       display: inline-block;
       color: #999;
       text-decoration: underline;
       cursor: pointer;
-      margin: 0 1em;
+      margin: 0 0.5em;
       padding: 1em;
 
       &.expanded {
@@ -71,15 +73,11 @@
   }
 
   .rating {
+    @include noselect;
+
     height: 50px;
     line-height: 50px;
     margin: 0.5em;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
   }
 
   .rating-bookend {
@@ -150,6 +148,9 @@
   .comments-toggle + .comments-input {
     display: none;
     overflow: hidden;
+  }
+
+  .comments-input {
     padding: 0.5em 0;
   }
 

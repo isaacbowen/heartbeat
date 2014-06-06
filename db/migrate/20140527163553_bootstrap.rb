@@ -36,7 +36,7 @@ class Bootstrap < ActiveRecord::Migration
       t.boolean :completed, null: false, default: false
       t.timestamp :completed_at
 
-      t.string :comments
+      t.string :comments, limit: 140
 
       t.timestamps
     end
@@ -53,7 +53,7 @@ class Bootstrap < ActiveRecord::Migration
       t.foreign_key :metrics
 
       t.integer :rating
-      t.text :comments
+      t.text :comments, limit: 140
 
       t.boolean :completed, null: false, default: false
       t.timestamp :completed_at

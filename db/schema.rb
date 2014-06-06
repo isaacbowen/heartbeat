@@ -42,9 +42,9 @@ ActiveRecord::Schema.define(version: 20140527163553) do
 
   create_table "submissions", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "user_id"
-    t.boolean  "completed",    default: false, null: false
+    t.boolean  "completed",                default: false, null: false
     t.datetime "completed_at"
-    t.string   "comments"
+    t.string   "comments",     limit: 140
     t.datetime "created_at"
     t.datetime "updated_at"
   end

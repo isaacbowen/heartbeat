@@ -1,6 +1,6 @@
 $ ->
   $('.submission-toggle').click ->
-    $(this).hide();
+    $(this).hide()
     $('.submission-form').slideDown('fast')
 
   $metricList = $('<ul class="metrics-list"></ul>').insertBefore('.metrics.optional')
@@ -9,6 +9,9 @@ $ ->
     $name.click =>
       $(this).slideToggle('fast')
       $name.toggleClass('expanded')
+
+    if $(this).is('.completed')
+      $name.click()
 
   $('.submission-form .rating-option').click ->
     $(this).closest('.rating').add(this).addClass('rated')
@@ -32,5 +35,5 @@ $ ->
         $(this).closest('.rating').find(':radio:last').click()
 
   $('.submission-form .comments-toggle').click ->
-    $(this).hide();
+    $(this).hide()
     $(this).next('.comments-input').slideDown('fast')
