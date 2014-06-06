@@ -1,16 +1,20 @@
 .submission
   - if current_submission.completed?
-    %p
-      %strong Thanks for your submission - appreciate it.
+    .submission-thanks
+      %p
+        %strong Thanks for your submission - appreciate it.
+        %br
 
-    %p Results will be out on Monday. I'm still working on the aggregates, and the presentation thereof - if data analysis/visualization/presentation is something you love, hit up #{mail_to 'ibowen@enova.com'} and let's chat.
+      %p Results will be out on Monday.
+
+      %p.muted (I'm still working on the aggregates, and the presentation thereof - if data analysis/visualization/presentation is something you love, hit up #{mail_to 'ibowen@enova.com'} and let's chat.)
 
     %p.submission-toggle
       %a Forget something?
 
   = form_for current_submission, html: {class: ['submission-form', ('complete' if current_submission.completed?)].join(' ')} do |f|
     %p.submission-prompt
-      Think about the past week. For each of these metrics, what was your experience?
+      Think about the past week. For each of these measures, what was your experience?
 
     .metrics.required
       = f.fields_for :submission_metrics, f.object.submission_metrics.required.ordered do |mf|
