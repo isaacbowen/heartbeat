@@ -9,7 +9,7 @@ class UserMailer < ActionMailer::Base
     @submission = submission
     @domain = ENV['HEARTBEAT_DOMAIN']
 
-    mail to: @user.email, subject: @subject
+    mail to: @user.email, subject: @subject, from: @from
   end
 
 end

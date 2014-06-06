@@ -7,6 +7,9 @@
     = label_tag :subject
     = text_field_tag :subject
   %div.input
+    = label_tag :from
+    = text_field_tag :from
+  %div.input
     = label_tag :message
     = text_area_tag :message
   .submit= submit_tag "Request from all #{pluralize User.count, 'user'}"
