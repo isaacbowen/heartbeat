@@ -7,5 +7,9 @@ FactoryGirl.define do
     factory :inactive_metric do
       active false
     end
+
+    factory :required_metric do
+      required true
+    end
   end
 end
