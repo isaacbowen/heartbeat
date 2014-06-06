@@ -15,6 +15,8 @@ gem 'numbers_and_words'
 
 gem 'jquery-rails'
 
+gem 'newrelic_rpm' if ENV['NEWRELIC_KEY']
+
 group :development do
   gem 'annotate'
   gem 'spring'
