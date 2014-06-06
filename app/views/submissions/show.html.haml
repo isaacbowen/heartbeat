@@ -47,7 +47,7 @@
         .user-manager
           %label
             What's your manager's email address?
-            %em You'll only get asked this once.
+            %em You'll only get asked this once. Your ratings won't get sent to your manager; this will only be used to draw connections when analyzing data.
           = uf.text_field :manager_email, placeholder: 'foo@bar.com', type: :email
 
     .submission-submit= f.submit(f.object.completed? ? 'Update' : 'Submit')
