@@ -3,6 +3,9 @@ module CompletedConcern
 
   included do
     before_save :set_completed
+
+    scope :complete,   -> { where(completed: true) }
+    scope :incomplete, -> { where(completed: false) }
   end
 
 

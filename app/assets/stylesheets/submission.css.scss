@@ -18,8 +18,11 @@
   }
 
   h2 {
-    font-size: 1.2em;
-    color: #777;
+    margin-bottom: 0.25em;
+
+    + p > em {
+      color: #555;
+    }
   }
 
   .submission-prompt {

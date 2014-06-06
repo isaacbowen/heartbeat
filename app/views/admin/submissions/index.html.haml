@@ -1,6 +1,26 @@
 %h1 Submissions
 
-%p Not a ton here. Mostly just this button which will email all #{User.count} of your users with a submission link.
+%h2 Send out a batch
 
 = form_tag [:batch, :admin, :submissions] do
-  = submit_tag 'Request from all users'
+  %div.input
+    = label_tag :subject
+    = text_field_tag :subject
+  %div.input
+    = label_tag :message
+    = text_area_tag :message
+  .submit= submit_tag "Request from all #{pluralize User.count, 'user'}"
+
+%hr
+
+%h2= pluralize Submission.complete.count, 'complete submission'
+
+%ul
+  - Submission.complete.each do |submission|
+    %li #{submission.user.email} / #{link_to submission.id, submission}
+
+%h2= pluralize Submission.incomplete.count, 'incomplete submission'
+
+%ul
+  - Submission.incomplete.each do |submission|
+    %li #{submission.user.email} / #{link_to submission.id, submission}

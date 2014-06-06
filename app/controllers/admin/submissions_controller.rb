@@ -6,7 +6,7 @@ class Admin::SubmissionsController < Admin::BaseController
   def batch
     User.all.each do |user|
       submission = user.submissions.create!
-      UserMailer.submission_created(submission).deliver
+      UserMailer.submission_created(submission, params[:subject], params[:message]).deliver
     end
 
     flash.notice = "#{User.count} submission request(s) sent"
