@@ -11,7 +11,7 @@
       %h1= metric.name
       %p.count= pluralize counts.map(&:last).sum, 'rating'
 
-      .chart= column_chart counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '85%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
+      .chart= column_chart counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
 
       - submission_metrics.reject { |sm| sm.comments.blank? }.tap do |submission_metrics|
         - if submission_metrics.any?
