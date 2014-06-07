@@ -35,13 +35,17 @@ describe Submission do
     end
 
     it 'should be committed when saved' do
-      submission = build :completed_submission
+      submission = create :submission, submission_metrics: build_list(:submission_metric, 5)
+
       submission[:completed].should be_false
+      submission.should_not be_completed
 
-      submission.should_receive(:set_completed).and_call_original
-
+      submission.submission_metrics.each { |sm| sm.rating = 3; sm.save! }
+      submission.comments = 'foobar'
       submission.save!
+
       submission[:completed].should be_true
+      submission.should be_completed
     end
 
     context 'with no submission metrics' do

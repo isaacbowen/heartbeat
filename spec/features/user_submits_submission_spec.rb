@@ -27,6 +27,8 @@ feature 'User submits submission' do
     click_button 'Submit'
 
     submission.reload.should be_completed
+    submission[:completed].should be_true
+    submission[:completed_at].should_not be_nil
     submission.comments.should == 'help!'
   end
 

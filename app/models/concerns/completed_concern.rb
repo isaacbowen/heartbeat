@@ -12,7 +12,8 @@ module CompletedConcern
   protected
 
   def set_completed
-    if self.completed = completed?
+    if completed? and not self[:completed]
+      self.completed    = true
       self.completed_at = Time.zone.now
     end
 

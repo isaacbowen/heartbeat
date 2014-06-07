@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :metric do
-    name { Faker::Lorem.word }
+    sequence(:name) { |n| "#{Faker::Lorem.word} #{n}" }
     description { Faker::Lorem.sentence }
     active true
 

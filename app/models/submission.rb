@@ -28,7 +28,9 @@ class Submission < ActiveRecord::Base
   completed_with -> {
     submission_metrics.present? and
     submission_metrics.any? &:completed? and
-    submission_metrics.required.all? &:completed?
+
+    # manually select through; we may be mid-save, so if we fetch from the db we'll get stale data
+    submission_metrics.select(&:required?).all? &:completed?
   }
 
 
