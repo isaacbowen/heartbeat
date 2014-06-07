@@ -20,6 +20,7 @@ class SubmissionMetric < ActiveRecord::Base
 
   belongs_to :submission
   belongs_to :metric
+  has_one :user, through: :submission
 
   validates_presence_of :submission
   validates_presence_of :metric

@@ -1,9 +1,26 @@
 .result
-  %p.timeframe Week of #{@result.start_time.format_like 'August 4, 2014'}
+  %p.timeframe Week ending #{@result.end_time.format_like 'August 4, 2014'}
+  %ul.summary
+    %li
+      .label Response rate:
+      .value= number_to_percentage @result.stats[:response_rate]*100, precision: 0
+      .context (#{@result.stats[:submission_count_completed]} of #{@result.stats[:submission_count]})
 
-  - @result.ratings_by_metric.each do |metric, counts|
+  - @result.ratings_by_metric.each do |metric, counts, submission_metrics|
     %section.result-metric
       %h1= metric.name
       %p.count= pluralize counts.map(&:last).sum, 'rating'
 
-      = column_chart counts, library: {hAxis: {title: 'Ratings'}, vAxis: {title: 'Counts'}}
+      .chart= column_chart counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '85%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
+
+      - submission_metrics.reject { |sm| sm.comments.blank? }.tap do |submission_metrics|
+        - if submission_metrics.any?
+          %ul.comments
+            - submission_metrics.each do |submission_metric|
+              %li
+                .content= simple_format submission_metric.comments
+                .author
+                  %span= submission_metric.user.name
+        - else
+          %p.comments.none
+            (no comments)

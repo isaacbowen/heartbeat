@@ -3,6 +3,29 @@
     font-style: italic;
     margin-bottom: 1em;
   }
+
+  .summary {
+    margin: 2em 0;
+
+    li {
+      > * {
+        display: inline;
+        margin-right: 0.5em;
+      }
+
+      .label {
+        font-weight: bold;
+      }
+
+      .value {
+        font-weight: bold;
+      }
+
+      .context {
+        color: #999;
+      }
+    }
+  }
 }
 
 .result-metric {
@@ -13,6 +36,65 @@
   .count {
     font-style: italic;
     color: #888;
+  }
+
+  .chart {
+    margin: 0 0 1em 0;
+  }
+
+  .comments {
+    margin: 0 2em 3em;
+    text-align: left;
+
+    &.none {
+      font-style: italic;
+      color: #777;
+      text-align: center;
+      font-size: 0.9em;
+      margin: 0;
+    }
+
+    li {
+      .content {
+        &:before, &:after {
+          font-family: 'FontAwesome';
+          display: block;
+          color: #999;
+          width: 1em;
+          text-align: center;
+        }
+
+        &:before {
+          float: left;
+          margin-right: 1em;
+          margin-left: -1em;
+          content: '\f10d';
+        }
+
+        &:after {
+          float: right;
+          margin-left: 1em;
+          content: '\f10e';
+        }
+      }
+
+      .author {
+        font-style: italic;
+        margin: 0.2em 2em 0.2em -1em;
+        padding-left: 0.5em;
+        height: 0.7em;
+        border-bottom: 1px #ddd solid;
+        color: #777;
+
+        span {
+          display: inline-block;
+          height: 1em;
+          padding: 0 0.5em;
+          margin-left: 1em;
+          background: #fff;
+        }
+      }
+    }
   }
 }
 
