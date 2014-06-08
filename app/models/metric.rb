@@ -20,4 +20,8 @@ class Metric < ActiveRecord::Base
   scope :required, -> { where(required: true) }
   scope :ordered,  -> { order('"order" asc') }
 
+  def slug
+    @slug ||= name.downcase.gsub(/[^\w]+/, '-')
+  end
+
 end

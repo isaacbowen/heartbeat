@@ -1,36 +1,100 @@
 .result {
   .timeframe {
     font-style: italic;
-    margin-bottom: 1em;
   }
 
   .summary {
-    margin: 2em 0;
+    overflow: hidden;
+    margin: 0.5em 0 2em;
+    padding-bottom: 2em;
+    border-bottom: 1px #ccc solid;
 
-    li {
-      > * {
-        display: inline;
-        margin-right: 0.5em;
-      }
+    .result-metric {
+      display: block;
+      float: left;
+      text-align: left;
+      padding: 1em 0 1em 3em;
+      width: 50%;
+      text-decoration: none;
+      color: #333;
 
-      .label {
+      .name {
+        display: block;
         font-weight: bold;
+        color: #777;
       }
 
-      .value {
-        font-weight: bold;
+      .rating {
+        font-size: 4em;
+        height: 1em;
+        line-height: 1em;
+        display: block;
+        float: left;
       }
 
-      .context {
+      .delta, .confidence {
+        display: block;
+        font-size: 1.2em;
         color: #999;
+
+        .fa {
+          &:before {
+            opacity: 0.8;
+            text-align: center;
+            width: 1em;
+            display: inline-block;
+            margin-left: 0.5em;
+          }
+        }
+      }
+
+      .delta {
+        margin-top: 0.7em;
+      }
+    }
+
+    .stats {
+      opacity: 0.8;
+      clear: both;
+      padding-top: 1em; // floats! bah.
+
+      li {
+        > * {
+          display: inline;
+          margin-right: 0.5em;
+        }
+
+        .label {
+          font-weight: bold;
+        }
+
+        .value {
+          font-weight: bold;
+        }
+
+        .context {
+          color: #999;
+        }
       }
     }
   }
 }
 
-.result-metric {
+section.result-metric {
+  & + & {
+    padding-top: 2em;
+    margin-top: 2em;
+    border-top: 1px #ccc solid;
+  }
+
   h1 {
-    font-weight: bold;
+    margin: 0;
+    font-size: 1.2em;
+    color: #555;
+  }
+
+  .description {
+    color: #999;
   }
 
   .count {
@@ -96,10 +160,4 @@
       }
     }
   }
-}
-
-.result-metric + .result-metric {
-  padding-top: 2em;
-  margin-top: 2em;
-  border-top: 1px #ccc solid;
 }

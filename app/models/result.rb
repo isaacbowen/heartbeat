@@ -9,7 +9,7 @@ class Result
     self.start_time  = start_time
     self.end_time    = start_time.at_end_of_week
 
-    self.submissions = Submission.complete.where(created_at: start_time..end_time)
+    self.submissions = Submission.where(created_at: start_time..end_time)
     self.metrics     = Metric.where(id: @submissions.joins(:metrics).uniq('metrics.id').pluck('metrics.id')).to_a
   end
 
@@ -22,25 +22,23 @@ class Result
   end
 
   def stats
-    all_submissions = Submission.where(created_at: start_time..end_time)
-
     @stats ||= {
-      response_rate: (all_submissions.complete.count.to_f / all_submissions.count.to_f),
-      submission_count_completed: all_submissions.complete.count,
-      submission_count: all_submissions.count,
+      response_rate: (submissions.complete.count.to_f / submissions.count.to_f),
+      submission_count_completed: submissions.complete.count,
+      submission_count: submissions.count,
+      average_response_time: submissions.complete.select('avg(completed_at - created_at) as completion_time')[0][:completion_time].gsub(/^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s'),
+      best_response_time: submissions.complete.select('min(completed_at - created_at) as completion_time')[0][:completion_time].gsub(/^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s'),
     }
   end
 
-  def ratings_by_metric
-    metrics.map do |metric|
-      submission_metrics = metric.submission_metrics.complete.where(submission: submissions)
-
-      counts = submission_metrics.group(:rating).count
-
-      # represent the zero counts
-      counts = Hash[SubmissionMetric::VALID_RATINGS.map { |r| [r, 0] }].merge(counts)
-
-      [metric, counts, submission_metrics]
+  def result_metrics
+    @result_metrics ||= begin
+      metrics.map do |metric|
+        ResultMetric.new(
+          metric: metric,
+          submission_metrics: metric.submission_metrics.where(submission: submissions),
+        )
+      end
     end
   end
 
