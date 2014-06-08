@@ -6,7 +6,8 @@
 #  name        :text             not null
 #  description :text             not null
 #  order       :integer
-#  active      :boolean          default(TRUE)
+#  active      :boolean          default(TRUE), not null
+#  required    :boolean          default(FALSE), not null
 #  created_at  :datetime
 #  updated_at  :datetime
 #

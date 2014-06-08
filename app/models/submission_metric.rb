@@ -7,6 +7,8 @@
 #  metric_id     :uuid
 #  rating        :integer
 #  comments      :text
+#  completed     :boolean          default(FALSE), not null
+#  completed_at  :datetime
 #
 
 class SubmissionMetric < ActiveRecord::Base

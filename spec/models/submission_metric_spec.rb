@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: submission_metrics
+#
+#  id            :uuid             not null, primary key
+#  submission_id :uuid
+#  metric_id     :uuid
+#  rating        :integer
+#  comments      :text
+#  completed     :boolean          default(FALSE), not null
+#  completed_at  :datetime
+#
+
 require 'spec_helper'
 
 describe SubmissionMetric do

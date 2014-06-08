@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: submissions
+#
+#  id           :uuid             not null, primary key
+#  user_id      :uuid
+#  completed    :boolean          default(FALSE), not null
+#  completed_at :datetime
+#  comments     :string(140)
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+
 require 'spec_helper'
 
 describe Submission do

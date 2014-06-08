@@ -7,7 +7,6 @@
 #  email           :text             not null
 #  manager_user_id :uuid
 #  manager_email   :text
-#  admin           :boolean          default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
 #
