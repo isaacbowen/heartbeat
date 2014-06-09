@@ -1,11 +1,12 @@
 .submission
   - if current_submission.completed?
     .submission-thanks
-      %p
-        %strong Thanks for your submission - appreciate it.
-        %br
+      %p Thanks for your submission - appreciate it.
 
-      %p Results will be out on Monday.
+      %p
+        = link_to '/results/20140608' do
+          = icon 'arrow-right'
+          %strong Results for the week of June 8, 2014
 
       %p.muted This thing is a work in progress. Hit up #{link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} on Slack to join up, talk about what this is and what it could be. (Pull requests welcome!)
 
