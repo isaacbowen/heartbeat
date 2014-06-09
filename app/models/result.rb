@@ -42,4 +42,15 @@ class Result
     end
   end
 
+  def comments
+    @comments ||= begin
+      submissions.reject { |s| s.comments.blank? }.map do |s|
+        {
+          user:    s.user,
+          content: s.comments,
+        }
+      end
+    end
+  end
+
 end

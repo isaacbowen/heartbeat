@@ -76,34 +76,9 @@
       }
     }
   }
-}
-
-section.result-metric {
-  padding-top: 2em;
-  margin-top: 2em;
-  border-top: 1px #ccc solid;
-
-  h1 {
-    margin: 0;
-    font-size: 1.2em;
-    color: #555;
-  }
-
-  .description {
-    color: #999;
-  }
-
-  .count {
-    font-style: italic;
-    color: #888;
-  }
-
-  .chart {
-    margin: 0 0 1em 0;
-  }
 
   .comments {
-    margin: 0 2em 3em;
+    margin: 1em 2em 3em;
     text-align: left;
 
     &.none {
@@ -111,7 +86,6 @@ section.result-metric {
       color: #777;
       text-align: center;
       font-size: 0.9em;
-      margin: 0;
     }
 
     li {
@@ -156,6 +130,32 @@ section.result-metric {
           background: #fff;
         }
       }
+    }
+  }
+
+  section {
+    padding-top: 2em;
+    margin-top: 2em;
+    border-top: 1px #ccc solid;
+
+    h1 {
+      margin: 0;
+      font-size: 1.2em;
+      color: #555;
+      text-align: center;
+    }
+
+    .description {
+      color: #999;
+    }
+
+    .count {
+      font-style: italic;
+      color: #888;
+    }
+
+    .chart {
+      margin: 0 0 1em 0;
     }
   }
 }

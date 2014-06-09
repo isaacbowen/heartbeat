@@ -23,6 +23,19 @@
         .value= @result.stats[:best_response_time]
         .context
 
+  %section.result-comments
+    %h1 General Comments
+    - if @result.comments.any?
+      %ul.comments
+        - @result.comments.each do |comments|
+          %li
+            .content= simple_format comments[:content]
+            .author
+              %span= comments[:user].name
+    - else
+      %p.comments.none
+        (no comments)
+
   - @result.result_metrics.each do |result_metric|
     %section.result-metric{id: result_metric.slug}
       %h1= result_metric.name
