@@ -115,6 +115,8 @@ section.result-metric {
     }
 
     li {
+      margin-bottom: 2em;
+
       .content {
         &:before, &:after {
           font-family: 'FontAwesome';
