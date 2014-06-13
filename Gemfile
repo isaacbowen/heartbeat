@@ -37,6 +37,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'webmock'
   gem 'vcr'
+  gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
 
   # http://collectiveidea.com/blog/archives/2014/02/11/false-positives-on-travis-ci-with-codeclimate-simplecov/

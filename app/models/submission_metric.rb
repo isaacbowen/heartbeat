@@ -41,4 +41,8 @@ class SubmissionMetric < ActiveRecord::Base
     end
   end
 
+  def previous
+    submission.previous.try(:submission_metrics).try(:find_by_metric_id, metric_id)
+  end
+
 end

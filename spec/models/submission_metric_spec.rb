@@ -50,4 +50,22 @@ describe SubmissionMetric do
     end
   end
 
+  describe '#previous' do
+    it 'should be the previous metric, for the previous submission, for the user' do
+      create_list :metric, 4
+
+      user = create :user
+      previous_submissions = []
+
+      (1..3).to_a.each do |i|
+        Timecop.travel i.days.ago
+        previous_submissions << create(:submission, user: user)
+        Timecop.return
+      end
+
+      submission = create :submission, user: user
+      submission.submission_metrics.map(&:previous).should == previous_submissions.first.submission_metrics
+    end
+  end
+
 end

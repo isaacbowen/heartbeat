@@ -44,4 +44,8 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def previous
+    user.submissions.order('created_at desc').where('id != ?', id).first
+  end
+
 end

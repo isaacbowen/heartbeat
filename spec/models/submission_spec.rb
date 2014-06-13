@@ -109,4 +109,20 @@ describe Submission do
 
   end
 
+  describe '#previous' do
+    it 'should be the previous submission for the user' do
+      user = create :user
+      previous_submissions = []
+
+      (1..3).each do |i|
+        Timecop.travel i.days.ago
+        previous_submissions << create(:submission, user: user)
+        Timecop.return
+      end
+
+      submission = create :submission, user: user
+      submission.previous.should == previous_submissions.first
+    end
+  end
+
 end

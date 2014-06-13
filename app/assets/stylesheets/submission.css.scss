@@ -131,6 +131,24 @@
       color: rgba(#fff, 0.95);
       box-shadow: inset 0 -4px 5px -3px rgba(#000, 0.2);
     }
+
+    .previous-rating-marker {
+      position: absolute;
+      line-height: 1em;
+      font-size: 90%;
+      margin: 0.3em 0 0 20px;
+      opacity: 0.5;
+      white-space: nowrap;
+
+      span {
+        opacity: 0;
+        transition: all 0.075s;
+      }
+
+      &:hover span {
+        opacity: 1;
+      }
+    }
   }
 
   .rating.rated .rating-option {

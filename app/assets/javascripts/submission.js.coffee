@@ -16,6 +16,10 @@ $ ->
   $('.submission-form .rating-option').click ->
     $(this).closest('.rating').add(this).addClass('rated')
 
+  $('.previous-rating-marker').click (e) ->
+    e.preventDefault();
+    e.stopPropagation();
+
   $('.submission-form .rating-bookend').click ->
     current_option = $(this).closest('.rating').find(':radio:checked').closest('.rating-option')
 

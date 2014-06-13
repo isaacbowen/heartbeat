@@ -14,6 +14,7 @@
 class User < ActiveRecord::Base
 
   has_many :submissions, dependent: :destroy
+  has_many :submission_metrics, through: :submissions
   belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
 
   before_save :set_manager
