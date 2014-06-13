@@ -38,7 +38,7 @@
     .submission-comments
       %label
         Anything else to add?
-        %em Could be about this week, could be about Heartbeat itself.
+        %em Anything you didn't get to comment on yet?
         = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
 
     - unless current_submission.user.name.present?
