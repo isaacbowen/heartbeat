@@ -7,8 +7,11 @@
         %span.name= result_metric.name
         %span.rating= result_metric.rating
         %span.delta.neutral{title: 'Change from last week'}
-          = icon 'arrow-up'
-          0
+          - if result_metric.delta >= 0
+            = icon 'arrow-up'
+          - else
+            = icon 'arrow-down'
+          = result_metric.delta
         %span.confidence{title: 'Response rate'}
           = icon 'user'
           = number_to_percentage result_metric.confidence*100, precision: 0

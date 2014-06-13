@@ -1,9 +1,17 @@
 class ResultMetric
   include ActiveModel::Model
 
-  attr_accessor :metric, :submission_metrics
+  attr_accessor :result, :metric, :submission_metrics
 
   delegate :name, :slug, :description, to: :metric
+
+  def previous
+    result.previous.result_metrics.find { |result_metric| result_metric.metric == metric }
+  end
+
+  def delta
+    (rating - previous.rating).round(2)
+  end
 
   def count
     @count ||= submission_metrics.complete.count

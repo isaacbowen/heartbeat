@@ -21,6 +21,10 @@ class Result
     end_time.to_date
   end
 
+  def previous
+    @previous ||= self.class.new(start_time - 1.week)
+  end
+
   def stats
     @stats ||= {
       response_rate: (submissions.complete.count.to_f / submissions.count.to_f),
@@ -35,6 +39,7 @@ class Result
     @result_metrics ||= begin
       metrics.map do |metric|
         ResultMetric.new(
+          result: self,
           metric: metric,
           submission_metrics: metric.submission_metrics.where(submission: submissions),
         )
