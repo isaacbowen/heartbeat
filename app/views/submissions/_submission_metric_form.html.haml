@@ -9,7 +9,7 @@
       .rating-option
         = mf.radio_button :rating, i
         = mf.label :rating, i, value: i, title: "Rate '#{mf.object.name}' a #{i}"
-        - if mf.object.previous.rating == i
+        - if mf.object.previous.try(:rating) == i
           .previous-rating-marker
             = icon 'asterisk'
             %span This was your rating last week.

@@ -125,4 +125,15 @@ describe Submission do
     end
   end
 
+  describe '#closed?' do
+    it 'should hinge on the one week mark' do
+      submission = create :submission
+      submission.should_not be_closed
+      submission.update_column :created_at, (1.week.ago + 1.day)
+      submission.should_not be_closed
+      submission.update_column :created_at, (1.week.ago - 1.day)
+      submission.should be_closed
+    end
+  end
+
 end

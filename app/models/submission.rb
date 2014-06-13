@@ -23,6 +23,7 @@ class Submission < ActiveRecord::Base
   validates_presence_of :user
 
   before_create :seed_metrics!
+  before_save -> { false }, if: :closed?
 
 
   include CompletedConcern
@@ -46,6 +47,14 @@ class Submission < ActiveRecord::Base
 
   def previous
     user.submissions.order('created_at desc').where('id != ?', id).first
+  end
+
+  def closed?
+    if new_record?
+      false
+    else
+      created_at < 1.week.ago
+    end
   end
 
 end
