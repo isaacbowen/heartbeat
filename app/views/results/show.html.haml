@@ -25,7 +25,9 @@
           %span.name= result_metric.name
           %span.rating= result_metric.rating
           %span.delta.neutral{title: 'Change from last week'}
-            - if result_metric.delta >= 0
+            - if result_metric.delta == 0
+              = icon 'arrows-h'
+            - elsif result_metric.delta > 0
               = icon 'arrow-up'
             - else
               = icon 'arrow-down'
