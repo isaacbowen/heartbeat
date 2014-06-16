@@ -10,7 +10,11 @@ class ResultMetric
   end
 
   def delta
-    (rating - previous.rating).round(2)
+    if previous.present?
+      (rating - previous.rating).round(2)
+    else
+      0.0
+    end
   end
 
   def count

@@ -4,6 +4,24 @@
     margin: 0 0 -1em 0;
   }
 
+  .previous-link {
+    float: left;
+  }
+
+  .next-link {
+    float: right;
+  }
+
+  .previous-link, .next-link {
+    margin: -0.4em 0.5em;
+
+    a, span {
+      display: block;
+      padding: 0.2em 0.5em;
+      text-decoration: none;
+    }
+  }
+
   .summary {
     overflow: hidden;
     padding-top: 1em;

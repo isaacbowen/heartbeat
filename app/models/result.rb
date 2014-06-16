@@ -1,4 +1,5 @@
 class Result
+  include ActiveModel::Model
 
   attr_accessor :start_time, :end_time
   attr_accessor :submissions, :metrics
@@ -13,6 +14,14 @@ class Result
     self.metrics     = Metric.where(id: @submissions.joins(:metrics).uniq('metrics.id').pluck('metrics.id')).to_a
   end
 
+  def persisted?
+    end_time < Time.now
+  end
+
+  def to_key
+    [end_date.strftime('%Y%m%d')]
+  end
+
   def start_date
     start_time.to_date
   end
@@ -23,6 +32,12 @@ class Result
 
   def previous
     @previous ||= self.class.new(start_time - 1.week)
+  end
+
+  def next
+    if end_time + 1.week < Time.now
+      @next ||= self.class.new(start_time + 1.week)
+    end
   end
 
   def stats

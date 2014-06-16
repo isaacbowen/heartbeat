@@ -1,56 +1,54 @@
 .result
   %p.timeframe Week ending #{@result.end_time.format_like 'August 4, 2014'}
 
-  %section.summary
-    - @result.result_metrics.each do |result_metric|
-      %a.result-metric{href: "##{result_metric.slug}"}
-        %span.name= result_metric.name
-        %span.rating= result_metric.rating
-        %span.delta.neutral{title: 'Change from last week'}
-          - if result_metric.delta >= 0
-            = icon 'arrow-up'
-          - else
-            = icon 'arrow-down'
-          = result_metric.delta
-        %span.confidence{title: 'Response rate'}
-          = icon 'user'
-          = number_to_percentage result_metric.confidence*100, precision: 0
-
-    %ul.stats
-      %li
-        .label Overall response rate:
-        .value= number_to_percentage @result.stats[:response_rate]*100, precision: 0
-        .context (#{@result.stats[:submission_count_completed]} of #{@result.stats[:submission_count]})
-      %li
-        .label Best response time:
-        .value= @result.stats[:best_response_time]
-        .context
-
-  %section.result-comments
-    %h1 General Comments
-    - if @result.comments.any?
-      %ul.comments
-        - @result.comments.each do |comments|
-          %li
-            .content= simple_format comments[:content]
-            .author
-              %span= comments[:user].name
+  .previous-link
+    - if @result.previous.present?
+      = link_to @result.previous do
+        = icon 'arrow-left'
     - else
-      %p.comments.none
-        (no comments)
+      %span.muted= icon 'arrow-left'
 
-  - @result.result_metrics.each do |result_metric|
-    %section.result-metric{id: result_metric.slug}
-      %h1= result_metric.name
-      %p.description= result_metric.description
-      %p.count
-        #{pluralize result_metric.count, 'rating'} (#{number_to_percentage result_metric.confidence*100, precision: 0})
+  .next-link
+    - if @result.next.present?
+      = link_to @result.next do
+        = icon 'arrow-right'
+    - else
+      %span.muted= icon 'arrow-right'
 
-      .chart= column_chart result_metric.rating_counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
+  - if @result.submissions.none?
+    %section.summary
+      %p No data.
+  - else
+    %section.summary
+      - @result.result_metrics.each do |result_metric|
+        %a.result-metric{href: "##{result_metric.slug}"}
+          %span.name= result_metric.name
+          %span.rating= result_metric.rating
+          %span.delta.neutral{title: 'Change from last week'}
+            - if result_metric.delta >= 0
+              = icon 'arrow-up'
+            - else
+              = icon 'arrow-down'
+            = result_metric.delta
+          %span.confidence{title: 'Response rate'}
+            = icon 'user'
+            = number_to_percentage result_metric.confidence*100, precision: 0
 
-      - if result_metric.comments.any?
+      %ul.stats
+        %li
+          .label Overall response rate:
+          .value= number_to_percentage @result.stats[:response_rate]*100, precision: 0
+          .context (#{@result.stats[:submission_count_completed]} of #{@result.stats[:submission_count]})
+        %li
+          .label Best response time:
+          .value= @result.stats[:best_response_time]
+          .context
+
+    %section.result-comments
+      %h1 General Comments
+      - if @result.comments.any?
         %ul.comments
-          - result_metric.comments.each do |comments|
+          - @result.comments.each do |comments|
             %li
               .content= simple_format comments[:content]
               .author
@@ -58,3 +56,23 @@
       - else
         %p.comments.none
           (no comments)
+
+    - @result.result_metrics.each do |result_metric|
+      %section.result-metric{id: result_metric.slug}
+        %h1= result_metric.name
+        %p.description= result_metric.description
+        %p.count
+          #{pluralize result_metric.count, 'rating'} (#{number_to_percentage result_metric.confidence*100, precision: 0})
+
+        .chart= column_chart result_metric.rating_counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
+
+        - if result_metric.comments.any?
+          %ul.comments
+            - result_metric.comments.each do |comments|
+              %li
+                .content= simple_format comments[:content]
+                .author
+                  %span= comments[:user].name
+        - else
+          %p.comments.none
+            (no comments)
