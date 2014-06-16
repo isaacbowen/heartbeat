@@ -1,4 +1,4 @@
-%div{class: "metric #{'optional' unless mf.object.required?} #{'completed' if mf.object.completed?}"}
+%div{class: "metric #{'optional' unless mf.object.required?} #{'completed' if mf.object.completed? or mf.object.previous.try(:completed?)}"}
   .metric-name
     = mf.object.name
   .metric-description= mf.object.description
