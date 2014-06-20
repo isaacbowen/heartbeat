@@ -3,10 +3,13 @@
     .submission-thanks
       %p Thanks for your submission - appreciate it.
 
+      / %p
+      /   = link_to '/results/20140615' do
+      /     = icon 'arrow-right'
+      /     %strong Results for this week (ending June 15, 2014)
+
       %p
-        = link_to '/results/20140615' do
-          = icon 'arrow-right'
-          %strong Results for this week (ending June 15, 2014)
+        %strong Results will be out on Monday.
 
       %p.muted This thing is a work in progress. Hit up #{link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} on Slack to join up, talk about what this is and what it could be. (Pull requests welcome!)
 
