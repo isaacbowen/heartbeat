@@ -35,11 +35,17 @@
       = f.fields_for :submission_metrics, f.object.submission_metrics.optional.ordered do |mf|
         = render partial: 'submission_metric_form', locals: {mf: mf}
 
-    .submission-comments
-      %label
+    .submission-comments.comments-input
+      %label{for: 'submission_comments'}
         Anything else to add?
         %em Anything you didn't get to comment on yet?
-        = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
+
+      = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
+
+      %label.public{data: {toggle: 'tooltip'}, title: 'Public (with your name), or private (anonymous, seen by management only)?'}
+        = f.check_box :comments_public
+        .icon
+
 
     - unless current_submission.user.name.present?
       = f.fields_for :user do |uf|

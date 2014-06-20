@@ -68,9 +68,14 @@ class Result
         {
           user:    s.user,
           content: s.comments,
+          public:  s.comments_public,
         }
       end
     end
+  end
+
+  def public_comments
+    comments.select { |c| c[:public] }
   end
 
 end

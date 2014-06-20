@@ -12,6 +12,7 @@ gem 'haml'
 gem 'chartkick'
 gem 'stamp'
 gem 'numbers_and_words'
+gem 'bootstrap-sass'
 
 gem 'jquery-rails'
 

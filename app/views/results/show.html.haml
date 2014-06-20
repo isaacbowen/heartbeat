@@ -46,9 +46,9 @@
 
     %section.result-comments
       %h1 General Comments
-      - if @result.comments.any?
+      - if @result.public_comments.any?
         %ul.comments
-          - @result.comments.each do |comments|
+          - @result.public_comments.each do |comments|
             %li
               .content= simple_format comments[:content]
               .author
@@ -66,9 +66,9 @@
 
         .chart= column_chart result_metric.rating_counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
 
-        - if result_metric.comments.any?
+        - if result_metric.public_comments.any?
           %ul.comments
-            - result_metric.comments.each do |comments|
+            - result_metric.public_comments.each do |comments|
               %li
                 .content= simple_format comments[:content]
                 .author

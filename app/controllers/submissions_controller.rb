@@ -23,8 +23,8 @@ class SubmissionsController < ApplicationController
   end
 
   def submission_params
-    params.require(:submission).permit(:comments,
-                                       submission_metrics_attributes: [:id, :rating, :comments],
+    params.require(:submission).permit(:comments, :comments_public,
+                                       submission_metrics_attributes: [:id, :rating, :comments, :comments_public],
                                        user_attributes: [:name, :manager_email])
   end
 

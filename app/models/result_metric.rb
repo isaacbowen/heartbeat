@@ -35,9 +35,14 @@ class ResultMetric
         {
           user:    sm.user,
           content: sm.comments,
+          public:  sm.comments_public,
         }
       end
     end
+  end
+
+  def public_comments
+    comments.select { |c| c[:public] }
   end
 
   def rating_counts

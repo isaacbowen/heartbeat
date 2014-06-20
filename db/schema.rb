@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140527163553) do
+ActiveRecord::Schema.define(version: 20140620135102) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,19 +34,21 @@ ActiveRecord::Schema.define(version: 20140527163553) do
     t.uuid     "metric_id"
     t.integer  "rating"
     t.text     "comments"
-    t.boolean  "completed",     default: false, null: false
+    t.boolean  "completed",       default: false, null: false
     t.datetime "completed_at"
+    t.boolean  "comments_public", default: true
   end
 
   add_index "submission_metrics", ["submission_id", "metric_id"], name: "index_submission_metrics_on_submission_id_and_metric_id", using: :btree
 
   create_table "submissions", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "user_id"
-    t.boolean  "completed",                default: false, null: false
+    t.boolean  "completed",                   default: false, null: false
     t.datetime "completed_at"
-    t.string   "comments",     limit: 140
+    t.string   "comments",        limit: 140
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "comments_public",             default: true
   end
 
   add_index "submissions", ["created_at"], name: "index_submissions_on_created_at", using: :btree

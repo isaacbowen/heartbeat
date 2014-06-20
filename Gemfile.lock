@@ -37,6 +37,8 @@ GEM
       erubis (>= 2.6.6)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-sass (3.1.1.1)
+      sass (~> 3.2)
     builder (3.2.2)
     capybara (2.2.1)
       mime-types (>= 1.16)
@@ -203,6 +205,7 @@ DEPENDENCIES
   annotate
   better_errors
   binding_of_caller
+  bootstrap-sass
   capybara
   chartkick
   codeclimate-test-reporter

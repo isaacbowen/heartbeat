@@ -1,4 +1,6 @@
 $ ->
+  $('.comments-input .public').tooltip(container: 'body', delay: {show: 200, hide: 100})
+
   $('.submission-toggle').click ->
     $(this).hide()
     $('.submission-form').slideDown('fast')

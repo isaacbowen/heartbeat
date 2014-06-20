@@ -176,7 +176,42 @@
   }
 
   .comments-input {
-    padding: 0.5em 0;
+    padding: 0.5em 0 0 0.5em;
+    overflow: hidden;
+
+    textarea {
+      display: block;
+      width: 93%;
+      float: left;
+    }
+
+    .public {
+      display: block;
+      width: 6%;
+      float: right;
+      position: relative;
+      padding-top: 1.5em;
+      text-align: center;
+      cursor: pointer;
+
+      input[type=checkbox] {
+        & + .icon:before {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          font-family: FontAwesome;
+          content: '\f070';
+          color: #555;
+        }
+
+        &:checked + .icon:before {
+          content: '\f06e';
+          color: #333;
+        }
+      }
+    }
   }
 
   .user-manager, .user-name, .submission-comments {
@@ -188,8 +223,8 @@
       font-style: italic;
     }
 
-    input, textarea {
-      margin-top: 0.5em;
+    label:first-child {
+      margin-bottom: 0.5em;
     }
   }
 

@@ -15,3 +15,8 @@
  *= require_tree .
  *= require_self
  */
+
+@import 'bootstrap/variables';
+@import 'bootstrap/mixins';
+@import 'bootstrap/component-animations';
+@import 'bootstrap/tooltip';
