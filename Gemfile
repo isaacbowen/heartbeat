@@ -20,10 +20,16 @@ gem 'newrelic_rpm'
 
 group :development do
   gem 'annotate'
+  
   gem 'spring'
   gem 'spring-commands-rspec'
+  
   gem 'better_errors'
   gem 'binding_of_caller'
+
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'rb-fsevent' if `uname` =~ /Darwin/
 end
 
 group :development, :test do
