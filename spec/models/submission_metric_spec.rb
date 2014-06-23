@@ -28,7 +28,7 @@ describe SubmissionMetric do
 
   describe '#rating=' do
     it 'should filter based on VALID_RATINGS' do
-      stub_const 'SubmissionMetric::VALID_RATINGS', [1, 2, 3]
+      stub_const 'Heartbeat::VALID_RATINGS', [1, 2, 3]
       subject.rating = 4
       subject.rating.should be_nil
       [1, 2, 3].each do |i|

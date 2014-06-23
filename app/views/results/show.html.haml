@@ -1,5 +1,5 @@
 .result
-  %p.timeframe Week ending #{@result.end_time.format_like 'August 4, 2014'}
+  %p.timeframe Week of #{@result.start_date.format_like 'August 4, 2014'}
 
   .previous-link
     - if @result.previous.present?
@@ -15,64 +15,64 @@
     - else
       %span.muted= icon 'arrow-right'
 
-  - if @result.submissions.none?
+  - if @result.empty?
     %section.summary
       %p No data.
   - else
     %section.summary
-      - @result.result_metrics.each do |result_metric|
-        %a.result-metric{href: "##{result_metric.slug}"}
-          %span.name= result_metric.name
-          %span.rating= result_metric.rating
+      - @metric_results.each do |metric_result|
+        %a.result-metric{href: "##{metric_result.meta[:slug]}"}
+          %span.name= metric_result.meta[:name]
+          %span.rating= metric_result.rating
           %span.delta.neutral{title: 'Change from last week'}
-            - if result_metric.delta >= 0
+            - if metric_result.delta >= 0
               = icon 'arrow-up'
             - else
               = icon 'arrow-down'
-            = result_metric.delta
-          %span.confidence{title: 'Response rate'}
+            = metric_result.delta
+          %span.representation{title: 'Response rate'}
             = icon 'user'
-            = number_to_percentage result_metric.confidence*100, precision: 0
+            = number_to_percentage metric_result.representation*100, precision: 0
 
       %ul.stats
         %li
           .label Overall response rate:
-          .value= number_to_percentage @result.stats[:response_rate]*100, precision: 0
-          .context (#{@result.stats[:submission_count_completed]} of #{@result.stats[:submission_count]})
+          .value= number_to_percentage @result.representation*100, precision: 0
+          .context (#{@result.sample.complete.count} of #{@result.sample.count})
         %li
           .label Best response time:
-          .value= @result.stats[:best_response_time]
+          .value= @result.shortest_time_to_completion
           .context
 
     %section.result-comments
       %h1 General Comments
       - if @result.public_comments.any?
         %ul.comments
-          - @result.public_comments.each do |comments|
+          - @result.public_comments.each do |comment|
             %li
-              .content= simple_format comments[:content]
+              .content= simple_format comment.body
               .author
-                %span= comments[:user].name
+                %span= comment.user.name
       - else
         %p.comments.none
           (no comments)
 
-    - @result.result_metrics.each do |result_metric|
-      %section.result-metric{id: result_metric.slug}
-        %h1= result_metric.name
-        %p.description= result_metric.description
+    - @metric_results.each do |metric_result|
+      %section.result-metric{id: metric_result.meta[:slug]}
+        %h1= metric_result.meta[:name]
+        %p.description= metric_result.meta[:description]
         %p.count
-          #{pluralize result_metric.count, 'rating'} (#{number_to_percentage result_metric.confidence*100, precision: 0})
+          #{pluralize metric_result.count, 'rating'} (#{number_to_percentage metric_result.representation*100, precision: 0})
 
-        .chart= column_chart result_metric.rating_counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
+        .chart= column_chart metric_result.rating_counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
 
-        - if result_metric.public_comments.any?
+        - if metric_result.public_comments.any?
           %ul.comments
-            - result_metric.public_comments.each do |comments|
+            - metric_result.public_comments.each do |comment|
               %li
-                .content= simple_format comments[:content]
+                .content= simple_format comment.body
                 .author
-                  %span= comments[:user].name
+                  %span= comment.user.name
         - else
           %p.comments.none
             (no comments)

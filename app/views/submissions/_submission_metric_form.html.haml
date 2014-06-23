@@ -5,7 +5,7 @@
   %div{class: "rating #{'rated' if mf.object.rating.present?}"}
     .rating-bookend.negative
       = icon 'thumbs-o-down fa-flip-horizontal'
-    - SubmissionMetric::VALID_RATINGS.each do |i|
+    - Heartbeat::VALID_RATINGS.each do |i|
       .rating-option
         = mf.radio_button :rating, i
         = mf.label :rating, i, value: i, title: "Rate '#{mf.object.name}' a #{i}"

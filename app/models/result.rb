@@ -1,81 +1,104 @@
 class Result
   include ActiveModel::Model
 
-  attr_accessor :start_time, :end_time
-  attr_accessor :submissions, :metrics
+  # e.g. 1.week
+  attr_accessor :period
 
-  def initialize start_time, interval = :week
-    raise ArgumentError if not [:week].include? interval
+  # e.g. last monday
+  attr_accessor :start_date
 
-    self.start_time  = start_time
-    self.end_time    = start_time.at_end_of_week
+  # enumerable of items implementing #rating and #user and #comments
+  attr_accessor :source
 
-    self.submissions = Submission.where(created_at: start_time..end_time)
-    self.metrics     = Metric.where(id: @submissions.joins(:metrics).uniq('metrics.id').pluck('metrics.id')).to_a
+  # any other crap you want to throw in here
+  attr_accessor :meta
+
+  def sample
+    source.where('created_at >= ?', start_time).where('created_at <= ?', end_time)
   end
 
   def persisted?
-    end_time < Time.now
+    true
   end
 
   def to_key
-    [end_date.strftime('%Y%m%d')]
+    [start_date.strftime('%Y%m%d')]
   end
 
-  def start_date
-    start_time.to_date
+  delegate :empty?, :any?, :count, :size, :klass, to: :sample
+
+
+  # date stuff
+
+  def start_time
+    start_date.at_beginning_of_day
   end
 
   def end_date
-    end_time.to_date
+    start_date + period
   end
 
-  def previous
-    @previous ||= self.class.new(start_time - 1.week)
+  def end_time
+    end_date.at_end_of_day
   end
 
-  def next
-    if end_time + 1.week < Time.now
-      @next ||= self.class.new(start_time + 1.week)
+
+  # stats
+
+  def rating
+    ratings = sample.select(&:completed?).map(&:rating)
+    (ratings.sum.to_f / ratings.size).round(1)
+  end
+
+  def rating_counts
+    raise NotImplementedError unless klass.column_names.include?('rating')
+
+    @rating_counts ||= begin
+      grouped_counts = sample.complete.group(:rating).count
+
+      # represent the zero counts
+      Hash[Heartbeat::VALID_RATINGS.map { |r| [r, 0] }].merge(grouped_counts)
     end
   end
 
-  def stats
-    @stats ||= {
-      response_rate: (submissions.complete.count.to_f / submissions.count.to_f),
-      submission_count_completed: submissions.complete.count,
-      submission_count: submissions.count,
-      average_response_time: submissions.complete.select('avg(completed_at - created_at) as completion_time')[0][:completion_time].gsub(/^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s'),
-      best_response_time: submissions.complete.select('min(completed_at - created_at) as completion_time')[0][:completion_time].gsub(/^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s'),
-    }
-  end
-
-  def result_metrics
-    @result_metrics ||= begin
-      metrics.map do |metric|
-        ResultMetric.new(
-          result: self,
-          metric: metric,
-          submission_metrics: metric.submission_metrics.where(submission: submissions),
-        )
-      end
+  def delta
+    if previous.present?
+      (rating - previous.rating).round(1)
+    else
+      0.0
     end
   end
+
+  def representation
+    sample.complete.count.to_f / sample.count
+  end
+
+  def shortest_time_to_completion
+    sample.complete.select('min(completed_at - created_at) as completion_time')[0][:completion_time].try(:gsub, /^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s')
+  end
+
+
+  # comments
 
   def comments
-    @comments ||= begin
-      submissions.reject { |s| s.comments.blank? }.map do |s|
-        {
-          user:    s.user,
-          content: s.comments,
-          public:  s.comments_public,
-        }
-      end
-    end
+    sample.select { |s| s.comments.present? }.map { |s| Comment.new source: s }
   end
 
   def public_comments
-    comments.select { |c| c[:public] }
+    comments.select(&:public?)
+  end
+
+
+  # pagination, sort of
+
+  def previous
+    @previous ||= self.class.new(source: source, period: period, start_date: start_date - period)
+    @previous if @previous.present?
+  end
+
+  def next
+    @next ||= self.class.new(source: source, period: period, start_date: start_date + period)
+    @next if @next.present?
   end
 
 end

@@ -4,7 +4,7 @@ FactoryGirl.define do
     metric
 
     factory :completed_submission_metric do
-      rating { SubmissionMetric::VALID_RATINGS.sample }
+      rating { Heartbeat::VALID_RATINGS.sample }
       comments { Faker::Lorem.sentence }
     end
 

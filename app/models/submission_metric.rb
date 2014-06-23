@@ -13,8 +13,6 @@
 
 class SubmissionMetric < ActiveRecord::Base
 
-  VALID_RATINGS = [1, 2, 3, 4]
-
   scope :required,  -> { joins(:metric).where(metrics: {required: true}) }
   scope :optional,  -> { joins(:metric).where(metrics: {required: false}) }
   scope :completed, -> { where(completed: true) }
@@ -36,7 +34,7 @@ class SubmissionMetric < ActiveRecord::Base
 
 
   def rating= value
-    if VALID_RATINGS.include? value.to_i
+    if Heartbeat::VALID_RATINGS.include? value.to_i
       self[:rating] = value.to_i
     end
   end

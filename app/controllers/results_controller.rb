@@ -1,19 +1,32 @@
 class ResultsController < ApplicationController
 
   def index
-    start_date = Date.today.at_end_of_week
+    start_date = Date.today.at_beginning_of_week
     redirect_to action: :show, id: start_date.strftime('%Y%m%d')
   end
 
   def show
-    end_date   = Date.strptime params[:id], '%Y%m%d'
-    start_date = end_date.at_beginning_of_week
-    start_time = start_date.at_midnight
+    period = 1.week
+    start_date = Date.strptime(params[:id], '%Y%m%d')
 
-    @result = Result.new start_time, :week
+    if start_date.at_beginning_of_week != start_date
+      redirect_to action: :show, id: start_date.at_beginning_of_week.strftime('%Y%m%d')
+      return
+    end
 
-    if @result.end_date.to_s != end_date.to_s
-      redirect_to action: :show, id: @result.end_date.strftime('%Y%m%d')
+    @result = Result.new(
+      start_date: start_date,
+      period: period,
+      source: Submission.all,
+    )
+
+    @metric_results = Metric.active.ordered.map do |metric|
+      Result.new(
+        start_date: start_date,
+        period: period,
+        source: metric.submission_metrics,
+        meta: metric.attributes.with_indifferent_access,
+      )
     end
   end
 
