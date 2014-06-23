@@ -1,4 +1,4 @@
-class Bootstrap < ActiveRecord::Migration
+class BootstrapTables < ActiveRecord::Migration
   def change
     enable_extension 'uuid-ossp'
 
