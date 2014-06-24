@@ -19,8 +19,16 @@ class User < ActiveRecord::Base
 
   before_save :set_manager
 
-  def first_name
-    name.split(/\s+/).first rescue name
+  def abbreviated_name
+    return name if name.blank?
+
+    name_bits = name.split(/\s+/, 2)
+
+    if name_bits.size == 1
+      name
+    else
+      "#{name_bits[0]} #{name_bits[1][0]}"
+    end
   end
 
 

@@ -17,6 +17,13 @@ describe User do
 
   subject { create :user }
 
+  describe '#abbreviated_name' do
+    specify { build(:user, name: 'Foo Bar').abbreviated_name.should == 'Foo B' }
+    specify { build(:user, name: 'Foo Bar Zab').abbreviated_name.should == 'Foo B' }
+    specify { build(:user, name: 'Foobar').abbreviated_name.should == 'Foobar' }
+    specify { build(:user, name: nil).abbreviated_name.should be_nil }
+  end
+
   describe '#set_manager' do
     let(:manager) { @manager ||= create :user }
 

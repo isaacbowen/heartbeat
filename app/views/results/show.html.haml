@@ -59,7 +59,7 @@
             - metric_result.public_comments.each do |comment|
               %li
                 .content= simple_format comment.body
-                .author{title: comment.user.name}= comment.user.first_name
+                .author{title: comment.user.name}= comment.user.abbreviated_name
         - else
           %p.comments.none
             (no comments)
@@ -71,7 +71,7 @@
           - @result.public_comments.each do |comment|
             %li
               .content= simple_format comment.body
-              .author{title: comment.user.name}= comment.user.first_name
+              .author{title: comment.user.name}= comment.user.abbreviated_name
       - else
         %p.comments.none
           (no comments)
