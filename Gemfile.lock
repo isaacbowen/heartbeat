@@ -254,7 +254,6 @@ DEPENDENCIES
   poltergeist
   pry-rails
   rails (= 4.1.1)
-  rb-fsevent
   rspec-rails
   sass-rails (~> 4.0.3)
   shoulda

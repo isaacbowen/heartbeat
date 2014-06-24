@@ -30,7 +30,6 @@ group :development do
 
   gem 'guard'
   gem 'guard-rspec'
-  gem 'rb-fsevent' if `uname` =~ /Darwin/
 end
 
 group :development, :test do
