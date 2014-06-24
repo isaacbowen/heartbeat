@@ -42,12 +42,12 @@
               - else
                 = icon 'arrow-down'
               = metric_result.delta
-            %li.representation{title: "Response rate (#{metric_result.sample.complete.count} of #{metric_result.sample.count})"}
-              = icon 'user'
-              = number_to_percentage metric_result.representation*100, precision: 0
             %li.volatility{title: 'Volatility'}
               = icon 'bolt'
               = metric_result.volatility
+            %li.representation{title: "Response rate (#{metric_result.sample.complete.count} of #{metric_result.sample.count})"}
+              = icon 'user'
+              = number_to_percentage metric_result.representation*100, precision: 0
             %li.unity{title: 'Unity'}
               = icon 'dot-circle-o'
               = number_to_percentage metric_result.unity*100, precision: 0
@@ -64,6 +64,18 @@
           %p.comments.none
             (no comments)
 
+    %section.result-comments
+      %h1 General Comments
+      - if @result.public_comments.any?
+        %ul.comments
+          - @result.public_comments.each do |comment|
+            %li
+              .content= simple_format comment.body
+              .author{title: comment.user.name}= comment.user.first_name
+      - else
+        %p.comments.none
+          (no comments)
+
     %section.summary
       %ul
         %li
@@ -75,14 +87,18 @@
           .value= @result.shortest_time_to_completion
           .context
 
-      %section.result-comments
-        %h1 General Comments
-        - if @result.public_comments.any?
-          %ul.comments
-            - @result.public_comments.each do |comment|
-              %li
-                .content= simple_format comment.body
-                .author{title: comment.user.name}= comment.user.first_name
-        - else
-          %p.comments.none
-            (no comments)
+    %section.definitions
+      %h1 Definitions
+
+      %dl
+        %dt Rating
+        %dd 1 (emphatically bad), 2 (eh, bad), 3 (eh, good), or 4 (emphatically good).
+
+        %dt Unity
+        %dd
+          %p A percentage indicating how closely each team's ratings fall. All 3's would be 100%, or perfect unity; an equal number of 0's and 4's would be 0%, or no unity.
+          %p <code>average(1 - variance(ratings for each team) / variance([1, 4]))</code>
+
+        %dt Volatility
+        %dd
+          %p The standard deviation of ratings for each user between this and last week, averaged across all users.
