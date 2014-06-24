@@ -96,6 +96,16 @@ class Result
     stddev_ratings.reject(&:nil?).mean.round(1) rescue 0.0
   end
 
+  def unity
+    raise NotImplementedError unless klass.column_names.include?('rating')
+
+    # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
+    unity_ratings = sample.joins(:user).select("1 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_email').map(&:unity)
+
+    # average the non-nils to get our volatility score
+    unity_ratings.reject(&:nil?).mean.round(1) rescue 0.0
+  end
+
   def shortest_time_to_completion
     sample.complete.select('min(completed_at - created_at) as completion_time')[0][:completion_time].try(:gsub, /^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s')
   end

@@ -89,6 +89,7 @@ describe Result do
 
       # these... I don't know how to test these.
       it { should respond_to :volatility }
+      it { should respond_to :unity }
       it { should respond_to :shortest_time_to_completion }
 
       describe '#comments' do

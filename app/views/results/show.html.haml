@@ -48,6 +48,9 @@
             %li.volatility{title: 'Volatility'}
               = icon 'bolt'
               = metric_result.volatility
+            %li.unity{title: 'Unity'}
+              = icon 'dot-circle-o'
+              = number_to_percentage metric_result.unity*100, precision: 0
 
           .sparkline{title: 'The last few weeks of data'}= line_chart metric_result.sparkline_data, min: nil, max: nil, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '10', width: '100%', height: '60%'}, hAxis: {title: '', baselineColor: 'transparent'}, vAxis: {title: '', gridlines: {color: 'transparent'}, baselineColor: 'transparent'}, curveType: 'none', pointSize: 0, enableInteractivity: false}
 
