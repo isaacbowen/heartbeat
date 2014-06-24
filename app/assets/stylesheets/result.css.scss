@@ -1,3 +1,5 @@
+@import 'mixins';
+
 .result {
   .timeframe {
     font-style: italic;
@@ -26,52 +28,7 @@
     overflow: hidden;
     padding-top: 1em;
 
-    .result-metric {
-      display: block;
-      float: left;
-      text-align: left;
-      padding: 1em 0 1em 8%;
-      width: 50%;
-      text-decoration: none;
-      color: #333;
-
-      .name {
-        display: block;
-        font-weight: bold;
-        color: #777;
-      }
-
-      .rating {
-        font-size: 4em;
-        height: 1em;
-        line-height: 1em;
-        display: block;
-        float: left;
-      }
-
-      .delta, .representation {
-        display: block;
-        font-size: 1.2em;
-        color: #999;
-
-        .fa {
-          &:before {
-            opacity: 0.8;
-            text-align: center;
-            width: 1em;
-            display: inline-block;
-            margin-left: 0.5em;
-          }
-        }
-      }
-
-      .delta {
-        margin-top: 0.7em;
-      }
-    }
-
-    .stats {
-      opacity: 0.8;
+    ul {
       clear: both;
       padding-top: 1em; // floats! bah.
 
@@ -96,8 +53,96 @@
     }
   }
 
+  .result-metric {
+    text-align: left;
+    text-decoration: none;
+
+    header {
+      margin-bottom: 15px;
+
+      h1 {
+        display: block;
+        font-weight: bold;
+        color: #777;
+        text-align: left;
+        margin-left: 20px;
+      }
+
+      .description {
+        display: none;
+      }
+    }
+
+    .data {
+      @include clearfix;
+      clear: both;
+      height: 50px;
+
+      > * {
+        display: block;
+        height: 50px;
+        float: left;
+      }
+
+      .bar-chart {
+        width: 100px;
+        margin: 0 20px 0 0;
+      }
+
+      .rating {
+        width: 90px;
+        line-height: 50px;
+        font-size: 50px;
+        text-align: center;
+      }
+
+      .sparkline {
+        width: 100px;
+        margin-left: 50px;
+      }
+
+      ul.stats {
+        width: 150px;
+        list-style: none;
+        margin: 0;
+        padding: 5px 0 0 0;
+
+        li {
+          display: block;
+          float: left;
+          font-size: 1.2em;
+          color: #999;
+          margin: 0 0 3px 0;
+          padding: 0;
+          width: 50%;
+          cursor: default;
+
+          &:nth-child(2n) {
+            clear: left;
+          }
+
+          .fa {
+            &:before {
+              opacity: 0.8;
+              text-align: center;
+              width: 1em;
+              display: inline-block;
+              margin-left: 0.5em;
+            }
+          }
+        }
+      }
+    }
+
+    .comments {
+      clear: both;
+    }
+  }
+
   .comments {
-    margin: 1em 2em 3em;
+    @include clearfix;
+
+    margin: 20px;
     text-align: left;
 
     &.none {
@@ -108,45 +153,33 @@
     }
 
     li {
-      margin-bottom: 2em;
+      margin-bottom: 0.5em;
+      line-height: 1.5em;
 
-      .content {
-        &:before, &:after {
-          font-family: 'FontAwesome';
-          display: block;
-          color: #999;
-          width: 1em;
-          text-align: center;
-        }
+      .author {
+        display: inline;
+        color: #999;
 
         &:before {
-          float: left;
-          margin-right: 1em;
-          margin-left: -1em;
-          content: '\f10d';
-        }
-
-        &:after {
-          float: right;
-          margin-left: 1em;
-          content: '\f10e';
+          content: '\2013';
+          margin: 0 0.2em;
         }
       }
 
-      .author {
-        font-style: italic;
-        margin: 0.2em 2em 0.2em -1em;
-        padding-left: 0.5em;
-        height: 0.7em;
-        border-bottom: 1px #ddd solid;
-        color: #777;
+      .content {
+        display: inline;
 
-        span {
-          display: inline-block;
-          height: 1em;
-          padding: 0 0.5em;
-          margin-left: 1em;
-          background: #fff;
+        p {
+          display: inline;
+          color: #555;
+        }
+
+        &:before {
+          display: inline;
+          font-family: 'FontAwesome';
+          color: #999;
+          margin: 0 0.5em 0 0;
+          content: '\f10d';
         }
       }
     }

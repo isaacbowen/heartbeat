@@ -18,23 +18,52 @@
   - if @result.empty?
     %section.summary
       %p No data.
-  - else
+  - elsif @result.not_ready?
     %section.summary
-      - @metric_results.each do |metric_result|
-        %a.result-metric{href: "##{metric_result.meta[:slug]}"}
-          %span.name= metric_result.meta[:name]
-          %span.rating= metric_result.rating
-          %span.delta.neutral{title: 'Change from last week'}
-            - if metric_result.delta >= 0
-              = icon 'arrow-up'
-            - else
-              = icon 'arrow-down'
-            = metric_result.delta
-          %span.representation{title: 'Response rate'}
-            = icon 'user'
-            = number_to_percentage metric_result.representation*100, precision: 0
+      %p
+        %strong In progress!
+      %p Report is #{number_to_percentage @result.representation*100, precision: 0} complete, with #{@result.sample.complete.count} of #{@result.sample.count} reporting - come back when we hit 50%.
+      %p 
+  - else
+    - @metric_results.each do |metric_result|
+      %section.result-metric{id: metric_result.meta[:slug]}
+        %header
+          %h1= metric_result.meta[:name]
+          %p.description= metric_result.meta[:description]
 
-      %ul.stats
+        .data
+          .bar-chart{title: 'Total ratings, from 0 to 4'}= column_chart metric_result.rating_counts, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '0', width: '100%', height: '100%'}, hAxis: {title: ''}, vAxis: {title: '', gridlines: {color: 'transparent'}}, enableInteractivity: false}
+
+          .rating= metric_result.rating
+
+          %ul.stats
+            %li.delta{title: 'Change from last week'}
+              - if metric_result.delta >= 0
+                = icon 'arrow-up'
+              - else
+                = icon 'arrow-down'
+              = metric_result.delta
+            %li.representation{title: "Response rate (#{metric_result.sample.complete.count} of #{metric_result.sample.count})"}
+              = icon 'user'
+              = number_to_percentage metric_result.representation*100, precision: 0
+            %li.volatility{title: 'Volatility'}
+              = icon 'bolt'
+              = metric_result.volatility
+
+          .sparkline{title: 'The last few weeks of data'}= line_chart metric_result.sparkline_data, min: nil, max: nil, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '10', width: '100%', height: '60%'}, hAxis: {title: '', baselineColor: 'transparent'}, vAxis: {title: '', gridlines: {color: 'transparent'}, baselineColor: 'transparent'}, curveType: 'none', pointSize: 0, enableInteractivity: false}
+
+        - if metric_result.public_comments.any?
+          %ul.comments
+            - metric_result.public_comments.each do |comment|
+              %li
+                .content= simple_format comment.body
+                .author{title: comment.user.name}= comment.user.first_name
+        - else
+          %p.comments.none
+            (no comments)
+
+    %section.summary
+      %ul
         %li
           .label Overall response rate:
           .value= number_to_percentage @result.representation*100, precision: 0
@@ -44,35 +73,14 @@
           .value= @result.shortest_time_to_completion
           .context
 
-    %section.result-comments
-      %h1 General Comments
-      - if @result.public_comments.any?
-        %ul.comments
-          - @result.public_comments.each do |comment|
-            %li
-              .content= simple_format comment.body
-              .author
-                %span= comment.user.name
-      - else
-        %p.comments.none
-          (no comments)
-
-    - @metric_results.each do |metric_result|
-      %section.result-metric{id: metric_result.meta[:slug]}
-        %h1= metric_result.meta[:name]
-        %p.description= metric_result.meta[:description]
-        %p.count
-          #{pluralize metric_result.count, 'rating'} (#{number_to_percentage metric_result.representation*100, precision: 0})
-
-        .chart= column_chart metric_result.rating_counts, height: '200px', library: {titlePosition: 'none', chartArea: {top: '10', width: '80%', height: '75%'}, hAxis: {title: 'Rating'}, vAxis: {title: 'Number of Ratings'}}
-
-        - if metric_result.public_comments.any?
+      %section.result-comments
+        %h1 General Comments
+        - if @result.public_comments.any?
           %ul.comments
-            - metric_result.public_comments.each do |comment|
+            - @result.public_comments.each do |comment|
               %li
                 .content= simple_format comment.body
-                .author
-                  %span= comment.user.name
+                .author{title: comment.user.name}= comment.user.first_name
         - else
           %p.comments.none
             (no comments)

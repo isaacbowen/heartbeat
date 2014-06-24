@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
 
   before_save :set_manager
 
+  def first_name
+    name.split(/\s+/).first rescue name
+  end
+
 
   protected
 

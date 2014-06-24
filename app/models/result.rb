@@ -13,8 +13,19 @@ class Result
   # any other crap you want to throw in here
   attr_accessor :meta
 
-  def sample
-    source.where('created_at >= ?', start_time).where('created_at <= ?', end_time)
+  def sample options = {}
+    sample_start_time = options[:start_time] || start_time
+    sample_end_time   = options[:end_time] || end_time
+
+    source.where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
+  end
+
+  def ready?
+    representation > 0.5
+  end
+
+  def not_ready?
+    not ready?
   end
 
   def persisted?
@@ -46,8 +57,7 @@ class Result
   # stats
 
   def rating
-    ratings = sample.select(&:completed?).map(&:rating)
-    (ratings.sum.to_f / ratings.size).round(1)
+    sample.select(&:completed?).map(&:rating).mean.round(1)
   end
 
   def rating_counts
@@ -69,8 +79,25 @@ class Result
     end
   end
 
+  def sparkline_data
+    (0..4).map { |n| previous(n) }.reject(&:nil?).map { |r| [r.start_date, r.rating] }
+  end
+
   def representation
     sample.complete.count.to_f / sample.count
+  end
+
+  def volatility
+    raise NotImplementedError unless klass.column_names.include?('rating')
+
+    # use data from the current period and the previous period
+    sample_plus_previous_period = sample(start_time: start_time - period)
+
+    # pull out the standard deviation for ratings, by user
+    stddev_ratings = sample_plus_previous_period.joins(:user).select('stddev_samp(rating) as stddev_rating').group(:user_id).map(&:stddev_rating)
+
+    # average the non-nils to get our volatility score
+    stddev_ratings.reject(&:nil?).mean.round(1) rescue 0.0
   end
 
   def shortest_time_to_completion
@@ -91,14 +118,20 @@ class Result
 
   # pagination, sort of
 
-  def previous
-    @previous ||= self.class.new(source: source, period: period, start_date: start_date - period)
-    @previous if @previous.present?
+  def previous n = 1
+    @previous ||= Hash.new do |hash, key|
+      hash[key] = self.class.new(source: source, period: period, start_date: start_date - (key * period).seconds)
+    end
+
+    @previous[n].presence
   end
 
-  def next
-    @next ||= self.class.new(source: source, period: period, start_date: start_date + period)
-    @next if @next.present?
+  def next n = 1
+    @next ||= Hash.new do |hash, key|
+      hash[key] = self.class.new(source: source, period: period, start_date: start_date + (key * period).seconds)
+    end
+
+    @next[n].presence
   end
 
 end
