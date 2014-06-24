@@ -45,7 +45,7 @@
 
       = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
 
-      %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
+      %label.public{title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
         = f.check_box :comments_public
         .icon
 

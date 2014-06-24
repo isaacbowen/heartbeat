@@ -13,14 +13,14 @@ feature 'User submits submission' do
 
     required_metrics.each do |metric|
       page.should have_text metric.name
-      find("label[title=\"Rate '#{metric.name}' a #{Heartbeat::VALID_RATINGS.sample}\"]").click
+      find("label[data-original-title=\"Rate '#{metric.name}' a #{Heartbeat::VALID_RATINGS.sample}\"]").click
     end
 
     optional_metrics.each do |metric|
       find('.metric-name', text: metric.name, visible: false).should_not be_visible
       find('.metrics-list li', text: metric.name).click
       find('.metric-name', text: metric.name).should be_visible
-      find("label[title=\"Rate '#{metric.name}' a #{Heartbeat::VALID_RATINGS.sample}\"]").click
+      find("label[data-original-title=\"Rate '#{metric.name}' a #{Heartbeat::VALID_RATINGS.sample}\"]").click
     end
 
     fill_in('submission[comments]', with: 'help!')

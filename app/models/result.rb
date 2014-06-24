@@ -20,12 +20,8 @@ class Result
     source.where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
   end
 
-  def ready?
+  def complete?
     representation > 0.5
-  end
-
-  def not_ready?
-    not ready?
   end
 
   def persisted?

@@ -27,6 +27,16 @@ describe Result do
         end
       end
 
+      describe '#complete?' do
+        it 'should hinge at 50% on #representation' do
+          subject.stub(:representation) { 0.2 }
+          subject.should_not be_complete
+
+          subject.stub(:representation) { 0.51 }
+          subject.should be_complete
+        end
+      end
+
       [:empty?, :any?, :count, :size, :klass].each do |method_name|
         describe "##{method_name}" do
           it "should be sample.#{method_name}" do
@@ -38,7 +48,7 @@ describe Result do
 
       describe '#sample' do
         it 'should be the result of querying the source within the given period' do
-          subject.sample.should == subject.source.where('created_at >= ?', start_date.at_beginning_of_day).where('created_at <= ?', (start_date + period).at_end_of_day)
+          subject.sample.to_a.should == subject.source.where('created_at >= ?', start_date.at_beginning_of_day).where('created_at <= ?', (start_date + period).at_end_of_day).to_a
         end
       end
 
@@ -77,6 +87,10 @@ describe Result do
         end
       end
 
+      # these... I don't know how to test these.
+      it { should respond_to :volatility }
+      it { should respond_to :shortest_time_to_completion }
+
       describe '#comments' do
         it 'should be an array of Comments, sourced from the sample' do
           source.update_all comments: '', comments_public: false
@@ -102,12 +116,6 @@ describe Result do
           subject.public_comments.size.should == 3
           subject.public_comments.map(&:class).uniq.should == [Comment]
           subject.public_comments.all?(&:public?).should be_true
-        end
-      end
-
-      describe '#shortest_time_to_completion' do
-        it 'should be a thing' do
-          subject.shortest_time_to_completion.should_not be_nil
         end
       end
 
@@ -142,7 +150,7 @@ describe Result do
               create :submission
             end
 
-            (subject.next.should be_a Result) rescue binding.pry
+            subject.next.should be_a Result
           end
         end
       end

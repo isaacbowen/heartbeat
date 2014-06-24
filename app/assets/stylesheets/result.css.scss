@@ -55,21 +55,16 @@
 
   .result-metric {
     text-align: left;
-    text-decoration: none;
 
     header {
       margin-bottom: 15px;
+      margin-left: 20px;
 
       h1 {
-        display: block;
+        display: inline;
         font-weight: bold;
         color: #777;
-        text-align: left;
-        margin-left: 20px;
-      }
-
-      .description {
-        display: none;
+        margin: 0;
       }
     }
 
@@ -146,9 +141,7 @@
     text-align: left;
 
     &.none {
-      font-style: italic;
       color: #777;
-      text-align: center;
       font-size: 0.9em;
     }
 
@@ -189,25 +182,5 @@
     padding-top: 2em;
     margin-top: 2em;
     border-top: 1px #ccc solid;
-
-    h1 {
-      margin: 0;
-      font-size: 1.2em;
-      color: #555;
-      text-align: center;
-    }
-
-    .description {
-      color: #999;
-    }
-
-    .count {
-      font-style: italic;
-      color: #888;
-    }
-
-    .chart {
-      margin: 0 0 1em 0;
-    }
   }
 }
