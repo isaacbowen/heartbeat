@@ -42,13 +42,13 @@
               - else
                 = icon 'arrow-down'
               = metric_result.delta
-            %li.volatility{title: 'Volatility'}
+            %li.volatility{title: 'Volatility*'}
               = icon 'bolt'
               = metric_result.volatility
             %li.representation{title: "Response rate (#{metric_result.sample.complete.count} of #{metric_result.sample.count})"}
               = icon 'user'
               = number_to_percentage metric_result.representation*100, precision: 0
-            %li.unity{title: 'Unity'}
+            %li.unity{title: 'Unity*'}
               = icon 'dot-circle-o'
               = number_to_percentage metric_result.unity*100, precision: 0
 
