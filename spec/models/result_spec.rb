@@ -21,6 +21,22 @@ describe Result do
         Result.new source: source, period: period, start_date: start_date
       end
 
+      describe '#start_date' do
+        it 'should default to the current week\'s start date' do
+          Timecop.travel(Time.local(2008, 9, 1, 10, 5, 0)) do
+            Result.new.start_date.should == Date.current.at_beginning_of_week
+            Result.new(start_date: 1.day.ago).start_date.to_i.should == 1.day.ago.to_i
+          end
+        end
+      end
+
+      describe '#period' do
+        it 'should default to 1.week' do
+          Result.new.period.should == 1.week
+          Result.new(period: 1.month).period.should == 1.month
+        end
+      end
+
       describe '#to_param' do
         it 'should be Ymd' do
           subject.to_param.should == start_date.strftime('%Y%m%d')

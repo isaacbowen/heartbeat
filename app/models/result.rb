@@ -20,6 +20,10 @@ class Result
     source.where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
   end
 
+  def period
+    @period ||= 1.week
+  end
+
   def complete?
     representation > 0.5
   end
@@ -36,6 +40,10 @@ class Result
 
 
   # date stuff
+
+  def start_date
+    @start_date ||= Date.current.at_beginning_of_week
+  end
 
   def start_time
     start_date.at_beginning_of_day
