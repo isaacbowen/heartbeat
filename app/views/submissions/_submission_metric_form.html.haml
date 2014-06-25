@@ -1,4 +1,5 @@
-%div{class: "metric #{'optional' unless mf.object.required?} #{'completed' if mf.object.completed? or mf.object.previous.try(:completed?)}"}
+%div{class: "metric #{'optional' unless mf.object.required?} #{'completed' if mf.object.completed?}"}
+  .rating-value 4
   .metric-name
     = mf.object.name
   .metric-description= mf.object.description
@@ -8,7 +9,7 @@
     - Heartbeat::VALID_RATINGS.each do |i|
       .rating-option
         = mf.radio_button :rating, i
-        = mf.label :rating, i, value: i, 'data-delay' => 2000, title: "Rate '#{mf.object.name}' a #{i}"
+        = mf.label :rating, i, value: i, 'data-delay' => 100000, title: "Rate '#{mf.object.name}' a #{i}"
         - if mf.object.previous.try(:rating) == i
           .previous-rating-marker
             = icon 'asterisk'
@@ -16,11 +17,20 @@
     .rating-bookend.positive
       = icon 'thumbs-o-up'
   .comments
-    - if mf.object.comments.blank?
-      .comments-toggle
-        %a More to say?
-    .comments-input
-      = mf.text_area :comments, placeholder: 'More to say about this one? What can we all improve? (limit 140 chars)', maxlength: 140, data: {'negative-placeholder' => 'You rated this particularly low. What went wrong? How can we handle this?', 'negative-positive' => 'You rated this particularly high. What went well?'}
-      %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
-        = mf.check_box :comments_public
-        .icon
+    = mf.text_area :comments, placeholder: 'More to say about this one? What can we all improve? (limit 140 chars)', maxlength: 140, data: {'negative-placeholder' => 'You rated this particularly low. What went wrong? How can we handle this?', 'negative-positive' => 'You rated this particularly high. What went well?'}
+    %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
+      = mf.check_box :comments_public
+      .icon
+  .actions
+    .action-comment
+      %a
+        Comments?
+        = icon 'comment'
+
+    .action-next
+      %a
+        = icon 'arrow-right'
+        Next
+
+    .action-previous
+      %a= icon 'arrow-left'

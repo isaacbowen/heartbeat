@@ -3,6 +3,15 @@ class SubmissionsController < ApplicationController
   helper_method :current_submission
 
   def show
+    if not current_submission.completed?
+      redirect_to action: :edit
+    end
+  end
+
+  def edit
+    if current_submission.closed?
+      redirect_to action: :show
+    end
   end
 
   def update

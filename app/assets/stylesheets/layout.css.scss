@@ -7,6 +7,7 @@ body {
 body > .container {
   text-align: center;
   margin: 0 auto;
+  transition: all 0.1s;
 
   > header {
     position: fixed;
@@ -65,12 +66,18 @@ body > .container {
   @media (min-width: 600px) {
     max-width: 600px;
 
+    &.fullscreen {
+      max-width: 100%;
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+
     > header {
       position: static;
     }
 
     > .content {
-      position: static;
+      position: relative;
       margin-top: 0;
       border: 1px #eee solid;
     }

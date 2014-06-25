@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     post '/hit-me', to: 'meta#hit_me'
   end
 
-  resources :submissions, only: [:show, :update]
+  resources :submissions, only: [:show, :edit, :update]
 
   resources :results, only: [:index, :show]
 

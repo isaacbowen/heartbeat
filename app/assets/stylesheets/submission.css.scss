@@ -1,26 +1,188 @@
 @import 'mixins';
 
-.submission {
-}
-
-.submission-thanks {
+.submission.completed {
   margin: 0 10% 1em;
 }
 
-.submission-toggle {
-  cursor: pointer;
-  padding: 0.5em;
+.submission {
+  &.spotlight {
+    overflow: hidden;
+    margin: 0 -1em;
 
-  a {
-    color: #999;
+    .steps {
+      margin: 0;
+      white-space: nowrap;
+
+      .step {
+        @include clearfix;
+        vertical-align: top;
+        display: inline-block;
+        white-space: normal;
+        width: 600px;
+        min-height: 185px;
+        position: relative;
+        border: 0;
+        padding: 1em 2em 0;
+
+        .metric-description {
+          min-height: 3em;
+        }
+
+        .actions {
+          @include clearfix;
+          text-align: center;
+          line-height: 20px;
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          right: 10px;
+
+          > div {
+            a {
+              text-decoration: none;
+              color: #888;
+              cursor: pointer;
+            }
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .action-comment, .action-next {
+          width: 50%;
+          padding: 0 10px;
+          float: left;
+          position: relative;
+          transition: all 0.1s;
+          top: 2px;
+
+          a {
+            opacity: 0.8;
+            transition: all 0.1s;
+          }
+
+          .fa {
+            font-size: 1.3em;
+            padding: 0 10px;
+          }
+        }
+
+        .metric.completed {
+          .action-comment, .action-next {
+            top: 0;
+
+            a {
+              opacity: 1;
+            }
+          }
+        }
+
+        .action-comment {
+          text-align: right;
+
+          .fa {
+            color: #999;
+          }
+        }
+
+        .action-next {
+          text-align: left;
+
+          .fa {
+            transition: all 0.05s;
+          }
+        }
+
+        .metric.completed .action-next .fa {
+          color: $blue;
+        }
+
+        .action-previous {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+
+          a {
+            display: block;
+            opacity: 0.5;
+            transition: all 0.05s;
+            padding: 0 5px;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+
+          .fa {
+            color: #999;
+          }
+        }
+
+        .action-submit {
+          margin: 0 20%;
+
+          input {
+          }
+        }
+
+        &:first-child {
+          .action-previous {
+            display: none;
+          }
+        }
+
+        .comments {
+          @include clearfix;
+
+          display: none;
+          padding-bottom: 15px;
+        }
+
+        .rating-value {
+          display: none;
+        }
+
+        &.final {
+          .comments {
+            display: block;
+          }
+        }
+
+        &.submitting {
+          padding-top: 75px;
+
+          .fa {
+            font-size: 30px;
+            color: #999;
+          }
+        }
+      }
+    }
+  }
+
+  .progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1em;
+    background: rgba(#000, 0.1);
+
+    .meter {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      min-width: 10px;
+      background: $blue;
+    }
   }
 }
 
 .submission-form {
-  &.complete {
-    display: none;
-  }
-
   h2 {
     margin-bottom: 0.25em;
 
@@ -29,37 +191,8 @@
     }
   }
 
-  .submission-prompt {
-    color: #555;
-    margin: 0.5em 0 1.5em;
-    font-style: italic;
-  }
-
-  .metrics-list {
-    border-bottom: 1px #ddd solid;
-    margin-bottom: 1.3em;
-    padding-bottom: 1em;
-
-    li {
-      @include noselect;
-
-      display: inline-block;
-      color: #999;
-      text-decoration: underline;
-      cursor: pointer;
-      margin: 0 0.5em;
-      padding: 1em;
-
-      &.expanded {
-        opacity: 0.5;
-        text-decoration: none;
-      }
-    }
-  }
-
   .metric {
     margin-bottom: 1.3em;
-    border-bottom: 1px #ddd solid;
     padding-bottom: 1em;
   }
 
@@ -84,7 +217,7 @@
 
     height: 50px;
     line-height: 50px;
-    margin: 0.5em;
+    margin: 0 0.5em 1.5em;
   }
 
   .rating-bookend {
@@ -107,7 +240,7 @@
     }
 
     label {
-      @include button(#266ACC);
+      @include button($blue);
       color: rgba(#fff, 0.8);
       font-size: 1.4em;
       cursor: pointer;
@@ -161,23 +294,9 @@
     }
   }
 
-  .comments-toggle {
-    cursor: pointer;
-    padding: 0.5em;
-
-    a {
-      color: #999;
-    }
-  }
-
-  .comments-toggle + .comments-input {
-    display: none;
-    overflow: hidden;
-  }
-
-  .comments-input {
-    padding: 0.5em 0 0 0.5em;
-    overflow: hidden;
+  .comments {
+    @include clearfix;
+    padding: 0 0 0 0.5em;
 
     textarea {
       display: block;
@@ -214,22 +333,20 @@
     }
   }
 
-  .user-manager, .user-name, .submission-comments {
-    margin: 1em 0;
+  .step.final {
+    .user-manager, .user-name, .comments {
+      margin: 0 0 1em 0;
 
-    em {
-      display: block;
-      color: #888;
-      font-style: italic;
+      em {
+        display: block;
+        color: #888;
+        font-style: italic;
+      }
+
+      label:first-child {
+        margin-bottom: 0.5em;
+      }
     }
-
-    label:first-child {
-      margin-bottom: 0.5em;
-    }
-  }
-
-  .submission-submit {
-    margin: 1.5em 0 2em;
   }
 
   .submission-disclaimer {

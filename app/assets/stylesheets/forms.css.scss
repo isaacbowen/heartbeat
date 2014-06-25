@@ -6,6 +6,10 @@ textarea, input {
   border-radius: 3px;
   padding: 0.5em;
   width: 100%;
+
+  &:focus {
+    outline: 0;
+  }
 }
 
 input[type=submit] {

@@ -1,74 +1,21 @@
-.submission
-  - if current_submission.completed?
-    .submission-thanks
-      %p Thanks for your submission - appreciate it.
+.submission.completed
+  %p Thanks for your submission - appreciate it.
 
-      / %p
-      /   = link_to '/results/20140615' do
-      /     = icon 'arrow-right'
-      /     %strong Results for this week (ending June 15, 2014)
+  / %p
+  /   = link_to '/results/20140615' do
+  /     = icon 'arrow-right'
+  /     %strong Results for this week (ending June 15, 2014)
 
-      %p
-        %strong Results will be out on Monday.
+  %p
+    %strong Results will be out on Monday.
 
-      %p.muted This thing is a work in progress. Hit up #{link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} on Slack to join up, talk about what this is and what it could be. (Pull requests welcome!)
+  %p.muted This thing is a work in progress. Hit up #{link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} on Slack to join up, talk about what this is and what it could be. (Pull requests welcome!)
 
-    - if current_submission.closed?
-      %p (Your submission is closed. Stay tuned for more.)
-    - else
-      %p.submission-toggle
-        Forget something?
-        %a
-          Update your submission
-          = icon 'angle-right'
-
-  = form_for current_submission, html: {class: ['submission-form', ('complete' if current_submission.completed?)].join(' ')} do |f|
-    %p.submission-prompt
-      Think about the past week. For each of these measures, what was your experience?
-
-    .metrics.required
-      = f.fields_for :submission_metrics, f.object.submission_metrics.required.ordered do |mf|
-        = render partial: 'submission_metric_form', locals: {mf: mf}
-
-    %h2 More?
-    %p
-      %em Rate these if they were an important part of the last week.
-
-    .metrics.optional
-      = f.fields_for :submission_metrics, f.object.submission_metrics.optional.ordered do |mf|
-        = render partial: 'submission_metric_form', locals: {mf: mf}
-
-    .submission-comments.comments-input
-      %label{for: 'submission_comments'}
-        Anything else to add?
-        %em Anything you didn't get to comment on yet?
-
-      = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
-
-      %label.public{title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
-        = f.check_box :comments_public
-        .icon
-
-
-    - unless current_submission.user.name.present?
-      = f.fields_for :user do |uf|
-        .user-name
-          %label
-            What's your name?
-            %em You'll only get asked this once.
-          = uf.text_field :name
-
-    - unless current_submission.user.manager_email.present?
-      = f.fields_for :user do |uf|
-        .user-manager
-          %label
-            What's your manager's email address?
-            %em You'll only get asked this once. Your ratings won't get sent to your manager; this will only be used to draw connections when analyzing data.
-          = uf.text_field :manager_email, placeholder: 'foo@bar.com', type: :email
-
-    .submission-submit= f.submit(f.object.completed? ? 'Update' : 'Submit')
-
-    .submission-disclaimer
-      %p On Monday, the aggregated/anonymized ratings will be publicly posted. Written notes will be included with your name attached.
-      %p This data belongs to you, and the more accurate your signal, the better the results for everyone.
-      %p (We'll be tuning how this works over time - feedback on all of this is very welcome.)
+  - if current_submission.closed?
+    %p (Your submission is closed. Stay tuned for more.)
+  - else
+    %p.submission-toggle
+      Forget something?
+      = link_to [:edit, current_submission] do
+        Update your submission
+        = icon 'angle-right'
