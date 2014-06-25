@@ -54,8 +54,8 @@ class Submission
     @$('.progress .meter').animate(width: "#{(@progress) / @progressTotal * 100}%")
 
   setListeners: ->
-    @$('.action-next').click => @nextStep()
-    @$('.action-previous').click => @prevStep()
+    @$('.action-next a').click => @nextStep()
+    @$('.action-previous a').click => @prevStep()
 
     @$('form :submit').click (e) =>
       e.preventDefault()
@@ -63,7 +63,7 @@ class Submission
       @nextStep()
       setTimeout((=> @$('form').submit()), 1000)
 
-    @$('.action-comment').click ->
+    @$('.action-comment a').click ->
       $comments = $(this).closest('.metric').find('.comments')
       if $comments.is(':visible')
         $(this).fadeTo('fast', 1)
@@ -89,14 +89,13 @@ class Submission
     @$('form').change =>
       $.post @$('form').attr('action'), @$('form').serialize()
 
-    @$('.rating :radio').change ->
+    @$('.rating :radio').click ->
       $metric = $(this).closest('.metric')
-      $metric.find('.rating-value').text($(this).val())
       $metric.find('textarea').focus()
 
       if parseInt($(this).val()) <= 2
         unless $metric.find('.comments').is(':visible')
-          $metric.find('.action-comment').click()
+          $metric.find('.action-comment a').click()
 
     @$('.rating-option').click ->
       $(this).closest('.rating').add(this).addClass('rated')
