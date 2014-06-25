@@ -84,7 +84,7 @@ class Result
   end
 
   def sparkline_data
-    (0..4).map { |n| previous(n) }.reject(&:nil?).map { |r| [r.start_date, r.rating] }
+    (0..5).map { |n| previous(n) }.reject(&:nil?).map { |r| [r.start_date, r.rating] }
   end
 
   def representation
@@ -94,24 +94,28 @@ class Result
   def volatility
     raise NotImplementedError unless klass.column_names.include?('rating')
 
-    # use data from the current period and the previous period
-    sample_plus_previous_period = sample(start_time: start_time - period)
+    @volatility ||= begin
+      # use data from the current period and the previous period
+      sample_plus_previous_period = sample(start_time: start_time - period)
 
-    # pull out the standard deviation for ratings, by user
-    stddev_ratings = sample_plus_previous_period.joins(:user).select('stddev_samp(rating) as stddev_rating').group(:user_id).map(&:stddev_rating)
+      # pull out the standard deviation for ratings, by user
+      stddev_ratings = sample_plus_previous_period.joins(:user).select('stddev_samp(rating) as stddev_rating').group(:user_id).map(&:stddev_rating)
 
-    # average the non-nils to get our volatility score
-    stddev_ratings.reject(&:nil?).mean.round(1) rescue 0.0
+      # average the non-nils to get our volatility score
+      stddev_ratings.reject(&:nil?).mean.round(1) rescue 0.0
+    end
   end
 
   def unity
     raise NotImplementedError unless klass.column_names.include?('rating')
 
-    # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
-    unity_ratings = sample.joins(:user).select("1.0 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_email').map(&:unity)
+    @unity ||= begin
+      # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
+      unity_ratings = sample.joins(:user).select("1.0 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_email').map(&:unity)
 
-    # average the non-nils to get our volatility score
-    unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
+      # average the non-nils to get our volatility score
+      unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
+    end
   end
 
   def shortest_time_to_completion
