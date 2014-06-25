@@ -1,10 +1,10 @@
 @import 'mixins';
 
-.submission.completed {
-  margin: 0 10% 1em;
-}
-
 .submission {
+  &.completed {
+    margin: 0 10% 1em;
+  }
+
   &.spotlight {
     overflow: hidden;
     margin: 0 -1em;
@@ -23,6 +23,11 @@
         position: relative;
         border: 0;
         padding: 1em 2em 0;
+
+        .metric {
+          margin-bottom: 1.3em;
+          padding-bottom: 1em;
+        }
 
         .metric-description {
           min-height: 3em;
@@ -145,6 +150,8 @@
         }
 
         &.final {
+          padding-top: 0.5em;
+
           .comments {
             display: block;
           }
@@ -180,20 +187,13 @@
       background: $blue;
     }
   }
-}
 
-.submission-form {
   h2 {
     margin-bottom: 0.25em;
 
     + p > em {
       color: #555;
     }
-  }
-
-  .metric {
-    margin-bottom: 1.3em;
-    padding-bottom: 1em;
   }
 
   .metric-name {
@@ -294,6 +294,22 @@
     }
   }
 
+  .step.final {
+    .user-manager, .user-name, .comments {
+      margin: 0 0 1em 0;
+
+      em {
+        display: block;
+        color: #888;
+        font-style: italic;
+      }
+
+      label:first-child {
+        margin-bottom: 0.5em;
+      }
+    }
+  }
+
   .comments {
     @include clearfix;
     padding: 0 0 0 0.5em;
@@ -331,26 +347,5 @@
         }
       }
     }
-  }
-
-  .step.final {
-    .user-manager, .user-name, .comments {
-      margin: 0 0 1em 0;
-
-      em {
-        display: block;
-        color: #888;
-        font-style: italic;
-      }
-
-      label:first-child {
-        margin-bottom: 0.5em;
-      }
-    }
-  }
-
-  .submission-disclaimer {
-    color: #999;
-    font-size: 0.9em;
   }
 }
