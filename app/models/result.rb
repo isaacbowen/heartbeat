@@ -53,7 +53,7 @@ class Result
   # stats
 
   def rating
-    sample.select(&:completed?).map(&:rating).mean.round(1)
+    mean(sample.select(&:completed?).map(&:rating)).round(1)
   end
 
   def rating_counts
@@ -93,7 +93,7 @@ class Result
     stddev_ratings = sample_plus_previous_period.joins(:user).select('stddev_samp(rating) as stddev_rating').group(:user_id).map(&:stddev_rating)
 
     # average the non-nils to get our volatility score
-    stddev_ratings.reject(&:nil?).mean.round(1) rescue 0.0
+    mean(stddev_ratings.reject(&:nil?)).round(1) rescue 0.0
   end
 
   def unity
@@ -103,7 +103,7 @@ class Result
     unity_ratings = sample.joins(:user).select("1.0 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_email').map(&:unity)
 
     # average the non-nils to get our volatility score
-    unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
+    mean(unity_ratings.reject(&:nil?)).round(2) rescue 0.0
   end
 
   def shortest_time_to_completion
@@ -138,6 +138,13 @@ class Result
     end
 
     @next[n].presence
+  end
+
+
+  private
+
+  def mean values
+    values.sum / values.size.to_f
   end
 
 end

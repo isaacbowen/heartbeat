@@ -13,7 +13,6 @@ gem 'chartkick'
 gem 'stamp'
 gem 'numbers_and_words'
 gem 'bootstrap-sass'
-gem 'descriptive_statistics'
 
 gem 'jquery-rails'
 
