@@ -3,6 +3,7 @@ class Submission
     @$node = $('.submission')
     @progressTotal = @$('.step:not(.submitting)').length
     @setListeners()
+    @detectStep()
 
   $: (selector) ->
     if selector
@@ -10,44 +11,57 @@ class Submission
     else
       @$node
 
-  step: 1
+  step: 0
 
   nextStep: -> @setStep(@step + 1)
   prevStep: -> @setStep(@step - 1)
 
-  setStep: (step) ->
+  setStep: (step, protectMe = false) ->
+    step = Math.max(step, 0)
+    step = Math.min(@progressTotal, step)
+
+    # don't let folks skip to the spinner screen
+    if protectMe
+      step = Math.min(@progressTotal - 1, step)
+
     @step = step
     @setViewport(@step)
     @setProgress(@step)
 
+  detectStep: ->
+    lastCompletedStep = @$('.step:first').nextUntil('.step:not(:has(.metric.completed))', '.step').last()[0]
+    lastMetricStep = @$('.step:has(.metric):last')[0]
+
+    if lastCompletedStep and lastCompletedStep != lastMetricStep
+      @$('.step').each (i, node) =>
+        if node == lastCompletedStep
+          @setStep(i+1)
+          false
+
   setViewport: (step) ->
-    $stepNode = @$('.step').eq(step - 1)
+    $stepNode = @$('.step').eq(step)
 
-    if $stepNode[0]
-      @$().removeClass('summary').addClass('spotlight')
-      @$('.steps').animate(marginLeft: "-=#{$stepNode.position().left}")
-      @$('.steps .metric .comments').not($stepNode.find('.comments')).slideUp('fast')
-      $('.container').removeClass('fullscreen')
+    @$('.steps').animate(marginLeft: "-=#{$stepNode.position().left}")
+    @$('.steps .metric .comments').not($stepNode.find('.comments')).slideUp('fast')
 
-      if $stepNode.find('.comments :input').val()
-        $stepNode.find('.comments').slideDown('fast')
-
-    else
-      @$().removeClass('spotlight').addClass('summary')
-      @$('.steps').removeAttr('style')
-      $('.container').addClass('fullscreen')
+    if $stepNode.find('.comments :input').val()
+      $stepNode.find('.comments').slideDown('fast')
 
   progress: 0
   progressTotal: null
   setProgress: (progress) ->
     @progress = progress
-    @$('.progress .meter').animate(width: "#{(@progress - 1) / @progressTotal * 100}%")
+    @$('.progress .meter').animate(width: "#{(@progress) / @progressTotal * 100}%")
 
   setListeners: ->
     @$('.action-next').click => @nextStep()
     @$('.action-previous').click => @prevStep()
 
-    @$('form').submit (e) => @nextStep()
+    @$('form :submit').click (e) =>
+      e.preventDefault()
+
+      @nextStep()
+      setTimeout((=> @$('form').submit()), 1000)
 
     @$('.action-comment').click ->
       $comments = $(this).closest('.metric').find('.comments')
@@ -59,6 +73,21 @@ class Submission
       $comments.slideToggle('fast')
   
     @$('.comments .public').tooltip(container: 'body', delay: {show: 200, hide: 100})
+
+    @$('.progress').click (e) =>
+      targetPercentage = (e.clientX - $(e.currentTarget).offset().left) / $(e.currentTarget).width()
+      targetStep = Math.round(@progressTotal * targetPercentage)
+
+      if targetStep == @step
+        if @progressTotal * targetPercentage > @step
+          @setStep(targetStep + 1, true)
+        else if @progressTotal * targetPercentage < @step
+          @setStep(targetStep - 1, true)
+      else
+        @setStep(targetStep, true)
+
+    @$('form').change =>
+      $.post @$('form').attr('action'), @$('form').serialize()
 
     @$('.rating :radio').change ->
       $metric = $(this).closest('.metric')
