@@ -33,9 +33,10 @@ class Submission
 
     $inputs = $step.find(':input')
     $inputs = $inputs.add $step.next(':input:hidden') # catch id the submission metric id
-    $inputs = $inputs.add @$(':input[name=authenticity_token]')
+    $inputs = $inputs.add @$(':input[name=authenticity_token], :input[name=_method]')
 
-    $.ajax @$('form').attr('action'), data: $inputs.serialize(), method: 'PATCH'
+    # note, capybara doesn't like PATCH'ing with data
+    $.post @$('form').attr('action'), $inputs.serialize()
 
   detectStep: ->
     lastCompletedStep = @$('.step:first').nextUntil('.step:not(:has(.metric.completed))', '.step').last()[0]

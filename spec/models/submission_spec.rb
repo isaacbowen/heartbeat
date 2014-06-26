@@ -2,18 +2,21 @@
 #
 # Table name: submissions
 #
-#  id           :uuid             not null, primary key
-#  user_id      :uuid
-#  completed    :boolean          default(FALSE), not null
-#  completed_at :datetime
-#  comments     :string(140)
-#  created_at   :datetime
-#  updated_at   :datetime
+#  id              :uuid             not null, primary key
+#  user_id         :uuid
+#  completed       :boolean          default(FALSE), not null
+#  completed_at    :datetime
+#  comments        :string(140)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  comments_public :boolean          default(TRUE)
 #
 
 require 'spec_helper'
 
 describe Submission do
+
+  subject { create :submission }
 
   describe '#seed_metrics!' do
     before(:each) do
@@ -145,6 +148,18 @@ describe Submission do
       submission = create :completed_submission
       submission.should be_completed
       submission.rating.should == submission.submission_metrics.average(:rating)
+    end
+  end
+
+  describe '#url' do
+    specify { subject.url.should == "http://heartbeat.dev/submissions/#{subject.id}" }
+  end
+
+  describe '#to_liquid' do
+    specify do
+      subject.to_liquid.should == {
+        'url' => "http://heartbeat.dev/submissions/#{subject.id}",
+      }
     end
   end
 

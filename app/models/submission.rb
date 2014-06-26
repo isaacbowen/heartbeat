@@ -2,13 +2,14 @@
 #
 # Table name: submissions
 #
-#  id           :uuid             not null, primary key
-#  user_id      :uuid
-#  completed    :boolean          default(FALSE), not null
-#  completed_at :datetime
-#  comments     :string(140)
-#  created_at   :datetime
-#  updated_at   :datetime
+#  id              :uuid             not null, primary key
+#  user_id         :uuid
+#  completed       :boolean          default(FALSE), not null
+#  completed_at    :datetime
+#  comments        :string(140)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  comments_public :boolean          default(TRUE)
 #
 
 class Submission < ActiveRecord::Base
@@ -16,6 +17,7 @@ class Submission < ActiveRecord::Base
   belongs_to :user
   has_many :submission_metrics, dependent: :delete_all
   has_many :metrics, through: :submission_metrics
+  has_many :submission_reminders, dependent: :delete_all
 
   accepts_nested_attributes_for :submission_metrics
   accepts_nested_attributes_for :user, update_only: true
@@ -61,6 +63,16 @@ class Submission < ActiveRecord::Base
     if completed?
       submission_metrics.average(:rating)
     end
+  end
+
+  def url
+    "http://#{ENV['HEARTBEAT_DOMAIN']}/submissions/#{id}"
+  end
+
+  def to_liquid
+    {
+      'url' => url,
+    }
   end
 
 end

@@ -2,13 +2,16 @@
 #
 # Table name: submission_metrics
 #
-#  id            :uuid             not null, primary key
-#  submission_id :uuid
-#  metric_id     :uuid
-#  rating        :integer
-#  comments      :text
-#  completed     :boolean          default(FALSE), not null
-#  completed_at  :datetime
+#  id              :uuid             not null, primary key
+#  submission_id   :uuid
+#  metric_id       :uuid
+#  rating          :integer
+#  comments        :text
+#  completed       :boolean          default(FALSE), not null
+#  completed_at    :datetime
+#  comments_public :boolean          default(TRUE)
+#  created_at      :datetime
+#  updated_at      :datetime
 #
 
 class SubmissionMetric < ActiveRecord::Base

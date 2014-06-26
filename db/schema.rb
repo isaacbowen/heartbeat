@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623203226) do
+ActiveRecord::Schema.define(version: 20140626170046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+  enable_extension "hstore"
 
   create_table "metrics", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name",                        null: false
@@ -45,6 +46,21 @@ ActiveRecord::Schema.define(version: 20140623203226) do
   add_index "submission_metrics", ["submission_id", "created_at"], name: "index_submission_metric_submission__created", using: :btree
   add_index "submission_metrics", ["submission_id", "metric_id", "created_at"], name: "index_submission_metric_submission_metric_created", using: :btree
   add_index "submission_metrics", ["submission_id", "metric_id"], name: "index_submission_metrics_on_submission_id_and_metric_id", using: :btree
+
+  create_table "submission_reminders", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.uuid     "submission_id",                 null: false
+    t.text     "medium",                        null: false
+    t.text     "message"
+    t.hstore   "meta"
+    t.boolean  "sent",          default: false, null: false
+    t.datetime "sent_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "submission_reminders", ["created_at", "sent"], name: "index_submission_reminders_on_created_at_and_sent", using: :btree
+  add_index "submission_reminders", ["sent"], name: "index_submission_reminders_on_sent", using: :btree
+  add_index "submission_reminders", ["submission_id"], name: "index_submission_reminders_on_submission_id", using: :btree
 
   create_table "submissions", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "user_id"

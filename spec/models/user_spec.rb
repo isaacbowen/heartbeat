@@ -51,4 +51,16 @@ describe User do
     end
   end
 
+  describe '#to_liquid' do
+    subject { build :user, name: 'Foo Bar', email: 'foo@bar.com' }
+
+    specify do
+      subject.to_liquid.should == {
+        'name' => 'Foo Bar',
+        'first_name' => 'Foo',
+        'email' => 'foo@bar.com',
+      }
+    end
+  end
+
 end

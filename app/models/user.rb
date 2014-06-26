@@ -31,6 +31,18 @@ class User < ActiveRecord::Base
     end
   end
 
+  def first_name
+    name.split(/\s+/).first rescue name
+  end
+
+  def to_liquid
+    {
+      'first_name' => first_name,
+      'name' => name,
+      'email' => email,
+    }
+  end
+
 
   protected
 

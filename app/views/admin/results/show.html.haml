@@ -9,5 +9,5 @@
 %h2 #{@result.sample.incomplete.count} Incomplete
 
 %ul
-  - @result.sample.incomplete.each do |submission|
-    %li #{submission.user.email} / #{link_to submission.id, submission}
+  - @result.sample.incomplete.eager_load(:submission_reminders).each do |submission|
+    %li #{submission.user.email} / #{link_to submission.id, submission} / #{pluralize submission.submission_reminders.count, 'reminder'}

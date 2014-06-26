@@ -13,6 +13,7 @@ gem 'chartkick'
 gem 'stamp'
 gem 'numbers_and_words'
 gem 'bootstrap-sass'
+gem 'liquid'
 
 # this by default will monkeypatch the crap out of Enumerable
 gem 'descriptive_statistics', require: false
