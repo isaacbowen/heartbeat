@@ -36,6 +36,18 @@ class Result
     [start_date.strftime('%Y%m%d')]
   end
 
+  def cache_key
+    @cache_key ||= "result/#{klass.name.underscore}/#{to_param}/#{updated_at.to_i}/#{count}"
+  end
+
+  def updated_at
+    @updated_at ||= sample.maximum(:updated_at)
+  end
+
+  def created_at
+    @created_at ||= sample.minimum(:created_at)
+  end
+
   delegate :empty?, :any?, :count, :size, :klass, to: :sample
 
 
@@ -88,7 +100,9 @@ class Result
   end
 
   def representation
-    sample.complete.count.to_f / sample.count
+    @representation ||= begin
+      sample.complete.count.to_f / sample.count
+    end
   end
 
   def volatility

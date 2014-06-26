@@ -13,8 +13,10 @@ describe Result do
       # get some data in there
       before(:each) do
         # heads up, this only makes sense for subs and their ilk
-        create_list(:submission, 10, created_at: start_date + 1.day)
-        create_list(:completed_submission, 10, created_at: start_date + 1.day)
+        Timecop.travel(start_date + 1.day) do
+          create_list(:submission, 10)
+          create_list(:completed_submission, 10)
+        end
       end
 
       subject do
@@ -40,6 +42,44 @@ describe Result do
       describe '#to_param' do
         it 'should be Ymd' do
           subject.to_param.should == start_date.strftime('%Y%m%d')
+        end
+      end
+
+      describe '#cache_key' do
+        it 'should change when a thing changes' do
+          subject.cache_key.should_not be_nil
+
+          cache_key = subject.cache_key
+
+          create :submission, created_at: start_date + 1.day
+
+          subject.instance_variable_set(:@cache_key, nil)
+          subject.cache_key.should_not be_nil
+          subject.cache_key.should_not == cache_key
+        end
+      end
+
+      describe '#created_at' do
+        it 'should be the min created at' do
+          Timecop.travel(start_date + 1.hour) do
+            create :submission
+          end
+
+          subject.created_at.should_not == subject.sample.maximum(:created_at)
+          subject.created_at.should == subject.sample.minimum(:created_at)
+          subject.created_at.to_i.should == (start_date + 1.hour).to_i
+        end
+      end
+
+      describe '#updated_at' do
+        it 'should be the max updated at' do
+          Timecop.travel(start_date + 1.day + 1.hour) do
+            create :submission
+          end
+
+          subject.updated_at.should_not == subject.sample.minimum(:updated_at)
+          subject.updated_at.should == subject.sample.maximum(:updated_at)
+          subject.updated_at.to_i.should == (start_date + 1.day + 1.hour).to_i
         end
       end
 

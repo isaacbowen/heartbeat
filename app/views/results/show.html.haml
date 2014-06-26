@@ -26,45 +26,59 @@
       %p 
   - else
     - @metric_results.each do |metric_result|
-      %section.result-metric{id: metric_result.meta[:slug]}
-        %header
-          %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
+      - cache(metric_result) do
+        %section.result-metric{id: metric_result.meta[:slug]}
+          %header
+            %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
 
-        .data
-          .bar-chart{title: 'Total ratings, from 1 to 4'}= column_chart metric_result.rating_counts, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '0', width: '100%', height: '100%'}, hAxis: {title: ''}, vAxis: {title: '', gridlines: {color: 'transparent'}}, enableInteractivity: false}
+          .data
+            .bar-chart{title: 'Total ratings, from 1 to 4'}= column_chart metric_result.rating_counts, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '0', width: '100%', height: '100%'}, hAxis: {title: ''}, vAxis: {title: '', gridlines: {color: 'transparent'}}, enableInteractivity: false}
 
-          .rating= metric_result.rating
+            .rating= metric_result.rating
 
-          %ul.stats
-            %li.delta{title: 'Delta: Change from last week'}
-              - if metric_result.delta == 0
-                = icon 'pause'
-              - elsif metric_result.delta > 0
-                = icon 'arrow-up'
-              - else
-                = icon 'arrow-down'
-              = metric_result.delta
-            %li.volatility{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users'}
-              = icon 'bolt'
-              - if metric_result.volatility.nan?
-                ?
-              - else
-                = metric_result.volatility
-            %li.representation{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}"}
-              = icon 'user'
-              = number_to_percentage metric_result.representation*100, precision: 0
-            %li.unity{title: 'Unity: A percentage indicating how closely each team\'s ratings fall'}
-              = icon 'dot-circle-o'
-              - if metric_result.unity.nan?
-                ?
-              - else
-                = number_to_percentage metric_result.unity*100, precision: 0
+            %ul.stats
+              %li.delta{title: 'Delta: Change from last week'}
+                - if metric_result.delta == 0
+                  = icon 'pause'
+                - elsif metric_result.delta > 0
+                  = icon 'arrow-up'
+                - else
+                  = icon 'arrow-down'
+                = metric_result.delta
+              %li.volatility{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users'}
+                = icon 'bolt'
+                - if metric_result.volatility.nan?
+                  ?
+                - else
+                  = metric_result.volatility
+              %li.representation{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}"}
+                = icon 'user'
+                = number_to_percentage metric_result.representation*100, precision: 0
+              %li.unity{title: 'Unity: A percentage indicating how closely each team\'s ratings fall'}
+                = icon 'dot-circle-o'
+                - if metric_result.unity.nan?
+                  ?
+                - else
+                  = number_to_percentage metric_result.unity*100, precision: 0
 
-          .sparkline{title: "The last #{metric_result.sparkline_data.size} weeks of data"}= line_chart metric_result.sparkline_data, min: nil, max: nil, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '10', width: '100%', height: '60%'}, hAxis: {title: '', baselineColor: 'transparent'}, vAxis: {title: '', gridlines: {color: 'transparent'}, baselineColor: 'transparent'}, curveType: 'none', pointSize: 0, enableInteractivity: false}
+            .sparkline{title: "The last #{metric_result.sparkline_data.size} weeks of data"}= line_chart metric_result.sparkline_data, min: nil, max: nil, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '10', width: '100%', height: '60%'}, hAxis: {title: '', baselineColor: 'transparent'}, vAxis: {title: '', gridlines: {color: 'transparent'}, baselineColor: 'transparent'}, curveType: 'none', pointSize: 0, enableInteractivity: false}
 
-        - if metric_result.public_comments.any?
+          - if metric_result.public_comments.any?
+            %ul.comments
+              - metric_result.public_comments.each do |comment|
+                %li
+                  .content= simple_format comment.body
+                  .author{title: comment.user.name}= comment.user.abbreviated_name
+          - else
+            %p.comments.none
+              (no comments)
+
+    - cache(@result) do
+      %section.result-comments
+        %h1 General Comments
+        - if @result.public_comments.any?
           %ul.comments
-            - metric_result.public_comments.each do |comment|
+            - @result.public_comments.each do |comment|
               %li
                 .content= simple_format comment.body
                 .author{title: comment.user.name}= comment.user.abbreviated_name
@@ -72,28 +86,16 @@
           %p.comments.none
             (no comments)
 
-    %section.result-comments
-      %h1 General Comments
-      - if @result.public_comments.any?
-        %ul.comments
-          - @result.public_comments.each do |comment|
-            %li
-              .content= simple_format comment.body
-              .author{title: comment.user.name}= comment.user.abbreviated_name
-      - else
-        %p.comments.none
-          (no comments)
-
-    %section.summary
-      %ul
-        %li
-          .label Overall response rate:
-          .value= number_to_percentage @result.representation*100, precision: 0
-          .context (#{@result.sample.complete.count} of #{@result.sample.count})
-        %li
-          .label Best response time:
-          .value= @result.shortest_time_to_completion
-          .context
+      %section.summary
+        %ul
+          %li
+            .label Overall response rate:
+            .value= number_to_percentage @result.representation*100, precision: 0
+            .context (#{@result.sample.complete.count} of #{@result.sample.count})
+          %li
+            .label Best response time:
+            .value= @result.shortest_time_to_completion
+            .context
 
     %section.definitions
       %h1 Definitions
