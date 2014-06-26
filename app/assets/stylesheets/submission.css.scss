@@ -98,6 +98,34 @@
           .fa {
             transition: all 0.05s;
           }
+
+          .skip {
+            display: none;
+          }
+        }
+
+        .metric.optional {
+          .action-next {
+            .next {
+              display: none;
+            }
+
+            .skip {
+              display: inline;
+            }
+          }
+        }
+
+        .metric.completed.optional {
+          .action-next {
+            .next {
+              display: inline;
+            }
+
+            .skip {
+              display: none;
+            }
+          }
         }
 
         .metric.completed .action-next .fa {

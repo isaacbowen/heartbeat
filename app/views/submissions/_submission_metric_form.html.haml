@@ -24,13 +24,16 @@
   .actions
     .action-comment
       %a
-        Comments?
+        %span Comments?
         = icon 'comment'
 
     .action-next
       %a
         = icon 'arrow-right'
-        Next
+        %span.skip
+          Skip
+        %span.next
+          Next
 
     .action-previous
       %a= icon 'arrow-left'
