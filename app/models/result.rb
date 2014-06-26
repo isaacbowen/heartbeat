@@ -37,7 +37,10 @@ class Result
   end
 
   def cache_key
-    @cache_key ||= "result/#{klass.name.underscore}/#{to_param}/#{updated_at.to_i}/#{count}"
+    @cache_key ||= begin
+      digest = Digest::MD5.hexdigest(sample.pluck(:id).join)
+      "result/#{klass.name.underscore}/#{digest}/#{updated_at.to_i}"
+    end
   end
 
   def updated_at
