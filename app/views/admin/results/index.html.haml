@@ -1,0 +1,5 @@
+%h1 Results
+
+%ul
+  - @results.each do |result|
+    %li Week starting #{link_to result.to_param, [:admin, result]} (#{result.sample.complete.count}/#{pluralize result.sample.count, 'submission'})

@@ -33,7 +33,13 @@ h2 {
   color: #777;
 }
 
-h1, h2 {
+h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #777;
+}
+
+h1, h2, h3 {
   margin: 1em 0;
 
   &:first-child {

@@ -26,6 +26,8 @@ Rails.application.routes.draw do
         post 'batch', action: :batch
       end
     end
+
+    resources :results
   end
 
 end
