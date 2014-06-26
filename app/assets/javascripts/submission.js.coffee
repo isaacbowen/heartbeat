@@ -28,6 +28,15 @@ class Submission
     @setViewport(@step)
     @setProgress(@step)
 
+  saveStep: (step) ->
+    $step = @$('.step').eq(step)
+
+    $inputs = $step.find(':input')
+    $inputs = $inputs.add $step.next(':input:hidden') # catch id the submission metric id
+    $inputs = $inputs.add @$(':input[name=authenticity_token]')
+
+    $.ajax @$('form').attr('action'), data: $inputs.serialize(), method: 'PATCH'
+
   detectStep: ->
     lastCompletedStep = @$('.step:first').nextUntil('.step:not(:has(.metric.completed))', '.step').last()[0]
     lastMetricStep = @$('.step:has(.metric):last')[0]
@@ -57,6 +66,8 @@ class Submission
     @$('.action-next a').click => @nextStep()
     @$('.action-previous a').click => @prevStep()
 
+    @$('form').change => @saveStep(@step)
+
     @$('form :submit').click (e) =>
       e.preventDefault()
 
@@ -85,9 +96,6 @@ class Submission
           @setStep(targetStep - 1, true)
       else
         @setStep(targetStep, true)
-
-    @$('form').change =>
-      $.post @$('form').attr('action'), @$('form').serialize()
 
     @$('.rating :radio').click ->
       $metric = $(this).closest('.metric')

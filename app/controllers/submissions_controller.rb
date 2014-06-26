@@ -17,7 +17,11 @@ class SubmissionsController < ApplicationController
   def update
     current_submission.update_attributes! submission_params
 
-    redirect_to current_submission
+    if request.xhr?
+      render nothing: true, status: :ok
+    else
+      redirect_to current_submission
+    end
   end
 
 
