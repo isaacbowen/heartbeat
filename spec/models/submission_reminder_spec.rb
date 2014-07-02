@@ -2,15 +2,16 @@
 #
 # Table name: submission_reminders
 #
-#  id            :uuid             not null, primary key
-#  submission_id :uuid             not null
-#  medium        :text             not null
-#  message       :text
-#  meta          :hstore
-#  sent          :boolean          default(FALSE), not null
-#  sent_at       :datetime
-#  created_at    :datetime
-#  updated_at    :datetime
+#  id                              :uuid             not null, primary key
+#  submission_id                   :uuid             not null
+#  medium                          :text             not null
+#  message                         :text
+#  meta                            :hstore
+#  sent                            :boolean          default(FALSE), not null
+#  sent_at                         :datetime
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  submission_reminder_template_id :uuid
 #
 
 require 'spec_helper'
@@ -18,10 +19,6 @@ require 'spec_helper'
 describe SubmissionReminder do
 
   subject { build :submission_reminder }
-
-  describe '#from' do
-    specify { subject.from.should == 'Isaac Bowen <ibowen@enova.com>' }
-  end
 
   describe '#to' do
     specify { subject.to.should == "#{subject.user.name} <#{subject.user.email}>" }

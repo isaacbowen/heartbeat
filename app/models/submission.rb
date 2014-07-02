@@ -18,6 +18,7 @@ class Submission < ActiveRecord::Base
   has_many :submission_metrics, dependent: :delete_all
   has_many :metrics, through: :submission_metrics
   has_many :submission_reminders, dependent: :delete_all
+  has_many :submission_reminder_templates, through: :submission_reminders
 
   accepts_nested_attributes_for :submission_metrics
   accepts_nested_attributes_for :user, update_only: true

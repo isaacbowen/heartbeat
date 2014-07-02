@@ -2,23 +2,25 @@
 #
 # Table name: submission_reminders
 #
-#  id            :uuid             not null, primary key
-#  submission_id :uuid             not null
-#  medium        :text             not null
-#  message       :text
-#  meta          :hstore
-#  sent          :boolean          default(FALSE), not null
-#  sent_at       :datetime
-#  created_at    :datetime
-#  updated_at    :datetime
+#  id                              :uuid             not null, primary key
+#  submission_id                   :uuid             not null
+#  medium                          :text             not null
+#  message                         :text
+#  meta                            :hstore
+#  sent                            :boolean          default(FALSE), not null
+#  sent_at                         :datetime
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  submission_reminder_template_id :uuid
 #
 
 class SubmissionReminder < ActiveRecord::Base
 
   belongs_to :submission
   has_one :user, through: :submission
+  belongs_to :submission_reminder_template
 
-  store_accessor :meta, :subject
+  store_accessor :meta, :subject, :from
   attr_accessor :template
 
   scope :email, -> { where medium: 'email' }
@@ -35,10 +37,6 @@ class SubmissionReminder < ActiveRecord::Base
 
   def message
     self.message = (self[:message].presence || render_template)
-  end
-
-  def from
-    'Isaac Bowen <ibowen@enova.com>'
   end
 
   def to

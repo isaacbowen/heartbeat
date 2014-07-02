@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140626201649) do
+ActiveRecord::Schema.define(version: 20140702213243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,15 +49,28 @@ ActiveRecord::Schema.define(version: 20140626201649) do
   add_index "submission_metrics", ["submission_id", "metric_id"], name: "index_submission_metrics_on_submission_id_and_metric_id", using: :btree
   add_index "submission_metrics", ["updated_at"], name: "index_submission_metrics_on_updated_at", using: :btree
 
+  create_table "submission_reminder_templates", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.date     "submissions_start_date",                 null: false
+    t.date     "submissions_end_date",                   null: false
+    t.datetime "send_at"
+    t.boolean  "sent",                   default: false, null: false
+    t.text     "medium",                                 null: false
+    t.text     "template",                               null: false
+    t.hstore   "meta"
+  end
+
+  add_index "submission_reminder_templates", ["sent", "send_at"], name: "index_submission_reminder_templates_on_sent_and_send_at", using: :btree
+
   create_table "submission_reminders", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.uuid     "submission_id",                 null: false
-    t.text     "medium",                        null: false
+    t.uuid     "submission_id",                                   null: false
+    t.text     "medium",                                          null: false
     t.text     "message"
     t.hstore   "meta"
-    t.boolean  "sent",          default: false, null: false
+    t.boolean  "sent",                            default: false, null: false
     t.datetime "sent_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.uuid     "submission_reminder_template_id"
   end
 
   add_index "submission_reminders", ["created_at", "sent"], name: "index_submission_reminders_on_created_at_and_sent", using: :btree
@@ -92,6 +105,8 @@ ActiveRecord::Schema.define(version: 20140626201649) do
 
   add_foreign_key "submission_metrics", "metrics", name: "submission_metrics_metric_id_fk"
   add_foreign_key "submission_metrics", "submissions", name: "submission_metrics_submission_id_fk"
+
+  add_foreign_key "submission_reminders", "submission_reminder_templates", name: "submission_reminders_submission_reminder_template_id_fk"
 
   add_foreign_key "submissions", "users", name: "submissions_user_id_fk"
 
