@@ -5,8 +5,8 @@
 #  id                     :uuid             not null, primary key
 #  submissions_start_date :date             not null
 #  submissions_end_date   :date             not null
-#  send_at                :datetime
-#  sent                   :boolean          default(FALSE), not null
+#  reify_at               :datetime
+#  reified                :boolean          default(FALSE), not null
 #  medium                 :text             not null
 #  template               :text             not null
 #  meta                   :hstore
@@ -33,9 +33,9 @@ describe SubmissionReminderTemplate do
     end
   end
 
-  describe '#create_submission_reminders!' do
+  describe '#reify!' do
     it 'should create matching submission reminders' do
-      reminders = subject.create_submission_reminders!
+      reminders = subject.reify!
 
       reminders.should_not be_empty
 
@@ -45,17 +45,32 @@ describe SubmissionReminderTemplate do
     end
 
     it 'should give us a set of submission reminders' do
-      expect { subject.create_submission_reminders! }.to change { SubmissionReminder.count }.from(0).to(subject.submissions.size)
+      expect { subject.reify! }.to change { SubmissionReminder.count }.from(0).to(subject.submissions.size)
     end
 
     it 'should fill in the gaps' do
-      subject.create_submission_reminders!
+      subject.reify!
 
       Timecop.travel(3.days.ago) { create_list :submission, 2 }
-      expect { subject.create_submission_reminders! }.to change { SubmissionReminder.count }.by(2)
+      expect { subject.reify! }.to change { SubmissionReminder.count }.by(2)
 
       # nothing the second time around
-      expect { subject.create_submission_reminders! }.to change { SubmissionReminder.count }.by(0)
+      expect { subject.reify! }.to change { SubmissionReminder.count }.by(0)
+    end
+
+    it 'should mark the subject as reified' do
+      expect { subject.reify! }.to change { subject.reified? }.from(false).to(true)
+    end
+
+    context 'when a problem occurs' do
+      it 'should not mark the subject as reified' do
+        # haaaack
+        foo = false
+        SubmissionReminder.any_instance.stub(:subject=) { raise 'asdf' if foo; foo = true }
+
+        expect { subject.reify! rescue nil }.to_not change { subject.reified? }
+        expect { subject.reify! rescue nil }.to_not change { SubmissionReminder.count }
+      end
     end
   end
 

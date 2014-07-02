@@ -4,8 +4,8 @@ class CreateSubmissionReminderTemplates < ActiveRecord::Migration
       t.date :submissions_start_date, null: false
       t.date :submissions_end_date, null: false
 
-      t.timestamp :send_at
-      t.boolean :sent, null: false, default: false
+      t.timestamp :reify_at
+      t.boolean :reified, null: false, default: false
 
       t.text :medium, null: false
       t.text :template, null: false
@@ -17,6 +17,6 @@ class CreateSubmissionReminderTemplates < ActiveRecord::Migration
       t.foreign_key :submission_reminder_templates
     end
 
-    add_index :submission_reminder_templates, [:sent, :send_at]
+    add_index :submission_reminder_templates, [:reified, :reify_at]
   end
 end

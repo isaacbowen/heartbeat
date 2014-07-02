@@ -15,8 +15,8 @@ ActiveRecord::Schema.define(version: 20140702213243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
   enable_extension "hstore"
+  enable_extension "uuid-ossp"
 
   create_table "metrics", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name",                        null: false
@@ -52,14 +52,14 @@ ActiveRecord::Schema.define(version: 20140702213243) do
   create_table "submission_reminder_templates", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.date     "submissions_start_date",                 null: false
     t.date     "submissions_end_date",                   null: false
-    t.datetime "send_at"
-    t.boolean  "sent",                   default: false, null: false
+    t.datetime "reify_at"
+    t.boolean  "reified",                default: false, null: false
     t.text     "medium",                                 null: false
     t.text     "template",                               null: false
     t.hstore   "meta"
   end
 
-  add_index "submission_reminder_templates", ["sent", "send_at"], name: "index_submission_reminder_templates_on_sent_and_send_at", using: :btree
+  add_index "submission_reminder_templates", ["reified", "reify_at"], name: "index_submission_reminder_templates_on_reified_and_reify_at", using: :btree
 
   create_table "submission_reminders", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.uuid     "submission_id",                                   null: false

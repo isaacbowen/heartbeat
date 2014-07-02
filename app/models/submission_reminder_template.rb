@@ -5,8 +5,8 @@
 #  id                     :uuid             not null, primary key
 #  submissions_start_date :date             not null
 #  submissions_end_date   :date             not null
-#  send_at                :datetime
-#  sent                   :boolean          default(FALSE), not null
+#  reify_at               :datetime
+#  reified                :boolean          default(FALSE), not null
 #  medium                 :text             not null
 #  template               :text             not null
 #  meta                   :hstore
@@ -23,19 +23,30 @@ class SubmissionReminderTemplate < ActiveRecord::Base
 
   store_accessor :meta, :subject, :from
 
+  scope :reified, -> { where(reified: true) }
+  scope :unreified, -> { where(reified: true) }
+
   def submissions
     Submission
       .where('created_at >= ?', submissions_start_date.at_beginning_of_day)
       .where('created_at <= ?', submissions_end_date.at_end_of_day)
   end
 
-  def create_submission_reminders!
-    submissions.map do |submission|
-      submission.submission_reminders.where(submission_reminder_template: self).first_or_create! do |submission_reminder|
-        %w(subject from medium template).each do |attr|
-          submission_reminder.send "#{attr}=", send(attr)
+  def reify!
+    transaction do
+      submission_reminders = submissions.map do |submission|
+        submission.submission_reminders.where(submission_reminder_template: self).first_or_create! do |submission_reminder|
+          %w(subject from medium template).each do |attr|
+            submission_reminder.send "#{attr}=", send(attr)
+          end
         end
       end
+
+      self.reified = true
+
+      save!
+
+      submission_reminders
     end
   end
 
