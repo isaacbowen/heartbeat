@@ -1,5 +1,13 @@
 %h1 Week starting #{@result.to_param}
 
+%h2 Comments
+
+- @metric_results.each do |metric_result|
+  - if metric_result.private_comments.any?
+    %h3= metric_result.meta[:name]
+    - metric_result.private_comments.each do |comment|
+      %p= comment.body
+
 %h2 #{@result.sample.complete.count} Complete
 
 %ul

@@ -10,7 +10,23 @@ class Admin::ResultsController < Admin::BaseController
   end
 
   def show
-    @result = Result.new source: Submission.all, start_date: Date.strptime(params[:id], '%Y%m%d')
+    period = 1.week
+    start_date = Date.strptime(params[:id], '%Y%m%d')
+
+    @result = Result.new(
+      start_date: start_date,
+      period: period,
+      source: Submission.all,
+    )
+
+    @metric_results = Metric.active.ordered.map do |metric|
+      Result.new(
+        start_date: start_date,
+        period: period,
+        source: metric.submission_metrics,
+        meta: metric.attributes.with_indifferent_access,
+      )
+    end
   end
 
 end

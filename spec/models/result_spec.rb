@@ -176,6 +176,22 @@ describe Result do
         end
       end
 
+      describe '#private_comments' do
+        it 'should be an array of public Comments, sourced from the sample' do
+          source.update_all comments: '', comments_public: true
+
+          subs = source.sample(5)
+          subs.each { |s| s.comments = 'foobar'; s.save! }
+
+          subs = source.sample(3)
+          subs.each { |s| s.comments = 'foobar'; s.comments_public = false; s.save! }
+
+          subject.private_comments.size.should == 3
+          subject.private_comments.map(&:class).uniq.should == [Comment]
+          subject.private_comments.all?(&:public?).should be_false
+        end
+      end
+
       describe '#previous' do
         context 'with no data' do
           it 'should be nil' do

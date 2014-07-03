@@ -150,6 +150,10 @@ class Result
     comments.select(&:public?)
   end
 
+  def private_comments
+    comments.reject(&:public?)
+  end
+
 
   # pagination, sort of
 
