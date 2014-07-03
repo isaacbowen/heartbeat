@@ -20,6 +20,19 @@ describe SubmissionReminder do
 
   subject { build :submission_reminder }
 
+  describe '::send_pending!' do
+    it 'should sending pending things' do
+      pending = create_list :submission_reminder, 5
+
+      # eehhhh, mostly we just need to prevent the email from actually happening
+      subject.class.any_instance.stub(:send_email!)
+
+      subject.class.pending.should_not be_empty
+      subject.class.send_pending!
+      subject.class.pending.should be_empty
+    end
+  end
+
   describe '#to' do
     specify { subject.to.should == "#{subject.user.name} <#{subject.user.email}>" }
   end

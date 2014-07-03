@@ -14,8 +14,6 @@ gem 'stamp'
 gem 'numbers_and_words'
 gem 'bootstrap-sass'
 gem 'liquid'
-gem 'sidekiq'
-gem 'whenever'
 
 # this by default will monkeypatch the crap out of Enumerable
 gem 'descriptive_statistics', require: false
@@ -29,7 +27,6 @@ group :development do
   
   gem 'spring'
   gem 'spring-commands-rspec'
-  gem 'spring-commands-sidekiq'
 
   gem 'better_errors'
   gem 'binding_of_caller'

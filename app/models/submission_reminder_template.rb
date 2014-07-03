@@ -14,6 +14,12 @@
 
 class SubmissionReminderTemplate < ActiveRecord::Base
 
+  class << self
+    def reify_pending!
+      pending.to_a.tap { |p| p.each &:reify! }
+    end
+  end
+
   has_many :submission_reminders
 
   validates_presence_of :submissions_start_date
@@ -23,8 +29,9 @@ class SubmissionReminderTemplate < ActiveRecord::Base
 
   store_accessor :meta, :subject, :from
 
-  scope :reified, -> { where(reified: true) }
-  scope :unreified, -> { where(reified: true) }
+  scope :reified,   -> { where(reified: true) }
+  scope :unreified, -> { where(reified: false) }
+  scope :pending,   -> { unreified.where('reify_at <= ?', Time.now) }
 
   def submissions
     Submission
@@ -34,8 +41,9 @@ class SubmissionReminderTemplate < ActiveRecord::Base
 
   def reify!
     transaction do
-      submission_reminders = submissions.map do |submission|
+      submission_reminders = submissions.incomplete.map do |submission|
         submission.submission_reminders.where(submission_reminder_template: self).first_or_create! do |submission_reminder|
+          submission_reminder.submission_reminder_template = self
           %w(subject from medium template).each do |attr|
             submission_reminder.send "#{attr}=", send(attr)
           end

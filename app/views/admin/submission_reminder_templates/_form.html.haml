@@ -1,0 +1,24 @@
+= form_for [:admin, @new_template] do |f|
+  .input
+    = f.label :submissions_start_date
+    = f.text_field :submissions_start_date
+  .input
+    = f.label :submissions_end_date
+    = f.text_field :submissions_end_date
+  .input
+    = f.label :reify_at
+    = f.text_field :reify_at
+  .input
+    = f.label :medium
+    = f.text_field :medium
+  .input
+    = f.label :from
+    = f.text_field :from
+  .input
+    = f.label :subject
+    = f.text_field :subject
+  .input
+    = f.label :template
+    = f.text_area :template, rows: [3, f.object.template.split("\n").size].max
+
+  .submit= f.submit 'Save'

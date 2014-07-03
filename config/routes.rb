@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
 
     resources :results
+    resources :submission_reminder_templates
   end
 
 end

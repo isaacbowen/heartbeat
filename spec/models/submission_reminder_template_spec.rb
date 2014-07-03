@@ -27,6 +27,37 @@ describe SubmissionReminderTemplate do
     Timecop.travel(1.days.ago) { create_list :submission, 4 }
   end
 
+  describe '::reify_pending!' do
+    before(:each) do
+      subject.class.delete_all
+
+      create_list :submission_reminder_template, 3, reify_at: 3.days.from_now
+      create_list :submission_reminder_template, 2, reify_at: 2.days.from_now
+      create_list :submission_reminder_template, 1, reify_at: 1.days.from_now
+    end
+
+    it 'should reify pending templates' do
+      subject.class.unreified.size.should == 6
+      subject.class.reified.size.should == 0
+
+      subject.class.reify_pending!.size.should == 0
+
+      Timecop.travel(1.day + 1.hour) do
+        subject.class.reify_pending!.size.should == 1
+      end
+
+      Timecop.travel(5.days) do
+        subject.class.reify_pending!.size.should == 5
+      end
+
+      subject.class.reify_pending!.size.should == 0
+
+
+      subject.class.unreified.size.should == 0
+      subject.class.reified.size.should == 6
+    end
+  end
+
   describe '#submissions' do
     it 'should be the matching range of submissions' do
       subject.submissions.size.should == 3

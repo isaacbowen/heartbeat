@@ -1,0 +1,12 @@
+%h1 Submission Reminder Templates
+
+= render partial: 'form'
+
+%ul
+  - @templates.each do |template|
+    %li{style: ('text-decoration: line-through;' if template.reified?)}
+      #{template.reify_at} via #{template.medium}
+      %br
+      #{template.meta}
+      %br
+      #{simple_format template.template}

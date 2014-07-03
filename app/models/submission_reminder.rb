@@ -16,6 +16,12 @@
 
 class SubmissionReminder < ActiveRecord::Base
 
+  class << self
+    def send_pending!
+      pending.to_a.tap { |p| p.each &:send! }
+    end
+  end
+
   belongs_to :submission
   has_one :user, through: :submission
   belongs_to :submission_reminder_template
@@ -23,9 +29,11 @@ class SubmissionReminder < ActiveRecord::Base
   store_accessor :meta, :subject, :from
   attr_accessor :template
 
-  scope :email, -> { where medium: 'email' }
-  scope :slack, -> { where medium: 'slack' }
-  scope :sent,  -> { where sent: true }
+  scope :email,   -> { where medium: 'email' }
+  scope :slack,   -> { where medium: 'slack' }
+  scope :sent,    -> { where sent: true }
+  scope :unsent,  -> { where sent: false }
+  scope :pending, -> { unsent }
 
   validates_presence_of :submission
   validates_presence_of :medium
