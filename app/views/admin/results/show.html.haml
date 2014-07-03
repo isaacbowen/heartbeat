@@ -6,7 +6,9 @@
   - if metric_result.private_comments.any?
     %h3= metric_result.meta[:name]
     - metric_result.private_comments.each do |comment|
-      %p= comment.body
+      %p #{comment.body} (anon)
+    - metric_result.public_comments.each do |comment|
+      %p #{comment.body} (#{comment.user.name})
 
 %h2 #{@result.sample.complete.count} Complete
 
