@@ -84,16 +84,53 @@
         margin: 0 20px 0 0;
       }
 
+      .value {
+        border-radius: 3px;
+        border: 1px transparent solid;
+        transition: border-color 0.1s;
+        cursor: pointer;
+
+        &:hover {
+          border-color: lighten($blue, 40%);
+        }
+
+        &.active {
+          border-color: lighten($blue, 40%);
+
+          &:hover {
+            border-color: lighten($blue, 30%);
+          }
+        }
+      }
+
       .rating {
         width: 90px;
-        line-height: 50px;
+        line-height: 46px;
         font-size: 50px;
         text-align: center;
       }
 
-      .sparkline {
-        width: 100px;
-        margin-left: 50px;
+      .sparklines {
+        width: 175px;
+        height: 50px;
+        margin-left: 20px;
+        position: relative;
+
+        .sparkline {
+          width: inherit;
+          height: inherit;
+          opacity: 0;
+          transition: opacity 0.1s;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+
+          &.active {
+            opacity: 1;
+          }
+        }
       }
 
       ul.stats {
@@ -107,10 +144,9 @@
           float: left;
           font-size: 1.2em;
           color: #999;
-          margin: 0 0 3px 0;
-          padding: 0;
+          margin: -1px -1px 0px 0;
+          padding: 1px 0;
           width: 50%;
-          cursor: default;
 
           &:nth-child(2n-1) {
             clear: left;

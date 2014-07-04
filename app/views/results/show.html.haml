@@ -34,10 +34,10 @@
           .data
             .bar-chart{title: 'Total ratings, from 1 to 4'}= column_chart metric_result.rating_counts, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '0', width: '100%', height: '100%'}, hAxis: {title: ''}, vAxis: {title: '', gridlines: {color: 'transparent'}}, enableInteractivity: false}
 
-            .rating= metric_result.rating
+            .rating.value.active{data: {sparkline_key: 'rating'}}= metric_result.rating
 
             %ul.stats
-              %li.delta{title: 'Delta: Change from last week'}
+              %li.delta.value{title: 'Delta: Change from last week', data: {sparkline_key: 'delta'}}
                 - if metric_result.delta == 0
                   = icon 'pause'
                 - elsif metric_result.delta > 0
@@ -45,23 +45,25 @@
                 - else
                   = icon 'arrow-down'
                 = metric_result.delta
-              %li.volatility{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users'}
+              %li.volatility.value{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users', data: {sparkline_key: 'volatility'}}
                 = icon 'bolt'
                 - if metric_result.volatility.nan?
                   ?
                 - else
                   = metric_result.volatility
-              %li.representation{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}"}
+              %li.representation.value{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}", data: {sparkline_key: 'representation'}}
                 = icon 'user'
                 = number_to_percentage metric_result.representation*100, precision: 0
-              %li.unity{title: 'Unity: A percentage indicating how closely each team\'s ratings fall'}
+              %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
                 = icon 'dot-circle-o'
                 - if metric_result.unity.nan?
                   ?
                 - else
                   = number_to_percentage metric_result.unity*100, precision: 0
 
-            .sparkline{title: "The last #{metric_result.sparkline_data.size} weeks of data"}= line_chart metric_result.sparkline_data, min: nil, max: nil, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '10', width: '100%', height: '60%'}, hAxis: {title: '', baselineColor: 'transparent'}, vAxis: {title: '', gridlines: {color: 'transparent'}, baselineColor: 'transparent'}, curveType: 'none', pointSize: 0, enableInteractivity: false}
+            .sparklines
+              - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
+                %div{class: "sparkline #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}= line_chart metric_result.sparklines[thing], min: nil, max: nil, width: '100px', height: '50px', library: {titlePosition: 'none', chartArea: {top: '10', width: '100%', height: '60%'}, hAxis: {title: '', baselineColor: 'transparent'}, vAxis: {title: '', gridlines: {color: 'transparent'}, baselineColor: 'transparent'}, curveType: 'none', pointSize: 0, enableInteractivity: false}
 
           - if metric_result.public_comments.any?
             %ul.comments

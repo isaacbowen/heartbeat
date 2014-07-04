@@ -98,8 +98,10 @@ class Result
     end
   end
 
-  def sparkline_data
-    (0..5).map { |n| previous(n) }.reject(&:nil?).map { |r| [r.start_date, r.rating] }
+  def sparklines
+    @sparklines ||= Hash.new do |hash, key|
+      hash[key] = (0..5).map { |n| previous(n) }.reject(&:nil?).map { |r| [r.start_date, r.send(key)] }
+    end
   end
 
   def representation
