@@ -17,6 +17,15 @@
 
   %h2 Comments
 
+  - if @result.comments.any?
+    .prose
+      %h3 General
+      - @result.private_comments.each do |comment|
+        %p
+          %strong #{comment.body} (anon)
+      - @result.public_comments.each do |comment|
+        %p #{comment.body} (#{comment.user.name})
+
   - @metric_results.each do |metric_result|
     - if metric_result.comments.any?
       .prose
