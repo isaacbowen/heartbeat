@@ -62,7 +62,7 @@ class Submission < ActiveRecord::Base
 
   def rating
     if completed?
-      submission_metrics.average(:rating)
+      submission_metrics.average(:rating).round(1).to_f
     end
   end
 

@@ -149,7 +149,7 @@ describe Result do
       it { should respond_to :shortest_time_to_completion }
 
       describe '#comments' do
-        it 'should be an array of Comments, sourced from the sample' do
+        it 'should be an array of Comments, sourced from the sample, sorted by the rating' do
           source.update_all comments: '', comments_public: false
 
           subs = source.sample(5)
@@ -157,6 +157,7 @@ describe Result do
 
           subject.comments.size.should == 5
           subject.comments.map(&:class).uniq.should == [Comment]
+          subject.comments.map { |c| c.source.rating }.map(&:to_f).should == subs.map(&:rating).map(&:to_f).sort.reverse
         end
       end
 
