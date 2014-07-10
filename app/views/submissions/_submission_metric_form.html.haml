@@ -17,7 +17,7 @@
     .rating-bookend.positive
       = icon 'thumbs-o-up'
   .comments
-    = mf.text_area :comments, placeholder: 'More to say about this one? What can we all improve? (limit 140 chars)', maxlength: 140, data: {'negative-placeholder' => 'You rated this particularly low. What went wrong? How can we handle this?', 'negative-positive' => 'You rated this particularly high. What went well?'}
+    = mf.text_area :comments, placeholder: 'Tell me more - what\'s behind your rating?  (limit 140 chars)', maxlength: 140, data: {'negative-placeholder' => 'You rated this particularly low. What went wrong? How can we handle this?', 'negative-positive' => 'You rated this particularly high. What went well?'}
     %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
       = mf.check_box :comments_public
       .icon

@@ -102,7 +102,7 @@ class Submission
       $metric = $(this).closest('.metric')
       $metric.find('textarea').focus()
 
-      if parseInt($(this).val()) <= 2
+      if parseInt($(this).val()) == 1 or parseInt($(this).val()) == 4
         unless $metric.find('.comments').is(':visible')
           $metric.find('.action-comment a').click()
 
