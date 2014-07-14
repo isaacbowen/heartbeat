@@ -50,5 +50,4 @@
         %p.prose
           #{submission.user.name} &lt;#{submission.user.email}&gt; / #{link_to 'submission', submission} / #{pluralize submission.submission_reminders.count, 'reminder'} / #{number_to_percentage(submission.user.submissions.complete.size.to_f / (submission.user.submissions.size - 1) * 100, precision: 0) rescue 'n/a'}
           %br
-          hey hey - #{submission.url}
-          short week last week, can you take a minute and get this guy in?
+          #{submission.url}
