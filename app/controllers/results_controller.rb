@@ -1,7 +1,7 @@
 class ResultsController < ApplicationController
 
   def index
-    start_date = Date.today.at_beginning_of_week
+    start_date = (Date.today - 5.days).at_beginning_of_week
     redirect_to action: :show, id: start_date.strftime('%Y%m%d')
   end
 
