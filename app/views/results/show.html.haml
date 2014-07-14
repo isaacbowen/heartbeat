@@ -94,10 +94,10 @@
             .label Overall response rate:
             .value= number_to_percentage @result.representation*100, precision: 0
             .context (#{@result.sample.complete.count} of #{@result.sample.count})
-          %li
-            .label Best response time:
-            .value= @result.shortest_time_to_completion
-            .context
+          / %li
+          /   .label Best response time:
+          /   .value= @result.shortest_time_to_completion
+          /   .context
 
     %section.definitions
       %h1 Definitions
