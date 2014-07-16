@@ -24,8 +24,9 @@ p {
 }
 
 h1 {
-  font-size: 1.2em;
+  font-size: 20px;
   color: #555;
+  font-weight: bold;
 }
 
 h2 {
@@ -40,11 +41,7 @@ h3 {
 }
 
 h1, h2, h3 {
-  margin: 1em 0;
-
-  &:first-child {
-    margin-top: 0;
-  }
+  margin: 5px 0 15px;
 }
 
 hr {

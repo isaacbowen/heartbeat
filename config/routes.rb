@@ -7,6 +7,10 @@ Rails.application.routes.draw do
     post '/hit-me', to: 'meta#hit_me'
   end
 
+  resource :user, path: '/me', only: [:show, :update, :edit] do
+    get :history, on: :member
+  end
+
   resources :submissions, only: [:show, :edit, :update]
 
   resources :results, only: [:index, :show]

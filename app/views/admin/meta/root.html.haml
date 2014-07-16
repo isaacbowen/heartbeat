@@ -1,5 +1,6 @@
-%h1 Admin
-
-%p
-  = link_to 'Users', [:admin, :users]
-  = link_to 'Results', [:admin, :results]
+%header
+  %h1 Admin
+  %nav
+    %ul
+      %li= link_to 'Users', [:admin, :users]
+      %li= link_to 'Results', [:admin, :results]

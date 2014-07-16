@@ -16,9 +16,9 @@
       .step {
         @include clearfix;
         vertical-align: top;
+        text-align: center;
         display: inline-block;
         white-space: normal;
-        width: 600px;
         min-height: 185px;
         position: relative;
         border: 0;

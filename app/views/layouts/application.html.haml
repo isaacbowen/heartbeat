@@ -14,13 +14,21 @@
   %body
     .container
       %header
-        %div.logo Heartbeat
-        %div.user
-          for
+        .logo
+          = link_to :root do
+            %span.heartbeat Heartbeat
+            %span.tenant for Enova
+        .user
           - if current_user
-            #{current_user.name.presence || current_user.email}
+            = link_to current_user.abbreviated_name, :user
           - else
-            Enova
+            %a Login
+
+        %nav.nav
+          %ul
+            %li= link_to 'Me', :user
+            %li= link_to 'Results', :results
+            %li= link_to 'Admin', [:admin, :root]
 
       - if flash.any?
         .flashes

@@ -1,3 +1,5 @@
+@import 'mixins';
+
 body {
   background: #fafafa;
   margin: 0;
@@ -5,26 +7,118 @@ body {
 }
 
 body > .container {
-  text-align: center;
+  max-width: 600px;
   margin: 0 auto;
   transition: all 0.1s;
 
   > header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 1em;
+    transition: all 0.1s;
+    position: relative;
+    opacity: 0.8;
+
+    &:before, &:after {
+      display: block;
+      position: absolute;
+      bottom: 12px;
+      left: 13px;
+
+      font-size: 14px;
+      font-family: 'FontAwesome';
+      content: '\f078';
+      color: rgba(#000, 0.4);
+
+      transition: all 0.1s;
+    }
+
+    &:after {
+      opacity: 0;
+      content: '\f054';
+    }
+
+    a {
+      color: #777;
+    }
 
     .logo {
-      font-size: 1.4em;
-      font-weight: bold;
+      opacity: 0.9;
+      padding: 10px 10px 10px 37px;
+      transition: all 0.1s;
+
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      span {
+        display: inline-block;
+        margin-right: 10px;
+      }
+
+      .heartbeat {
+        font-size: 18px;
+        font-weight: bold;
+        color: darken($blue, 20);
+      }
+
+      .tenant {
+      }
     }
 
     .user {
+      position: absolute;
+      top: 7px;
+      right: 5px;
+      padding: 5px 10px;
+      border-radius: 3px;
+
       font-size: 0.9em;
-      color: #999;
+
+      .toggle {
+        cursor: pointer;
+      }
+    }
+
+    $nav-height-expanded: 45px;
+    .nav {
+      height: 0;
+      opacity: 0;
+      transition: all 0.1s;
+      background: rgba(#000, 0.05);
+
+      ul {
+        padding: 13px 10px 10px 30px;
+
+        li {
+          display: inline-block;
+          margin-right: 10px;
+
+          a {
+            padding: 4px 8px;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+    &:hover, &:active {
+      opacity: 1;
+
+      &:after {
+        opacity: 1;
+      }
+
+      &:before {
+        opacity: 0;
+      }
+
+      .logo {
+        padding-left: 20px;
+      }
+
+      .nav {
+        height: $nav-height-expanded;
+        opacity: 1;
+      }
     }
   }
 
@@ -41,11 +135,36 @@ body > .container {
     position: relative;
     z-index: 200;
     padding: 1em 1em 2em;
-    margin-top: 60px;
     background: #fff;
     border-radius: 3px;
     border-top: 1px #eee solid;
     box-shadow: 0 0 2px rgba(#000, 0.1);
+    border-bottom: 4px $blue solid;
+
+    > header {
+      @include clearfix;
+
+      h1 {
+        float: left;
+        line-height: 20px;
+      }
+
+      nav {
+        float: right;
+        line-height: 20px;
+
+        a {
+          color: #999;
+        }
+
+        ul {
+          li {
+            display: inline-block;
+            margin-left: 10px;
+          }
+        }
+      }
+    }
   }
 
   > footer {
@@ -55,31 +174,12 @@ body > .container {
 
     span {
       color: #888;
-      margin: 0 0.5em;
+      margin: 0 5px 5px;
+      display: inline-block;
     }
 
     a {
       color: #999;
-    }
-  }
-
-  @media (min-width: 600px) {
-    max-width: 600px;
-
-    &.fullscreen {
-      max-width: 100%;
-      margin-left: 1em;
-      margin-right: 1em;
-    }
-
-    > header {
-      position: static;
-    }
-
-    > .content {
-      position: relative;
-      margin-top: 0;
-      border: 1px #eee solid;
     }
   }
 }

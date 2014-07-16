@@ -31,10 +31,6 @@ class SubmissionsController < ApplicationController
     Submission.find params[:id]
   end
 
-  def current_user
-    current_submission.user
-  end
-
   def submission_params
     params.require(:submission).permit(:comments, :comments_public,
                                        submission_metrics_attributes: [:id, :rating, :comments, :comments_public],

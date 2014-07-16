@@ -64,6 +64,10 @@ class Submission
     @$('.progress .meter').animate(width: "#{(@progress) / @progressTotal * 100}%")
 
   setListeners: ->
+    $(window).resize =>
+      @$('.step').outerWidth @$().width()
+    $(window).trigger('resize')
+
     @$('.action-next a').click => @nextStep()
     @$('.action-previous a').click => @prevStep()
 
