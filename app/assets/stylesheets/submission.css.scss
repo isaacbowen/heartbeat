@@ -22,7 +22,51 @@
         min-height: 185px;
         position: relative;
         border: 0;
-        padding: 1em 2em 0;
+        padding: 10px 20px 0;
+
+        &.intro {
+          padding-top: 5px;
+
+          h3 {
+            em {
+              display: block;
+              opacity: 0.8;
+              font-style: normal;
+              font-size: 90%;
+            }
+          }
+
+          p {
+            &.timeframe {
+              color: #555;
+              margin-top: 10px;
+            }
+
+            &.intro {
+              color: #666;
+              line-height: 18px;
+            }
+          }
+
+          .actions {
+            text-align: center;
+
+            .action-next {
+              display: inline-block;
+              float: none;
+              width: auto;
+
+              // haaaack
+              a {
+                opacity: 1;
+              }
+
+              .fa {
+                color: blue;
+              }
+            }
+          }
+        }
 
         .metric {
           margin-bottom: 1.3em;
@@ -199,12 +243,14 @@
 
   .progress {
     position: absolute;
-    bottom: 0;
+    bottom: -4px;
     left: 0;
     right: 0;
     height: 1em;
-    background: rgba(#000, 0.1);
+    background: #ddd;
     cursor: pointer;
+    @include border-radius(0 0 3px 3px);
+    overflow: hidden;
 
     .meter {
       position: absolute;

@@ -15,7 +15,11 @@ gem 'numbers_and_words'
 gem 'bootstrap-sass'
 gem 'liquid'
 
-# this by default will monkeypatch the crap out of Enumerable
+# auth
+gem 'devise'
+gem 'omniauth-google-oauth2'
+
+# if auto-required, this will monkeypatch the crap out of Enumerable
 gem 'descriptive_statistics', require: false
 
 gem 'jquery-rails'
@@ -45,11 +49,14 @@ group :development, :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'database_cleaner'
-  gem 'webmock'
-  gem 'vcr'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
 
   # http://collectiveidea.com/blog/archives/2014/02/11/false-positives-on-travis-ci-with-codeclimate-simplecov/
   gem 'simplecov', '~> 0.7.1', require: nil
+end
+
+group :test do
+  gem 'webmock'
+  gem 'vcr'
 end

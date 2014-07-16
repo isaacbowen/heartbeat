@@ -2,13 +2,11 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  helper_method :current_user
-
 
   protected
 
-  def current_user
-    @current_user ||= User.find_by_email('ibowen@enova.com')
+  def authenticate_user!
+    redirect_to :login unless user_signed_in?
   end
 
 end

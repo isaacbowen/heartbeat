@@ -27,6 +27,10 @@ class SubmissionsController < ApplicationController
 
   protected
 
+  def current_user
+    current_submission.user
+  end
+
   def current_submission
     Submission.find params[:id]
   end

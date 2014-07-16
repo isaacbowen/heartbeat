@@ -19,6 +19,19 @@ class User < ActiveRecord::Base
 
   before_save :set_manager
 
+  devise :omniauthable
+
+  class << self
+    def find_for_google_oauth2 access_token, signed_in_resource = nil
+      data = access_token.info
+
+      User.find_or_create_by!(email: data['email']) do |user|
+        # user.email    = data['email'].strip
+        user.name     = data['name']
+      end
+    end
+  end
+
   def abbreviated_name
     return name if name.blank?
 

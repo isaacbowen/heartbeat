@@ -5,6 +5,20 @@
   - submission = current_submission
   = form_for submission, html: {class: ['submission-form', ('complete' if submission.completed?)].join(' ')} do |f|
     .steps
+      .step.intro
+        %h3
+          Your Heartbeat
+          %em Week of #{f.object.created_at.at_beginning_of_week.format_like 'August 4, 2014'}
+
+        %p.intro <strong>This'll just take a minute.</strong> You'll be asked about #{f.object.submission_metrics.size.to_words} metrics as they relate to your week. Don't think too hard - best thing you can do is be honest, and think only about how the week went for you.
+
+        .actions
+          .action-next
+            %a
+              = icon 'arrow-right'
+              %span.next
+                Next
+
       = f.fields_for :submission_metrics, f.object.submission_metrics.ordered do |mf|
         .step= render partial: 'submission_metric_form', locals: {mf: mf}
       .step.final

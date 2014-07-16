@@ -6,10 +6,13 @@
   %div{class: "rating #{'rated' if mf.object.rating.present?}"}
     .rating-bookend.negative
       = icon 'thumbs-o-down fa-flip-horizontal'
+
+    - # hack for the moment
+    - rating_descriptions = {1 => 'Very bad.', 2 => 'Not good.', 3 => 'Pretty good.', 4 => 'Excellent!'}
     - Heartbeat::VALID_RATINGS.each do |i|
-      .rating-option
+      .rating-option{title: rating_descriptions[i]}
         = mf.radio_button :rating, i
-        = mf.label :rating, i, value: i, 'data-delay' => 100000, title: "Rate '#{mf.object.name}' a #{i}"
+        = mf.label :rating, i, value: i, 'data-tooltip' => false, title: "Rate '#{mf.object.name}' a #{i}"
         - if mf.object.previous.try(:rating) == i
           .previous-rating-marker
             = icon 'asterisk'

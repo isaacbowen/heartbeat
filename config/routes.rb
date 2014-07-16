@@ -2,6 +2,13 @@ Rails.application.routes.draw do
 
   root 'meta#root'
 
+  devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
+  get 'login' => redirect('/users/auth/google_oauth2')
+
+  devise_scope :user do
+    delete 'logout' => 'devise/sessions#destroy'
+  end
+
   # temporary haaaack
   if Rails.env.development?
     post '/hit-me', to: 'meta#hit_me'

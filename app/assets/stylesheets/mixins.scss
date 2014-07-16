@@ -32,6 +32,13 @@ $blue: #266ACC;
   user-select: none;
 }
 
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
 // http://nicolasgallagher.com/micro-clearfix-hack/
 @mixin clearfix {
   /**

@@ -1,5 +1,10 @@
+// @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600);
+// @import url(http://fonts.googleapis.com/css?family=Roboto:400,500,300);
+// @import url(http://fonts.googleapis.com/css?family=Hind:400,600);
+
 body {
   font-family: sans-serif;
+  font-weight: 400;
   font-size: 14px;
   line-height: 1.4em;
 }
@@ -17,30 +22,44 @@ a {
   }
 }
 
+em {
+  font-weight: 400;
+}
+
 p {
   & + p, & + ul {
-    margin-top: 1em;
+    margin-top: 15px;
+  }
+
+  strong {
+    opacity: 0.9;
   }
 }
 
 h1 {
   font-size: 20px;
   color: #555;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 h2 {
-  font-size: 1.2em; // eh
+  font-size: 17px; // eh
   color: #777;
 }
 
 h3 {
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #777;
+  font-size: 15px;
+  font-weight: 600;
+  color: #666;
 }
 
-h1, h2, h3 {
+h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+h1, h2, h3, h4 {
   margin: 5px 0 15px;
 }
 

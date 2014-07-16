@@ -21,13 +21,16 @@
         .user
           - if current_user
             = link_to current_user.abbreviated_name, :user
+            = link_to icon('sign-out').html_safe, :logout, method: :delete
           - else
-            %a Login
+            = link_to 'Login', :login
 
-        %nav.nav
-          %ul
-            %li= link_to 'Me', :user
-            %li= link_to 'Results', :results
+      %nav.main
+        %ul
+          %li= link_to 'Me', :user
+          %li= link_to 'Enova', :results
+          %li= link_to '?', :root
+          - if current_user.try :admin?
             %li= link_to 'Admin', [:admin, :root]
 
       - if flash.any?

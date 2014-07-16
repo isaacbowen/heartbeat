@@ -1,5 +1,7 @@
 @import 'mixins';
 
+$header-height: 40px;
+
 body {
   background: #fafafa;
   margin: 0;
@@ -7,33 +9,21 @@ body {
 }
 
 body > .container {
-  max-width: 600px;
   margin: 0 auto;
   transition: all 0.1s;
+  position: relative;
+
+  @media all and (min-width: 600px) {
+    width: 50%;
+    min-width: 400px;
+    max-width: 600px;
+  }
 
   > header {
     transition: all 0.1s;
     position: relative;
     opacity: 0.8;
-
-    &:before, &:after {
-      display: block;
-      position: absolute;
-      bottom: 12px;
-      left: 13px;
-
-      font-size: 14px;
-      font-family: 'FontAwesome';
-      content: '\f078';
-      color: rgba(#000, 0.4);
-
-      transition: all 0.1s;
-    }
-
-    &:after {
-      opacity: 0;
-      content: '\f054';
-    }
+    height: $header-height;
 
     a {
       color: #777;
@@ -41,7 +31,7 @@ body > .container {
 
     .logo {
       opacity: 0.9;
-      padding: 10px 10px 10px 37px;
+      padding: 10px 15px;
       transition: all 0.1s;
 
       a {
@@ -68,56 +58,70 @@ body > .container {
       position: absolute;
       top: 7px;
       right: 5px;
-      padding: 5px 10px;
+      padding: 5px 0 5px 10px;
       border-radius: 3px;
 
       font-size: 0.9em;
 
-      .toggle {
-        cursor: pointer;
+      .fa {
+        text-decoration: none;
+        margin-left: 10px;
+        padding: 0 5px;
+      }
+    }
+  }
+
+  > nav {
+    padding: 0 10px;
+    opacity: 0.8;
+    transition: opacity 0.1s;
+
+    @media all and (min-width: 600px) {
+      $width: 20%;
+      width: $width;
+      position: absolute;
+      top: $header-height + 10px;
+
+      &.main {
+        left: calc(#{-1 * $width} - 10px);
+        text-align: right;
+      }
+
+      &.user {
+        right: calc(#{-1 * $width} - 10px);
+        text-align: left;
+      }
+
+      &:hover {
+        opacity: 1;
       }
     }
 
-    $nav-height-expanded: 45px;
-    .nav {
-      height: 0;
-      opacity: 0;
-      transition: all 0.1s;
-      background: rgba(#000, 0.05);
+    ul {
+      margin: -5px -5px 5px;
 
-      ul {
-        padding: 13px 10px 10px 30px;
+      li {
+        display: inline-block;
 
-        li {
-          display: inline-block;
-          margin-right: 10px;
+        a, span {
+          color: #555;
+          text-decoration: none;
+          display: block;
+          padding: 5px 10px;
+          transition: all 0.1s;
+          opacity: 0.8;
+        }
 
-          a {
-            padding: 4px 8px;
-            font-size: 13px;
-          }
+        a:hover {
+          opacity: 1;
         }
       }
-    }
 
-    &:hover, &:active {
-      opacity: 1;
-
-      &:after {
-        opacity: 1;
-      }
-
-      &:before {
-        opacity: 0;
-      }
-
-      .logo {
-        padding-left: 20px;
-      }
-
-      .nav {
-        height: $nav-height-expanded;
-        opacity: 1;
+      @media all and (min-width: 600px) {
+        li {
+          display: block;
+          border-bottom: 1px rgba(#000, 0.1) solid;
+        }
       }
     }
   }
@@ -133,13 +137,13 @@ body > .container {
 
   > .content {
     position: relative;
-    z-index: 200;
-    padding: 1em 1em 2em;
+    padding: 10px 15px 20px 15px;
     background: #fff;
     border-radius: 3px;
     border-top: 1px #eee solid;
     box-shadow: 0 0 2px rgba(#000, 0.1);
     border-bottom: 4px $blue solid;
+    min-height: 150px;
 
     > header {
       @include clearfix;
