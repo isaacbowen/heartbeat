@@ -28,7 +28,8 @@
       %nav.main
         %ul
           %li= link_to 'Me', :user
-          %li= link_to 'Enova', :results
+          %li= link_to 'My Team', [:results, scope: :team]
+          %li= link_to 'Enova', [:results, scope: :all]
           %li= link_to '?', :root
           - if current_user.try :admin?
             %li= link_to 'Admin', [:admin, :root]

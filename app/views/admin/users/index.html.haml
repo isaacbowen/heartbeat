@@ -1,8 +1,13 @@
-%h1 Users
+%header
+  %h1 Users
 
-%p
-  = link_to 'Import', [:import, :admin, :users]
+  %nav
+    %ul
+      %li= link_to 'Import', [:import, :admin, :users]
 
-%ul
+%table
   - @users.each do |user|
-    %li= user.email
+    %tr
+      %td= user.email
+      - if Rails.env.development?
+        %td= link_to 'Become', [:become, :admin, user], method: :post

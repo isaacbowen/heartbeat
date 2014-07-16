@@ -64,3 +64,9 @@ VCR.configure do |config|
   config.hook_into :webmock
   config.ignore_hosts 'codeclimate.com'
 end
+
+
+# warden
+
+include Warden::Test::Helpers
+Warden.test_mode!

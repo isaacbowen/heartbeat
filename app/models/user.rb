@@ -13,7 +13,8 @@
 
 class User < ActiveRecord::Base
 
-  has_many :submissions, dependent: :destroy
+  has_many :submissions, dependent: :destroy do
+  end
   has_many :submission_metrics, through: :submissions
   belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
 
@@ -54,6 +55,18 @@ class User < ActiveRecord::Base
       'name' => name,
       'email' => email,
     }
+  end
+
+  def manager?
+    User.where(manager_email: email).any?
+  end
+
+  def team
+    if manager?
+      User.where(manager_email: email)
+    else
+      User.where(manager_email: manager_email)
+    end
   end
 
 

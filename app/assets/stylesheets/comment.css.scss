@@ -1,0 +1,28 @@
+.comment {
+  .author {
+    display: inline-block;
+    color: #999;
+
+    &:before {
+      content: '\2013';
+      margin: 0 0.2em;
+    }
+  }
+
+  .content {
+    display: inline;
+
+    p {
+      display: inline;
+      color: #555;
+    }
+
+    &:before {
+      display: inline;
+      font-family: 'FontAwesome';
+      color: #999;
+      margin: 0 0.5em 0 0;
+      content: '\f10d';
+    }
+  }
+}

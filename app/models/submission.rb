@@ -60,6 +60,10 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def open?
+    not closed?
+  end
+
   def rating
     if completed?
       submission_metrics.average(:rating).round(1).to_f

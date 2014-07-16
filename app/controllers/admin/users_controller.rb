@@ -4,6 +4,12 @@ class Admin::UsersController < Admin::BaseController
     @users = User.order('email asc')
   end
 
+  def become
+    @user = User.find params[:id]
+    sign_in @user
+    redirect_to :root
+  end
+
   def import
     if params[:emails].present?
       original_user_count = User.count
