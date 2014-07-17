@@ -130,7 +130,7 @@ class Result
 
     @unity ||= begin
       # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
-      unity_ratings = sample.joins(:user).select("1.0 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_email').map(&:unity)
+      unity_ratings = sample.complete.joins(:user).select("1.0 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_email').map(&:unity)
 
       # average the non-nils to get our volatility score
       unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
