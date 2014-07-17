@@ -3,9 +3,7 @@ class SubmissionsController < ApplicationController
   helper_method :current_submission
 
   def show
-    if not current_submission.completed?
-      redirect_to({action: :edit}, {notice: "Double-check your submission - make sure to fill in at least the first #{current_submission.metrics.required.size} metrics."})
-    end
+    redirect_to action: :edit unless current_submission.completed?
   end
 
   def edit
@@ -25,7 +23,11 @@ class SubmissionsController < ApplicationController
     if request.xhr?
       render nothing: true, status: :ok
     else
-      redirect_to current_submission
+      if current_submission.completed?
+        redirect_to current_submission
+      else
+        redirect_to({action: :edit}, {notice: "Double-check your submission - make sure to fill in at least the first #{current_submission.metrics.required.size} metrics."})
+      end
     end
   end
 
