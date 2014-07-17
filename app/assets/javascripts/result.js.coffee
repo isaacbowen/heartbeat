@@ -5,5 +5,5 @@ $ ->
     $metric.find('.value.active').removeClass('active')
     $(this).addClass('active')
 
-    $metric.find('.sparkline.active').removeClass('active')
-    $metric.find(".sparkline.#{$(this).data('sparkline-key')}").addClass('active')
+    $metric.find('.sparkline-wrapper.active').removeClass('active')
+    $metric.find(".sparkline-wrapper.#{$(this).data('sparkline-key')}").addClass('active')

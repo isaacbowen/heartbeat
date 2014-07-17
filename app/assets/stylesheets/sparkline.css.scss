@@ -1,0 +1,30 @@
+$color: #274ec0;
+
+.sparkline {
+  background: #fff;
+  display: inline-block;
+
+  svg {
+    width: inherit;
+    height: inherit;
+    display: block;
+  }
+}
+
+.sparkline-lines {
+  polyline, line {
+    stroke: $color;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    fill: transparent;
+  }
+}
+
+.sparkline-bars {
+  rect {
+    fill: $color;
+  }
+
+  padding: 0 5px;
+  border-bottom: 1px #ccc solid;
+}

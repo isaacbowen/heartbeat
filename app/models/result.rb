@@ -100,7 +100,7 @@ class Result
 
   def sparklines
     @sparklines ||= Hash.new do |hash, key|
-      hash[key] = (0..5).map { |n| previous(n) }.reject(&:nil?).map { |r| [r.start_date, r.send(key)] }
+      hash[key] = (0..5).map { |n| previous(n) }.reject(&:nil?).map(&key).reverse
     end
   end
 
@@ -121,7 +121,7 @@ class Result
       stddev_ratings = sample_plus_previous_period.joins(:user).select('stddev_samp(rating) as stddev_rating').group(:user_id).map(&:stddev_rating)
 
       # average the non-nils to get our volatility score
-      stddev_ratings.reject(&:nil?).mean.round(1) rescue 0.0
+      stddev_ratings.reject(&:nil?).mean.round(1).to_f rescue 0.0
     end
   end
 

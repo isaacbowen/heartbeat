@@ -32,7 +32,8 @@
             %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
 
           .data
-            .bar-chart{title: 'Total ratings, from 1 to 4'}= column_chart metric_result.rating_counts, height: '50px', width: '100px', library: {titlePosition: 'none', chartArea: {top: '0', width: '100%', height: '100%'}, hAxis: {title: ''}, vAxis: {title: '', gridlines: {color: 'transparent'}}, enableInteractivity: false}
+            .bar-chart{title: 'Total ratings, from 1 to 4'}
+              = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
 
             .rating.value.active{data: {sparkline_key: 'rating'}}= metric_result.rating
 
@@ -63,8 +64,8 @@
 
             .sparklines
               - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
-                %div{class: "sparkline #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
-                  = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing]}
+                %div{class: "sparkline-wrapper #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
+                  = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines}
 
           - if metric_result.public_comments.any?
             %ul.comments

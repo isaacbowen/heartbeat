@@ -49,7 +49,6 @@ GEM
       xpath (~> 2.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
-    chartkick (1.2.4)
     cliver (0.3.2)
     codeclimate-test-reporter (0.3.0)
       simplecov (>= 0.7.1, < 1.0.0)
@@ -268,7 +267,6 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass
   capybara
-  chartkick
   codeclimate-test-reporter
   coffee-rails (~> 4.0.0)
   database_cleaner
