@@ -15,4 +15,8 @@ class Comment
     source.comments_public
   end
 
+  def private?
+    not public?
+  end
+
 end

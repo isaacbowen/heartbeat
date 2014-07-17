@@ -17,14 +17,14 @@ class ResultsController < ApplicationController
       return
     end
 
-    scope = params[:scope].presence.try(:to_sym) || :all
+    @scope = params[:scope].presence.try(:to_sym) || :all
 
-    if scope != :all and not user_signed_in?
+    if @scope != :all and not user_signed_in?
       return redirect_to :login
     end
 
     submissions = begin
-      case scope
+      case @scope
       when :me
         Submission.where(user: current_user)
       when :team

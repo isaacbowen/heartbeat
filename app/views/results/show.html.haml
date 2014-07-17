@@ -1,9 +1,9 @@
 .result
   %p.timeframe
-    - case params[:scope]
-    - when 'me'
+    - case @scope
+    - when :me
       Me,
-    - when 'team'
+    - when :team
       My team,
     - else
       Enova,
@@ -11,14 +11,14 @@
 
   .previous-link
     - if @result.previous.present?
-      = link_to [@result.previous, scope: params[:scope]] do
+      = link_to [@result.previous, scope: @scope] do
         = icon 'arrow-left'
     - else
       %span.muted= icon 'arrow-left'
 
   .next-link
     - if @result.next.present?
-      = link_to [@result.next, scope: params[:scope]] do
+      = link_to [@result.next, scope: @scope] do
         = icon 'arrow-right'
     - else
       %span.muted= icon 'arrow-right'
@@ -83,12 +83,19 @@
                 %div{class: "sparkline-wrapper #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
                   = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines}
 
-          - if metric_result.public_comments.any?
+          - if @scope == :me
+            - comments = metric_result.comments
+          - else
+            - comments = metric_result.public_comments
+          - if comments.any?
             %ul.comments
-              - metric_result.public_comments.each do |comment|
+              - comments.each do |comment|
                 %li.comment
                   .content= simple_format comment.body
-                  .author{title: comment.user.name}= comment.user.abbreviated_name
+                  .author{title: comment.user.name}
+                    = comment.user.abbreviated_name
+                    - if comment.private?
+                      (private)
           - else
             %p.comments.none
               (no comments)

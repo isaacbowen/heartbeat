@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
 
   def team
     if manager?
-      User.where(manager_email: email)
+      User.where(manager_email: email) | User.where(email: email)
     else
       User.where(manager_email: manager_email)
     end
