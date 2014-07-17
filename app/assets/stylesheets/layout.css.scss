@@ -13,10 +13,14 @@ body > .container {
   transition: all 0.1s;
   position: relative;
 
-  @media all and (min-width: 600px) {
-    width: 60%;
-    min-width: 400px;
-    max-width: 700px;
+  @media all and (max-width: 775px) {
+    margin: 0 5% 0 20%;
+    width: auto;
+  }
+
+  @media all and (min-width: 775px) {
+    margin: 0 auto;
+    width: 575px;
   }
 
   > header {
@@ -175,6 +179,7 @@ body > .container {
     padding: 1em;
     margin-bottom: 1em;
     font-size: 0.9em;
+    text-align: center;
 
     span {
       color: #888;

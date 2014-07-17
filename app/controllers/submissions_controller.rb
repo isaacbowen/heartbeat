@@ -4,7 +4,7 @@ class SubmissionsController < ApplicationController
 
   def show
     if not current_submission.completed?
-      redirect_to action: :edit
+      redirect_to({action: :edit}, {notice: "Double-check your submission - make sure to fill in at least the first #{current_submission.metrics.required.size} metrics."})
     end
   end
 

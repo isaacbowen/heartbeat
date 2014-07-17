@@ -54,7 +54,7 @@
     }
   }
 
-  .result-metric {
+  section {
     text-align: left;
 
     header {
@@ -113,9 +113,9 @@
       }
 
       .sparklines {
-        width: 175px;
+        width: 150px;
         height: 50px;
-        margin-left: 20px;
+        margin-left: 10px;
         position: relative;
 
         .sparkline-wrapper {

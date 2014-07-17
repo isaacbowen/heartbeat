@@ -26,7 +26,8 @@
       %nav.main
         %ul
           %li= link_to 'Me', [:results, scope: :me]
-          %li= link_to 'My Team', [:results, scope: :team]
+          - if current_user.try :manager?
+            %li= link_to 'My Team', [:results, scope: :team]
           %li= link_to 'Enova', [:results, scope: :all]
           %li= link_to '?', :root
           - if current_user.try :admin?
@@ -45,6 +46,3 @@
         %p
           %span= link_to 'Heartbeat on Github', 'https://github.com/isaacbowen/heartbeat', target: :_blank
           %span #{icon 'heart'} Isaac
-          %span
-            Feedback/discussion:
-            = link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank

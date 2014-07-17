@@ -24,7 +24,11 @@ class ResultsController < ApplicationController
       when :me
         Submission.where(user: current_user)
       when :team
-        Submission.where(user: current_user.team)
+        if current_user.manager?
+          Submission.where(user: current_user.team)
+        else
+          Submission.all
+        end
       else
         Submission.all
       end

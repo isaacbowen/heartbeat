@@ -95,7 +95,8 @@
 
     - cache(@result) do
       %section.result-comments
-        %h1 General Comments
+        %header
+          %h1 General Comments
         - if @result.public_comments.any?
           %ul.comments
             - @result.public_comments.each do |comment|
@@ -119,7 +120,8 @@
           /   .context
 
     %section.definitions
-      %h1 Definitions
+      %header
+        %h1 Definitions
 
       %dl
         %dt Rating
