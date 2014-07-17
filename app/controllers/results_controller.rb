@@ -1,7 +1,7 @@
 class ResultsController < ApplicationController
 
   def index
-    start_date = (Date.today - 5.days).at_beginning_of_week
+    start_date = (Date.today - 3.days).at_beginning_of_week
 
     scope = params[:scope].presence.try(&:to_sym) || :all
 
