@@ -3,7 +3,8 @@ require 'spec_helper'
 feature 'User management' do
 
   before(:each) do
-    page.driver.headers = {'Authorization' => ActionController::HttpAuthentication::Basic.encode_credentials(ENV['HEARTBEAT_ADMIN_USERNAME'], ENV['HEARTBEAT_ADMIN_PASSWORD'])}
+    user = create :admin_user
+    login_as user, scope: :user
   end
 
   scenario 'Import users' do

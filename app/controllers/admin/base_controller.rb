@@ -7,7 +7,9 @@ class Admin::BaseController < ApplicationController
   protected
 
   def authorize_user!
-    current_user.admin?
+    unless current_user.admin?
+      redirect_to :root, notice: 'Nope.'
+    end
   end
 
 end

@@ -1,17 +1,16 @@
 require 'spec_helper'
 
 feature 'User submits submission' do
-  before(:each) { optional_metrics; required_metrics }
+  before(:each) { optional_metrics; required_metrics; submission }
 
   let(:optional_metrics) { create_list :metric, 3 }
   let(:required_metrics) { create_list :required_metric, 3 }
+  let(:submission) { create :submission }
 
   scenario 'Complete a basic submission' do
-    submission = create :submission
-
     visit "/submissions/#{submission.id}"
 
-    page.current_url.should match /\/submissions\/#{Regexp.escape submission.id}\/edit$/
+    page.current_path.should == "/submissions/#{submission.id}/edit"
 
     (required_metrics + optional_metrics).each do |metric|
       page.should have_text metric.name
@@ -24,7 +23,7 @@ feature 'User submits submission' do
 
     page.should have_content 'Thanks for your submission'
 
-    page.current_url.should match /\/submissions\/#{Regexp.escape submission.id}$/
+    page.current_path.should == "/submissions/#{submission.id}"
 
     submission.reload.should be_completed
     submission[:completed].should be_true

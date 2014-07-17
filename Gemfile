@@ -50,6 +50,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'timecop'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'quiet_assets'
 
   # http://collectiveidea.com/blog/archives/2014/02/11/false-positives-on-travis-ci-with-codeclimate-simplecov/
   gem 'simplecov', '~> 0.7.1', require: nil

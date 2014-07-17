@@ -5,7 +5,7 @@ class MetaController < ApplicationController
 
   def hit_me
     if Rails.env.development?
-      redirect_to User.where(email: params[:user][:email]).first_or_create.submissions.create
+      redirect_to [:edit, User.where(email: params[:user][:email]).first_or_create.submissions.create]
     else
       redirect_to :root
     end
