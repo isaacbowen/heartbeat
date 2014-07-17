@@ -76,7 +76,7 @@
                   - if metric_result.unity.nan?
                     ?
                   - else
-                  = number_to_percentage metric_result.unity*100, precision: 0
+                    = number_to_percentage metric_result.unity*100, precision: 0
 
             .sparklines
               - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
