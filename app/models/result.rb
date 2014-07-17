@@ -100,7 +100,7 @@ class Result
 
   def sparklines
     @sparklines ||= Hash.new do |hash, key|
-      hash[key] = (0..5).map { |n| previous(n) }.reject(&:nil?).map(&key).reverse
+      hash[key] = (0..12).map { |n| previous(n) }.reject(&:nil?).map(&key).reverse
     end
   end
 

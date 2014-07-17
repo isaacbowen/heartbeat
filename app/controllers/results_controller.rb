@@ -3,14 +3,7 @@ class ResultsController < ApplicationController
   def index
     start_date = (Date.today - 5.days).at_beginning_of_week
 
-    scope = begin
-      case params[:scope]
-      when 'team'
-        :team
-      else
-        :all
-      end
-    end
+    scope = params[:scope].presence.try(&:to_sym) || :all
 
     redirect_to action: :show, id: start_date.strftime('%Y%m%d'), scope: scope
   end
@@ -28,6 +21,8 @@ class ResultsController < ApplicationController
 
     submissions = begin
       case scope
+      when :me
+        Submission.where(user: current_user)
       when :team
         Submission.where(user: current_user.team)
       else

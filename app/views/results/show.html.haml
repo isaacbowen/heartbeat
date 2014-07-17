@@ -1,5 +1,13 @@
 .result
-  %p.timeframe Week of #{@result.start_date.format_like 'August 4, 2014'}
+  %p.timeframe
+    - case params[:scope]
+    - when 'me'
+      Me,
+    - when 'team'
+      My team,
+    - else
+      Enova,
+    for the week of #{@result.start_date.format_like 'August 4, 2014'}
 
   .previous-link
     - if @result.previous.present?
@@ -35,7 +43,11 @@
             .bar-chart{title: 'Total ratings, from 1 to 4'}
               = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
 
-            .rating.value.active{data: {sparkline_key: 'rating'}}= metric_result.rating
+            .rating.value.active{data: {sparkline_key: 'rating'}}
+              - if metric_result.rating.nan?
+                ?
+              - else
+                = metric_result.rating
 
             %ul.stats
               %li.delta.value{title: 'Delta: Change from last week', data: {sparkline_key: 'delta'}}
@@ -45,21 +57,25 @@
                   = icon 'arrow-up'
                 - else
                   = icon 'arrow-down'
-                = metric_result.delta
+                - if metric_result.delta.nan?
+                  ?
+                - else
+                  = metric_result.delta
               %li.volatility.value{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users', data: {sparkline_key: 'volatility'}}
                 = icon 'bolt'
                 - if metric_result.volatility.nan?
                   ?
                 - else
                   = metric_result.volatility
-              %li.representation.value{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}", data: {sparkline_key: 'representation'}}
-                = icon 'user'
-                = number_to_percentage metric_result.representation*100, precision: 0
-              %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
-                = icon 'dot-circle-o'
-                - if metric_result.unity.nan?
-                  ?
-                - else
+              - if metric_result.size > 1
+                %li.representation.value{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}", data: {sparkline_key: 'representation'}}
+                  = icon 'user'
+                  = number_to_percentage metric_result.representation*100, precision: 0
+                %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
+                  = icon 'dot-circle-o'
+                  - if metric_result.unity.nan?
+                    ?
+                  - else
                   = number_to_percentage metric_result.unity*100, precision: 0
 
             .sparklines
@@ -92,10 +108,11 @@
 
       %section.summary
         %ul
-          %li
-            .label Overall response rate:
-            .value= number_to_percentage @result.representation*100, precision: 0
-            .context (#{@result.sample.complete.count} of #{@result.sample.count})
+          - if @result.size > 1
+            %li
+              .label Overall response rate:
+              .value= number_to_percentage @result.representation*100, precision: 0
+              .context (#{@result.sample.complete.count} of #{@result.sample.count})
           / %li
           /   .label Best response time:
           /   .value= @result.shortest_time_to_completion
