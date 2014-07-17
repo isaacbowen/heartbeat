@@ -14,7 +14,7 @@ body, select, input, textarea {
 }
 
 a {
-  color: #03f;
+  color: desaturate(#03f, 50);
   text-decoration: underline;
 
   &:hover {
@@ -61,6 +61,23 @@ h4 {
 
 h1, h2, h3, h4 {
   margin: 5px 0 15px;
+
+  p + & {
+    margin: 15px 0 5px;
+  }
+}
+
+dl {
+  margin: 10px;
+
+  dt {
+    font-weight: bold;
+    color: #777;
+  }
+
+  dd + dt {
+    margin-top: 10px;
+  }
 }
 
 hr {

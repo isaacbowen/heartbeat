@@ -1,0 +1,26 @@
+%h1 About
+
+%h2 What is this thing
+
+%p Self-improvement is best served by self-awareness. It's how we each develop. It's easier to be self-aware as individuals, but it's harder for a group, and it gets harder as the group grows more complex.
+
+%p Heartbeat is an effort in improving self-awareness of the larger whole, with a few useful bonuses.
+
+%p It's also actively evolving. If you have thoughts or want to peer into things, head over to #{link_to 'Slack', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} or shoot me (Isaac) #{mail_to 'ibowen@enova.com', 'an email'}. The code's also opensourced over #{link_to 'on Github', 'https://github.com/isaacbowen/heartbeat', target: :_blank}.
+
+%h2 What "anonymous" means
+
+%p Your metric ratings ("metrics" being defined below) will always be anonymous. They're tied to your email address internally, but the only entities who see the association are #{link_to 'you', [:results, scope: :me]} and the database.
+
+%h2 A word on comments
+
+%p When you leave a comment, note the checkbox next to the comment box. It controls whether or not your comment is public (which means it'll have your name on it and will be in #{link_to 'the weekly summaries', [:results, scope: :all]}), or private (which means it'll be anonymous, and viewable only by the management team).
+
+%h2 Metrics
+
+%p These are the things we'll ask you about, every week.
+
+%dl
+  - Metric.active.ordered.each do |metric|
+    %dt= metric.name
+    %dd= metric.description

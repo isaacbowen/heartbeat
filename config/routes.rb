@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   root 'meta#root'
+  get 'about' => 'meta#about'
 
   devise_for :users, controllers: {omniauth_callbacks: 'omniauth_callbacks'}
   get 'login' => redirect('/users/auth/google_oauth2')

@@ -29,7 +29,7 @@
           - if current_user.try :manager?
             %li= link_to 'My Team', [:results, scope: :team]
           %li= link_to 'Enova', [:results, scope: :all]
-          %li= link_to '?', :root
+          %li= link_to '?', :about
           - if current_user.try :admin?
             %li= link_to 'Admin', [:admin, :root]
 
