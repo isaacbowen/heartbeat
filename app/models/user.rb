@@ -13,14 +13,16 @@
 
 class User < ActiveRecord::Base
 
-  has_many :submissions, dependent: :destroy do
-  end
+  has_many :submissions, dependent: :destroy
   has_many :submission_metrics, through: :submissions
   belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
 
   before_save :set_manager
 
   devise :omniauthable
+
+  scope :active,   -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
 
   class << self
     def find_for_google_oauth2 access_token, signed_in_resource = nil

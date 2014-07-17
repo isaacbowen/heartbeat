@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140702213243) do
+ActiveRecord::Schema.define(version: 20140717171737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "hstore"
   enable_extension "uuid-ossp"
+  enable_extension "hstore"
 
   create_table "metrics", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name",                        null: false
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20140702213243) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "comments_public",             default: true
+    t.boolean  "opted_out",                   default: false, null: false
   end
 
   add_index "submissions", ["created_at"], name: "index_submissions_on_created_at", using: :btree
@@ -93,13 +94,16 @@ ActiveRecord::Schema.define(version: 20140702213243) do
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name"
-    t.text     "email",           null: false
+    t.text     "email",                           null: false
     t.uuid     "manager_user_id"
     t.text     "manager_email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "admin",           default: false, null: false
+    t.boolean  "active",          default: true,  null: false
   end
 
+  add_index "users", ["active"], name: "index_users_on_active", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["manager_user_id"], name: "index_users_on_manager_user_id", using: :btree
 
