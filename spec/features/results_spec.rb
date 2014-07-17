@@ -20,7 +20,7 @@ feature 'Viewing results' do
 
     visit "/results/#{result.to_param}"
 
-    page.should have_text "Week of #{result.start_date.format_like 'August 4, 2014'}"
+    page.should have_text "#{result.start_date.format_like 'August 4, 2014'}"
 
     Metric.all.pluck(:name).each do |name|
       page.should have_text name

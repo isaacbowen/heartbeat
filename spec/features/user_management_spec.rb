@@ -23,7 +23,7 @@ feature 'User management' do
 
     page.should have_text '40 user(s) created'
 
-    User.pluck(:email).sort.should == emails
+    User.where(email: emails).size.should == emails.size
   end
 
   scenario 'List users' do

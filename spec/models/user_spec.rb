@@ -17,6 +17,30 @@ describe User do
 
   subject { create :user }
 
+  describe '::find_for_google_oauth2' do
+    let(:access_token) { double('access_token', info: info) }
+
+    context 'the right domain' do
+      let(:info) { {'email' => "foo@#{ENV['GOOGLE_APPS_DOMAIN']}", 'name' => 'Foo Bar'} }
+
+      it 'should give me back a persisted user' do
+        user = User.find_for_google_oauth2(access_token)
+        user.should be_persisted
+        user.name.should  == 'Foo Bar'
+        user.email.should == "foo@#{ENV['GOOGLE_APPS_DOMAIN']}"
+      end
+    end
+
+    context 'the wrong domain' do
+      let(:info) { {'email' => "foo@rabble#{ENV['GOOGLE_APPS_DOMAIN']}", 'name' => 'Foo Bar'} }
+
+      it 'should give me back an unpersisted user' do
+        user = User.find_for_google_oauth2(access_token)
+        user.should_not be_persisted
+      end
+    end
+  end
+
   describe '#abbreviated_name' do
     specify { build(:user, name: 'Foo Bar').abbreviated_name.should == 'Foo B' }
     specify { build(:user, name: 'Foo Bar Zab').abbreviated_name.should == 'Foo B' }
