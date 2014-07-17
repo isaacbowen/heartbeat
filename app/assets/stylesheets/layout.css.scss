@@ -23,6 +23,12 @@ body > .container {
     width: 575px;
   }
 
+  @media all and (max-width: 600px) {
+    margin: 0 auto;
+    width: auto;
+  }
+
+
   > header {
     transition: all 0.1s;
     position: relative;
