@@ -12,7 +12,8 @@
         - rect_height = ((n-(data.min))/(data.max-(data.min))*height*-1+height)
         %rect{x: (data.size-(i))/data.size.to_f*width*-1+width+i*(width*padding), y: rect_height, width: (width.to_f/data.size) - (width*padding*3), height: height - rect_height, data: {value: n}}
     - else
-      %polyline{points: data.each_with_index.map { |n, i| "#{((i).to_f/([data.size-1, 1].max)*width)*0.95+0.025*width},#{((n-data.min)/([data.max-data.min, 1].max)*height*-1+height)*0.9+0.05*height}"}.join(' '), data: {value: data}}
+      - offset = (data.max - data.min) < 0.5 ? height/2.0*0.9 : 0
+      %polyline{points: data.each_with_index.map { |n, i| "#{((i).to_f/([data.size-1, 1].max)*width)*0.95+0.025*width},#{((n-data.min)/([data.max-data.min, 1].max)*height*-1+height-offset)*0.9+0.05*height}"}.join(' '), data: {value: data}}
 
 
   /%embed.sparkline.lines{src: "//sparksvg.me/line.svg?#{data.join(',')}", type: 'image/svg+xml'}
