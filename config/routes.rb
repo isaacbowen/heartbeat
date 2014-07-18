@@ -19,10 +19,8 @@ Rails.application.routes.draw do
 
   resources :submissions, only: [:show, :edit, :update]
 
-  resources :results, only: :index
-
-  # currently unsure how to roll this into the resource above
-  get 'results/:id(/:scope)' => 'results#show', as: :result
+  get 'results' => 'results#index', as: :results
+  get 'results/:start_date(/:scope)' => 'results#show', as: :result
 
   namespace :admin do
     root 'meta#root'
@@ -38,6 +36,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :teams
     resources :results
     resources :submission_reminder_templates
   end

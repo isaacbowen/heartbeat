@@ -9,6 +9,8 @@
 #  manager_email   :text
 #  created_at      :datetime
 #  updated_at      :datetime
+#  admin           :boolean          default(FALSE), not null
+#  active          :boolean          default(TRUE), not null
 #
 
 class User < ActiveRecord::Base
@@ -16,6 +18,8 @@ class User < ActiveRecord::Base
   has_many :submissions, dependent: :destroy
   has_many :submission_metrics, through: :submissions
   belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
+  has_and_belongs_to_many :teams
+  has_many :managed_teams, class_name: 'Team', foreign_key: :manager_user_id
 
   before_save :set_manager
 
@@ -62,15 +66,7 @@ class User < ActiveRecord::Base
   end
 
   def manager?
-    User.where(manager_email: email).any?
-  end
-
-  def team
-    if manager?
-      User.where(manager_email: email) | User.where(email: email)
-    else
-      User.where(manager_email: manager_email)
-    end
+    managed_teams.any?
   end
 
 

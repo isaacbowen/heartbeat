@@ -1,6 +1,6 @@
 .result
   %p.timeframe
-    - case @scope
+    - case result_scope
     - when :me
       Me,
     - when :team
@@ -11,14 +11,14 @@
 
   .previous-link
     - if @result.previous.present?
-      = link_to [@result.previous, scope: @scope] do
+      = link_to [@result.previous, scope: result_scope] do
         = icon 'arrow-left'
     - else
       %span.muted= icon 'arrow-left'
 
   .next-link
     - if @result.next.present?
-      = link_to [@result.next, scope: @scope] do
+      = link_to [@result.next, scope: result_scope] do
         = icon 'arrow-right'
     - else
       %span.muted= icon 'arrow-right'

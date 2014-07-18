@@ -1,0 +1,43 @@
+= form_for [:admin, @team] do |f|
+  %h2
+    - if f.object.persisted?
+      Editing #{f.object.name} (#{f.object.slug})
+    - else
+      New team
+
+  .input
+    = f.label :name
+    = f.text_field :name
+
+  - if f.object.persisted?
+    .input
+      = f.label :slug
+      = f.text_field :slug
+
+  .input
+    = f.label :manager_user, 'Manager'
+    = f.select :manager_user_id, User.all.order(:email).collect { |u| [u.abbreviated_name, u.id] }, include_blank: true
+
+  .input
+    = f.label :parent_team
+    = f.select :parent_team_id, Team.all.order(:slug).where('id != ?', f.object.id).collect { |u| [u.name, u.id] }, include_blank: true
+
+  .input
+    = f.label :description
+    = f.text_area :description
+
+  .input
+    = f.label :teams, 'Child Teams'
+    .collection
+      = f.collection_check_boxes :team_ids, (f.object.persisted? ? Team.where('id != ?', f.object.id) : Team.all), :id, :name do |b|
+        - b.label { b.check_box + b.text }
+
+  .input
+    = f.label :users do
+      Users
+      %small (not counting manager)
+    .collection
+      = f.collection_check_boxes :user_ids, User.all, :id, :abbreviated_name do |b|
+        - b.label { b.check_box + b.text }
+
+  .submit= f.submit

@@ -1,0 +1,20 @@
+table {
+  width: 100%;
+  text-align: left;
+  margin: 10px 0;
+  padding: 15px;
+
+  th, td {
+    padding: 5px;
+  }
+
+  &.lined {
+    tr {
+      border-bottom: 1px #ccc solid;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}

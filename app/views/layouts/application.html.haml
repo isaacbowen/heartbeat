@@ -8,7 +8,6 @@
 
     %meta{name: 'viewport', content: 'width=device-width, user-scalable=no'}
 
-
   %body
     .container
       %header
@@ -26,8 +25,9 @@
       %nav.main
         %ul
           %li= link_to 'Me', [:results, scope: :me]
-          - if current_user.try :manager?
-            %li= link_to 'My Team', [:results, scope: :team]
+          - if user_signed_in?
+            - current_user.managed_teams.each do |team|
+              %li= link_to team.name, [:results, scope: team.slug]
           %li= link_to 'Enova', [:results, scope: :all]
           %li= link_to '?', :about
           - if current_user.try :admin?

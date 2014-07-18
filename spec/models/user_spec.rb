@@ -9,6 +9,8 @@
 #  manager_email   :text
 #  created_at      :datetime
 #  updated_at      :datetime
+#  admin           :boolean          default(FALSE), not null
+#  active          :boolean          default(TRUE), not null
 #
 
 require 'spec_helper'

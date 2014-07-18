@@ -1,0 +1,21 @@
+%header
+  %h1 Teams
+
+- if @teams.any?
+  %table.lined
+    - for team in @teams
+      %tr
+        %th= link_to team.name, [:admin, team]
+        %td
+          = icon 'user'
+          = team.manager_user.try(:abbreviated_name) || '(no manager)'
+        %td
+          = icon 'users'
+          = team.users.map(&:abbreviated_name).join(', ').presence || '(empty team)'
+        %td= link_to icon('times').html_safe, [:admin, team], method: :delete, data: {confirm: 'You sure?'}
+- else
+  %p No teams. :(
+
+%hr
+
+= render partial: 'form'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717171737) do
+ActiveRecord::Schema.define(version: 20140718203330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,29 @@ ActiveRecord::Schema.define(version: 20140717171737) do
   add_index "submissions", ["updated_at"], name: "index_submissions_on_updated_at", using: :btree
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
+  create_table "teams", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
+    t.text     "name",                           null: false
+    t.text     "slug",                           null: false
+    t.uuid     "parent_team_id"
+    t.uuid     "manager_user_id"
+    t.text     "description"
+    t.boolean  "active",          default: true, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "teams", ["manager_user_id"], name: "index_teams_on_manager_user_id", using: :btree
+  add_index "teams", ["parent_team_id"], name: "index_teams_on_parent_team_id", using: :btree
+  add_index "teams", ["slug"], name: "index_teams_on_slug", using: :btree
+
+  create_table "teams_users", id: false, force: true do |t|
+    t.uuid "team_id"
+    t.uuid "user_id"
+  end
+
+  add_index "teams_users", ["team_id"], name: "index_teams_users_on_team_id", using: :btree
+  add_index "teams_users", ["user_id"], name: "index_teams_users_on_user_id", using: :btree
+
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name"
     t.text     "email",                           null: false
@@ -113,5 +136,8 @@ ActiveRecord::Schema.define(version: 20140717171737) do
   add_foreign_key "submission_reminders", "submission_reminder_templates", name: "submission_reminders_submission_reminder_template_id_fk"
 
   add_foreign_key "submissions", "users", name: "submissions_user_id_fk"
+
+  add_foreign_key "teams", "teams", name: "teams_parent_team_id_fk", column: "parent_team_id"
+  add_foreign_key "teams", "users", name: "teams_manager_user_id_fk", column: "manager_user_id"
 
 end
