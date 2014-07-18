@@ -15,40 +15,49 @@ feature 'Viewing results' do
     end
   end
 
-  scenario 'View a complete result' do
-    result = Result.new(source: Submission.all, start_date: Time.now.at_beginning_of_week - 2.weeks, period: 1.week)
+  context 'Authenticated' do
+    before(:each) { login_as create(:user), scope: :user }
 
-    visit "/results/#{result.to_param}"
+    scenario 'View a complete result' do
+      result = Result.new(source: Submission.all, start_date: Time.now.at_beginning_of_week - 2.weeks, period: 1.week)
 
-    page.should have_text "#{result.start_date.format_like 'August 4, 2014'}"
+      visit "/results/#{result.to_param}"
 
-    Metric.all.pluck(:name).each do |name|
-      page.should have_text name
+      page.should have_text "#{result.start_date.format_like 'August 4, 2014'}"
+
+      Metric.all.pluck(:name).each do |name|
+        page.should have_text name
+      end
+    end
+
+    scenario 'View an empty result' do
+      result = Result.new(source: Submission.all, start_date: Time.now.at_beginning_of_week - 1.year, period: 1.week)
+
+      visit "/results/#{result.to_param}"
+
+      page.should have_text 'No data.'
+
+      Metric.all.pluck(:name).each do |name|
+        page.should_not have_text name
+      end
+    end
+
+    scenario 'View an incomplete result' do
+      result = Result.new(source: Submission.all, start_date: Time.now.at_beginning_of_week - 1.week, period: 1.week)
+
+      visit "/results/#{result.to_param}"
+
+      page.should have_text 'In progress!'
+
+      Metric.all.pluck(:name).each do |name|
+        page.should_not have_text name
+      end
     end
   end
 
-  scenario 'View an empty result' do
-    result = Result.new(source: Submission.all, start_date: Time.now.at_beginning_of_week - 1.year, period: 1.week)
-
-    visit "/results/#{result.to_param}"
-
-    page.should have_text 'No data.'
-
-    Metric.all.pluck(:name).each do |name|
-      page.should_not have_text name
-    end
-  end
-
-  scenario 'View an incomplete result' do
-    result = Result.new(source: Submission.all, start_date: Time.now.at_beginning_of_week - 1.week, period: 1.week)
-
-    visit "/results/#{result.to_param}"
-
-    page.should have_text 'In progress!'
-
-    Metric.all.pluck(:name).each do |name|
-      page.should_not have_text name
-    end
+  scenario 'Unauthenticated' do
+    visit '/results'
+    page.should have_text 'Sign in with your Google Account'
   end
 
 end

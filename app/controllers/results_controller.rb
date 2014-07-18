@@ -1,5 +1,7 @@
 class ResultsController < ApplicationController
 
+  before_action :authenticate_user!
+
   def index
     start_date = (Date.today - 3.days).at_beginning_of_week
 
@@ -18,10 +20,6 @@ class ResultsController < ApplicationController
     end
 
     @scope = params[:scope].presence.try(:to_sym) || :all
-
-    if @scope != :all and not user_signed_in?
-      return redirect_to :login
-    end
 
     submissions = begin
       case @scope
