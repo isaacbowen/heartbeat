@@ -30,7 +30,7 @@
     %section.summary
       %p
         %strong In progress!
-      %p Report is #{number_to_percentage @result.representation*100, precision: 0} complete, with #{@result.sample.complete.count} of #{@result.sample.count} reporting - come back when we hit 50%.
+      %p Report is #{number_to_percentage @result.representation*100, precision: 1} complete, with #{@result.sample.complete.count} of #{@result.sample.count} reporting - come back when we hit 50%.
       %p 
   - else
     - @metric_results.each do |metric_result|
