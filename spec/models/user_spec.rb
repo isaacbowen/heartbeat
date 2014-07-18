@@ -23,11 +23,22 @@ describe User do
     context 'the right domain' do
       let(:info) { {'email' => "foo@#{ENV['GOOGLE_APPS_DOMAIN']}", 'name' => 'Foo Bar'} }
 
-      it 'should give me back a persisted user' do
-        user = User.find_for_google_oauth2(access_token)
-        user.should be_persisted
-        user.name.should  == 'Foo Bar'
-        user.email.should == "foo@#{ENV['GOOGLE_APPS_DOMAIN']}"
+      context 'new user' do
+        it 'should give me back a persisted user' do
+          user = User.find_for_google_oauth2(access_token)
+          user.should be_persisted
+          user.name.should  == 'Foo Bar'
+          user.email.should == "foo@#{ENV['GOOGLE_APPS_DOMAIN']}"
+          user.should_not be_active
+        end
+      end
+
+      context 'existing user' do
+        let(:user) { create :user, email: info['email'] }
+
+        it 'should give me back the existing user' do
+          user.should == User.find_for_google_oauth2(access_token)
+        end
       end
     end
 

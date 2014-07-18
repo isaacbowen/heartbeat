@@ -29,7 +29,8 @@ class User < ActiveRecord::Base
       data = access_token.info
 
       User.find_or_initialize_by(email: data['email']) do |user|
-        user.name = data['name']
+        user.name   = data['name']
+        user.active = false
 
         user.save! if user.email.to_s.ends_with? "@#{ENV['GOOGLE_APPS_DOMAIN']}"
       end
