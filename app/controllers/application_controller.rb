@@ -6,7 +6,10 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_user!
-    redirect_to :login unless user_signed_in?
+    unless user_signed_in?
+      session['user_return_to'] = request.fullpath
+      redirect_to :login
+    end
   end
 
 end
