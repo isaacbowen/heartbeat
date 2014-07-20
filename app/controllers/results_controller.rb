@@ -2,8 +2,9 @@ class ResultsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :ensure_valid_result_start_date!, except: :index
+  before_action :authorize_team!, unless: -> { current_user.admin? }
 
-  helper_method :result_scope
+  helper_method :result_scope, :result_team
 
   def index
     redirect_to action: :show, start_date: default_result_start_date.strftime('%Y%m%d'), scope: result_scope
@@ -53,6 +54,12 @@ class ResultsController < ApplicationController
 
   def result_start_date
     @result_start_date ||= Date.strptime(params[:start_date], '%Y%m%d') if params[:start_date]
+  end
+
+  def authorize_team!
+    if result_team and not result_team.members.include? current_user
+      redirect_to scope: nil
+    end
   end
 
   def ensure_valid_result_start_date!

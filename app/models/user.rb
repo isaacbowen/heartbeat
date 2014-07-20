@@ -11,17 +11,16 @@
 #  updated_at      :datetime
 #  admin           :boolean          default(FALSE), not null
 #  active          :boolean          default(TRUE), not null
+#  team_id         :uuid
 #
 
 class User < ActiveRecord::Base
 
   has_many :submissions, dependent: :destroy
   has_many :submission_metrics, through: :submissions
-  belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
+
   has_and_belongs_to_many :teams
   has_many :managed_teams, class_name: 'Team', foreign_key: :manager_user_id
-
-  before_save :set_manager
 
   devise :omniauthable
 

@@ -93,18 +93,17 @@ ActiveRecord::Schema.define(version: 20140718203330) do
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "teams", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
-    t.text     "name",                           null: false
-    t.text     "slug",                           null: false
-    t.uuid     "parent_team_id"
+    t.text     "name",                            null: false
+    t.text     "slug",                            null: false
     t.uuid     "manager_user_id"
     t.text     "description"
-    t.boolean  "active",          default: true, null: false
+    t.boolean  "private",         default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "teams", ["manager_user_id"], name: "index_teams_on_manager_user_id", using: :btree
-  add_index "teams", ["parent_team_id"], name: "index_teams_on_parent_team_id", using: :btree
+  add_index "teams", ["private"], name: "index_teams_on_private", using: :btree
   add_index "teams", ["slug"], name: "index_teams_on_slug", using: :btree
 
   create_table "teams_users", id: false, force: true do |t|
@@ -137,7 +136,9 @@ ActiveRecord::Schema.define(version: 20140718203330) do
 
   add_foreign_key "submissions", "users", name: "submissions_user_id_fk"
 
-  add_foreign_key "teams", "teams", name: "teams_parent_team_id_fk", column: "parent_team_id"
   add_foreign_key "teams", "users", name: "teams_manager_user_id_fk", column: "manager_user_id"
+
+  add_foreign_key "teams_users", "teams", name: "teams_users_team_id_fk"
+  add_foreign_key "teams_users", "users", name: "teams_users_user_id_fk"
 
 end

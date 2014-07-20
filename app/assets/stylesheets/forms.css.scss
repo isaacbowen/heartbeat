@@ -39,6 +39,10 @@ form + p {
     margin-left: 10px;
   }
 
+  input.statebox {
+    float: right;
+  }
+
   .collection {
     @include clearfix;
 

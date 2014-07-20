@@ -8,7 +8,7 @@
         %th= link_to team.name, [:admin, team]
         %td
           = icon 'user'
-          = team.manager_user.try(:abbreviated_name) || '(no manager)'
+          = team.manager.try(:abbreviated_name) || '(no manager)'
         %td
           = icon 'users'
           = team.users.map(&:abbreviated_name).join(', ').presence || '(empty team)'

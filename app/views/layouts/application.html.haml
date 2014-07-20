@@ -26,9 +26,8 @@
         %ul
           %li= link_to 'Me', [:results, scope: :me]
           - if user_signed_in?
-            - current_user.managed_teams.each do |team|
+            - current_teams.each do |team|
               %li= link_to team.name, [:results, scope: team.slug]
-          %li= link_to 'Enova', [:results, scope: :all]
           %li= link_to '?', :about
           - if current_user.try :admin?
             %li= link_to 'Admin', [:admin, :root]

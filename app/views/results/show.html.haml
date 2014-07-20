@@ -3,10 +3,10 @@
     - case result_scope
     - when :me
       Me,
-    - when :team
-      My team,
+    - when nil
+      Everyone
     - else
-      Enova,
+      = result_team.name
     for the week of #{@result.start_date.format_like 'August 4, 2014'}
 
   .previous-link

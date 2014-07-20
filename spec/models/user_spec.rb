@@ -11,6 +11,7 @@
 #  updated_at      :datetime
 #  admin           :boolean          default(FALSE), not null
 #  active          :boolean          default(TRUE), not null
+#  team_id         :uuid
 #
 
 require 'spec_helper'
