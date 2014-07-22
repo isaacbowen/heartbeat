@@ -28,4 +28,41 @@ form {
   .input, .submit {
     margin-top: 1em;
   }
+
+  h2 {
+    margin-top: 20px;
+  }
+}
+
+form + p {
+  margin-top: 20px;
+}
+
+.input {
+  label + select {
+    margin-left: 10px;
+  }
+
+  .text {
+    margin-left: 5px;
+  }
+
+  .collection {
+    @include clearfix;
+
+    label {
+      display: block;
+      width: 120px;
+      margin-right: 10px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      float: left;
+
+      input {
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+    }
+  }
 }

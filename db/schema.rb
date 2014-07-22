@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717171737) do
+ActiveRecord::Schema.define(version: 20140722195659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
   enable_extension "hstore"
+  enable_extension "uuid-ossp"
 
   create_table "metrics", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name",                        null: false
@@ -85,10 +85,11 @@ ActiveRecord::Schema.define(version: 20140717171737) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "comments_public",             default: true
-    t.boolean  "opted_out",                   default: false, null: false
+    t.string   "tags",                        default: [],                 array: true
   end
 
   add_index "submissions", ["created_at"], name: "index_submissions_on_created_at", using: :btree
+  add_index "submissions", ["tags"], name: "index_submissions_on_tags", using: :gin
   add_index "submissions", ["updated_at"], name: "index_submissions_on_updated_at", using: :btree
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
@@ -101,11 +102,13 @@ ActiveRecord::Schema.define(version: 20140717171737) do
     t.datetime "updated_at"
     t.boolean  "admin",           default: false, null: false
     t.boolean  "active",          default: true,  null: false
+    t.string   "tags",            default: [],                 array: true
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["manager_user_id"], name: "index_users_on_manager_user_id", using: :btree
+  add_index "users", ["tags"], name: "index_users_on_tags", using: :gin
 
   add_foreign_key "submission_metrics", "metrics", name: "submission_metrics_metric_id_fk"
   add_foreign_key "submission_metrics", "submissions", name: "submission_metrics_submission_id_fk"

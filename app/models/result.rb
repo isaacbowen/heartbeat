@@ -1,6 +1,9 @@
 class Result
   include ActiveModel::Model
 
+  MINIMUM_REPRESENTATION = 0.5 # %
+  MINIMUM_SIZE = 3
+
   # e.g. 1.week
   attr_accessor :period
 
@@ -25,7 +28,7 @@ class Result
   end
 
   def complete?
-    representation > 0.5
+    size > MINIMUM_SIZE and representation > MINIMUM_REPRESENTATION
   end
 
   def persisted?

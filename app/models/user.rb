@@ -12,10 +12,15 @@
 #
 
 class User < ActiveRecord::Base
+  include TaggableConcern
 
   has_many :submissions, dependent: :destroy
   has_many :submission_metrics, through: :submissions
+
   belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
+  has_many   :reports, class_name: 'User', foreign_key: :manager_user_id
+
+  accepts_nested_attributes_for :reports
 
   before_save :set_manager
 
@@ -62,7 +67,7 @@ class User < ActiveRecord::Base
   end
 
   def manager?
-    User.where(manager_email: email).any?
+    reports.any?
   end
 
   def team
@@ -71,6 +76,10 @@ class User < ActiveRecord::Base
     else
       User.where(manager_email: manager_email)
     end
+  end
+
+  def inactive?
+    not active?
   end
 
 

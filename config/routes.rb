@@ -15,14 +15,15 @@ Rails.application.routes.draw do
     post '/hit-me', to: 'meta#hit_me'
   end
 
-  resource :user, path: '/me', only: :show
+  resource :user, path: '/me', only: [:show, :update] do
+    get 'history', on: :member
+  end
 
   resources :submissions, only: [:show, :edit, :update]
 
-  resources :results, only: :index
-
-  # currently unsure how to roll this into the resource above
-  get 'results/:id(/:scope)' => 'results#show', as: :result
+  get 'results' => 'results#index', as: :results
+  get 'results/:start_date(/:scope)'  => 'results#show', as: :result
+  get 'results/:start_date/tags/:tag' => 'results#show', as: :tag_result
 
   namespace :admin do
     root 'meta#root'
