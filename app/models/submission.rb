@@ -87,7 +87,7 @@ class Submission < ActiveRecord::Base
   protected
 
   def set_tags_from_user
-    self.tags = user.tags
+    self.tags = user.try(:tags)
   end
 
 end

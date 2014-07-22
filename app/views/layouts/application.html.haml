@@ -27,8 +27,9 @@
         %ul
           %li= link_to 'Me', [:results, scope: :me]
 
-          - current_user.tags.each do |tag|
-            %li= link_to "##{tag}", [:results, tag: tag]
+          - if user_signed_in?
+            - current_user.tags.each do |tag|
+              %li= link_to "##{tag}", [:results, tag: tag]
 
           / - if current_user.try :manager?
           /   %li= link_to 'My Reports', [:results, scope: :team]
