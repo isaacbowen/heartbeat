@@ -8,6 +8,8 @@
 %table
   - @users.each do |user|
     %tr
+      %td= link_to user.abbreviated_name, [:edit, :admin, user]
       %td= user.email
+      %td= 'inactive' if user.inactive?
       - if Rails.env.development?
         %td= link_to 'Become', [:become, :admin, user], method: :post

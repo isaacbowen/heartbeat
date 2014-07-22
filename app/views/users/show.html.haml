@@ -1,34 +1,40 @@
 %header
   %h1 Me
 
-.user
-  .history
-    / %table
-    /   %thead
-    /     %tr
-    /       %th
-    /       - @submissions.each do |submission|
-    /         %th= submission.created_at.at_beginning_of_week.strftime('%m/%d')
-    /   %tbody
-    /     - @metrics.each do |metric|
-    /       %tr
-    /         %th= metric.name
-    /         - @submissions.each do |submission|
-    /           %td= submission.submission_metrics.find_by_metric_id(metric).rating
+  %nav
+    %ul
+      %li= link_to 'Profile', :user
+      %li= link_to 'History', [:history, :user]
 
-    - @submissions.each do |submission|
-      %section.user-submission
-        %h3
-          = submission.created_at.format_like 'August 3, 2014'
-          - if submission.open?
-            = link_to submission do
-              = icon 'arrow-right'
+= form_for @user do |f|
+  .input
+    = f.label :name
+    .text= f.object.name
 
-        - submission.submission_metrics.ordered.each do |submission_metric|
-          %ul.metrics
-            %li.metric
-              .name= submission_metric.name
-              .rating= submission_metric.rating.presence || 'n/a'
-              - if submission_metric.comments.present?
-                .comment
-                  .content= submission_metric.comments
+  .input
+    = f.label :email
+    .text= f.object.email
+
+  .input
+    = f.label :manager
+    .text
+      - if f.object.manager.present?
+        = f.object.manager.name
+        (#{f.object.manager.email})
+      - else
+        n/a
+
+  .input
+    = f.label :tags do
+      Tags
+      %small (What team are you on? What projects are taking up your time?)
+    = f.text_field :tags_as_string
+
+  - if f.object.manager?
+    %h2 My team
+    = f.fields_for :reports do |fr|
+      .input
+        = fr.label :tags, "Tags for #{fr.object.name}"
+        = fr.text_field :tags_as_string
+
+  .submit= f.submit

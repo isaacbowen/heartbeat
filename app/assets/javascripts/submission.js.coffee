@@ -68,6 +68,9 @@ class Submission
       @$('.step').outerWidth @$().width()
     $(window).trigger('resize')
 
+    @$('.tags :input').autosizeInput(space: 10)
+    setTimeout (=> @$('.tags :input').addClass('autosized')), 1000
+
     @$('.action-next a').click => @nextStep()
     @$('.action-previous a').click => @prevStep()
 

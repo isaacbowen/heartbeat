@@ -86,6 +86,11 @@ describe User do
     end
   end
 
+  describe '#manager?' do
+    specify { create(:user, reports: build_list(:user, 2)).should be_manager }
+    specify { create(:user, reports: []).should_not be_manager }
+  end
+
   describe '#to_liquid' do
     subject { build :user, name: 'Foo Bar', email: 'foo@bar.com' }
 

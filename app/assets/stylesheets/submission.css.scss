@@ -25,7 +25,7 @@
         padding: 10px 20px 0;
 
         &.intro {
-          padding-top: 5px;
+          padding-top: 0;
 
           h3 {
             em {
@@ -45,6 +45,39 @@
             &.intro {
               color: #666;
               line-height: 18px;
+            }
+          }
+
+          .tags {
+            white-space: nowrap;
+            margin-top: 10px;
+
+            label, input {
+              padding: 4px;
+            }
+
+            label {
+              display: inline;
+
+              &:after {
+                content: ':';
+              }
+            }
+
+            input {
+              display: inline;
+              border-color: rgba(#000, 0.1);
+              transition: border-color 0.2s;
+              min-width: 30px;
+              margin: 0;
+
+              &.autosized {
+                transition: width 0.2s;
+              }
+
+              &:focus {
+                border-color: rgba(#000, 0.3);
+              }
             }
           }
 

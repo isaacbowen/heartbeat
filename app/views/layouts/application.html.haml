@@ -26,10 +26,17 @@
       %nav.main
         %ul
           %li= link_to 'Me', [:results, scope: :me]
-          - if current_user.try :manager?
-            %li= link_to 'My Team', [:results, scope: :team]
-          %li= link_to 'Enova', [:results, scope: :all]
+
+          - current_user.tags.each do |tag|
+            %li= link_to "##{tag}", [:results, tag: tag]
+
+          / - if current_user.try :manager?
+          /   %li= link_to 'My Reports', [:results, scope: :team]
+
+          /%li= link_to 'Enova', [:results, scope: :all]
+
           %li= link_to '?', :about
+
           - if current_user.try :admin?
             %li= link_to 'Admin', [:admin, :root]
 
