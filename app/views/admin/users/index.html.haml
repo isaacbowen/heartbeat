@@ -3,6 +3,7 @@
 
   %nav
     %ul
+      %li= link_to 'All', [:admin, :users]
       %li= link_to 'Import', [:import, :admin, :users]
 
 %table
@@ -10,6 +11,8 @@
     %tr
       %td= link_to user.abbreviated_name, [:edit, :admin, user]
       %td= user.email
-      %td= 'inactive' if user.inactive?
+      %td
+        = 'inactive' if user.inactive?
+        = 'no manager' if user.manager.nil?
       - if Rails.env.development?
         %td= link_to 'Become', [:become, :admin, user], method: :post

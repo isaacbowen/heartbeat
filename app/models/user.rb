@@ -33,12 +33,21 @@ class User < ActiveRecord::Base
     def find_for_google_oauth2 access_token, signed_in_resource = nil
       data = access_token.info
 
-      User.find_or_initialize_by(email: data['email']) do |user|
+      user = User.find_or_initialize_by(email: data['email']) do |user|
         user.name   = data['name']
         user.active = false
 
         user.save! if user.email.to_s.ends_with? "@#{ENV['GOOGLE_APPS_DOMAIN']}"
       end
+
+      # take this opportunity to update our records
+      if user.persisted?
+        user.name = data['name']
+
+        user.save! if user.changed?
+      end
+
+      user
     end
   end
 

@@ -35,7 +35,7 @@ feature 'Viewing results' do
 
       visit "/results/#{result.to_param}"
 
-      page.should have_text 'No data.'
+      page.should have_text 'No data'
 
       Metric.all.pluck(:name).each do |name|
         page.should_not have_text name

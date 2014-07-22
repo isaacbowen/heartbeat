@@ -13,6 +13,10 @@ module TaggableConcern
     self.tags = str.try :split, /\s+(?:,?\s+)?/
   end
 
+  def tags
+    self[:tags] || []
+  end
+
   def tags= the_tags
     self[:tags] = the_tags
 
