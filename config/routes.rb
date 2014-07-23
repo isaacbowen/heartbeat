@@ -21,7 +21,8 @@ Rails.application.routes.draw do
 
   resources :submissions, only: [:show, :edit, :update]
 
-  get 'results' => 'results#index', as: :results
+  get 'results'      => 'results#index', as: :results
+  get 'results/tags' => 'results#index_tags', as: :tags_results
   get 'results/:start_date/tags'      => 'results#tags', as: :tags_result
   get 'results/:start_date/tags/:tag' => 'results#show', as: :tag_result
   get 'results/:start_date(/:scope)'  => 'results#show', as: :result
