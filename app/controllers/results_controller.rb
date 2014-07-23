@@ -35,6 +35,11 @@ class ResultsController < ApplicationController
 
   def tags
     @tags = result_submissions.tags
+
+    @result = Result.new(
+      start_date: result_start_date,
+      source: result_submissions,
+    )
   end
 
 
@@ -53,15 +58,21 @@ class ResultsController < ApplicationController
   end
 
   def result_submissions
-    case result_scope
-    when :me
-      Submission.where(user: current_user)
-    when :tag
-      Submission.tagged_with(result_tag)
-    when :all
-      Submission.all
-    else
-      Submission.none
+    @result_submissions ||= begin
+      case result_scope
+      when :me
+        Submission.where(user: current_user)
+      when :tag
+        Submission.tagged_with(result_tag)
+      when :managers, :reports, :vertical
+        # reifying the user list here to reduce complexity down the line.
+        # activerecord was generating invalid statements.
+        Submission.where(user: current_user.send(result_scope).pluck(:id))
+      when :all
+        Submission.all
+      else
+        Submission.none
+      end
     end
   end
 

@@ -6,9 +6,11 @@
 #  name            :text
 #  email           :text             not null
 #  manager_user_id :uuid
-#  manager_email   :text
 #  created_at      :datetime
 #  updated_at      :datetime
+#  admin           :boolean          default(FALSE), not null
+#  active          :boolean          default(TRUE), not null
+#  tags            :string(255)      default([]), is an Array
 #
 
 require 'spec_helper'
@@ -73,6 +75,33 @@ describe User do
         'first_name' => 'Foo',
         'email' => 'foo@bar.com',
       }
+    end
+  end
+
+  describe '#managers' do
+    it 'should be the management chain, top to bottom' do
+      dfish = create :user
+      dhall = create :user, manager: dfish
+      jjon  = create :user, manager: dhall
+      me    = create :user, manager: jjon
+      blake = create :user, manager: dhall
+
+      me.managers.should == [dfish, dhall, jjon]
+    end
+  end
+
+  describe '#vertical' do
+    it 'should be #managers + me + #reports' do
+      dfish = create :user
+      dhall = create :user, manager: dhall
+      jjon  = create :user, manager: jjon
+      me    = create :user, manager: jjon
+      trogdor = create_list :user, 5, manager: me
+
+      blake = create :user, manager: dhall
+      shodan = create_list :user, 5, manager: blake
+
+      me.vertical.should == me.managers + [me] + me.reports
     end
   end
 

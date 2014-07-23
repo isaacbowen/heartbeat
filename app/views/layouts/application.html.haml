@@ -26,15 +26,24 @@
       %nav.main
         %ul
           %li= link_to 'Me', [:results, scope: :me]
-          %li= link_to 'Enova', [:results, scope: :all]
 
           - if user_signed_in?
+            / - if current_user.vertical.any?
+            /   %li= link_to 'My vertical', [:results, scope: :vertical]
+            - if current_user.managers.any?
+              %li= link_to 'My managers', [:results, scope: :managers]
+            - if current_user.reports.any?
+              %li= link_to 'My reports', [:results, scope: :reports]
+
+          %li= link_to 'Enova', [:results, scope: :all]
+
+        - if user_signed_in? and current_user.tags.any?
+          %ul
             - current_user.tags.each do |tag|
               %li= link_to "##{tag}", [:results, tag: tag]
+            %li= link_to 'all tags', [:tags, :result]
 
-          / - if current_user.try :manager?
-          /   %li= link_to 'My Reports', [:results, scope: :team]
-
+        %ul
           %li= link_to '?', :about
 
           - if current_user.try :admin?

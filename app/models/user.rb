@@ -6,9 +6,11 @@
 #  name            :text
 #  email           :text             not null
 #  manager_user_id :uuid
-#  manager_email   :text
 #  created_at      :datetime
 #  updated_at      :datetime
+#  admin           :boolean          default(FALSE), not null
+#  active          :boolean          default(TRUE), not null
+#  tags            :string(255)      default([]), is an Array
 #
 
 class User < ActiveRecord::Base
@@ -77,6 +79,24 @@ class User < ActiveRecord::Base
 
   def inactive?
     not active?
+  end
+
+  def managers
+    @managers ||= begin
+      user  = self
+      users = []
+
+      while user.manager.present? do
+        users << user.manager
+        user = user.manager
+      end
+
+      User.where(id: users.reverse.map(&:id))
+    end
+  end
+
+  def vertical
+    User.where(id: managers + [self] + reports)
   end
 
 end

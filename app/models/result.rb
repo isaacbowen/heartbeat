@@ -2,7 +2,7 @@ class Result
   include ActiveModel::Model
 
   MINIMUM_REPRESENTATION = 0.5 # %
-  MINIMUM_SIZE = 3
+  MINIMUM_SIZE = 2
 
   # e.g. 1.week
   attr_accessor :period
@@ -28,7 +28,7 @@ class Result
   end
 
   def complete?
-    representation > MINIMUM_REPRESENTATION
+    representation >= MINIMUM_REPRESENTATION
   end
 
   def incomplete?
@@ -36,7 +36,7 @@ class Result
   end
 
   def sufficient?
-    size > MINIMUM_SIZE
+    size >= MINIMUM_SIZE
   end
 
   def insufficient?

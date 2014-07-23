@@ -3,6 +3,8 @@
     - case result_scope
     - when :me
       Me,
+    - when :managers, :vertical, :reports
+      My #{result_scope}
     - when :tag
       \##{result_tag}
     - when :all
@@ -13,14 +15,14 @@
 
   .previous-link
     - if @result.previous.present?
-      = link_to start_date: @result.previous.to_param do
+      = link_to scope: result_scope, start_date: @result.previous.to_param do
         = icon 'arrow-left'
     - else
       %span.muted= icon 'arrow-left'
 
   .next-link
     - if @result.next.present?
-      = link_to start_date: @result.next.to_param do
+      = link_to scope: result_scope, start_date: @result.next.to_param do
         = icon 'arrow-right'
     - else
       %span.muted= icon 'arrow-right'
