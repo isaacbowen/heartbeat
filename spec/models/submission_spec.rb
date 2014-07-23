@@ -164,4 +164,21 @@ describe Submission do
     end
   end
 
+  describe '#set_tags_from_user' do
+    let(:user) { user = create :user, tags: ['one', 'two'] }
+
+    it 'should happen on initialize for something new' do
+      user.submissions.new.tags.should == user.tags
+    end
+
+    it 'should preserve saved tags' do
+      user.submissions.create(tags: ['foo', 'bar'])
+      Submission.first.tags.should_not == user.tags
+    end
+
+    it 'should not freak out when missing a user' do
+      Submission.new.tags.should be_empty
+    end
+  end
+
 end
