@@ -86,27 +86,6 @@ body > .container {
     opacity: 0.8;
     transition: opacity 0.1s;
 
-    @media all and (min-width: 600px) {
-      $width: 20%;
-      width: $width;
-      position: absolute;
-      top: $header-height + 10px;
-
-      &.main {
-        left: calc(#{-1 * $width} - 10px);
-        text-align: right;
-      }
-
-      &.user {
-        right: calc(#{-1 * $width} - 10px);
-        text-align: left;
-      }
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-
     ul {
       margin: -5px -5px 5px;
 
@@ -126,12 +105,44 @@ body > .container {
           opacity: 1;
         }
       }
+    }
 
-      @media all and (min-width: 600px) {
+    @media all and (min-width: 600px) {
+      $width: 20%;
+      width: $width;
+      position: absolute;
+      top: $header-height + 10px;
+
+      ul {
+        & + ul {
+          border-top: 1px rgba(#000, 0.05) solid;
+          margin-top: 10px;
+          padding-top: 10px;
+        }
+
         li {
+          white-space: nowrap;
           display: block;
           border-bottom: 1px rgba(#000, 0.1) solid;
+
+          &:last-child {
+            border-bottom: 0;
+          }
         }
+      }
+
+      &.main {
+        left: calc(#{-1 * $width} - 10px);
+        text-align: right;
+      }
+
+      &.user {
+        right: calc(#{-1 * $width} - 10px);
+        text-align: left;
+      }
+
+      &:hover {
+        opacity: 1;
       }
     }
   }

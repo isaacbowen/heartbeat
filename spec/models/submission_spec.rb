@@ -10,6 +10,7 @@
 #  created_at      :datetime
 #  updated_at      :datetime
 #  comments_public :boolean          default(TRUE)
+#  tags            :string(255)      default([]), is an Array
 #
 
 require 'spec_helper'
