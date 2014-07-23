@@ -21,7 +21,7 @@ class AddTagsToSubmissionsAndUsers < ActiveRecord::Migration
           shodan: %w(bsubramanian@enova.com bthomas@enova.com jmiller@enova.com akumar1@enova.com abondzic@enova.com vconcepcion@enova.com),
           noobs: %w(icundiff@enova.com mguldur@enova.com cmwesigwa@enova.com),
           incredibles: %w(skim@enova.com dpollak@enova.com hkotecha@enova.com smanam@enova.com whan@enova.com yfayad@enova.com aabbineni@enova.com gguntupalli@enova.com dschepers@enova.com),
-          turtle: %w(srees@enova.com bheilman@enova.com mkeisler@enova.com jkrueger@enova.com rcorrieri@enova.com),
+          turtles: %w(srees@enova.com bheilman@enova.com mkeisler@enova.com jkrueger@enova.com rcorrieri@enova.com),
         }.each do |tag, emails|
           User.where(email: emails).update_all tags: ['rnd', tag]
         end
