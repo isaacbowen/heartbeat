@@ -96,15 +96,16 @@ ActiveRecord::Schema.define(version: 20140723161152) do
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: true do |t|
     t.text     "name"
     t.uuid     "manager_user_id"
-    t.text     "manager_email"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "admin",           default: false, null: false
     t.boolean  "active",          default: true,  null: false
     t.string   "tags",            default: [],                 array: true
+    t.text     "email"
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["manager_user_id"], name: "index_users_on_manager_user_id", using: :btree
   add_index "users", ["tags"], name: "index_users_on_tags", using: :gin
 

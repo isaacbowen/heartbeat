@@ -6,7 +6,7 @@
     - when :tag
       \##{result_tag}
     - when :all
-      Everyone,
+      Enova,
     - else
       ?
     for the week of #{@result.start_date.format_like 'August 4, 2014'}
@@ -30,13 +30,13 @@
       %p
         %strong No data!
       %p This is not a thing.
-  - elsif not @result.complete?
+  - elsif @result.incomplete? or (@result.insufficient? and result_scope != :me)
     %section.summary
-      - if @result.representation < Result::MINIMUM_REPRESENTATION
+      - if @result.incomplete?
         %p
           %strong In progress!
         %p Report is #{number_to_percentage (@result.representation*100).floor, precision: 0} complete, with #{@result.sample.complete.count} of #{@result.sample.count} reporting - come back when we hit #{number_to_percentage (Result::MINIMUM_REPRESENTATION*100), precision: 0}.
-      - elsif @result.size < Result::MINIMUM_SIZE
+      - elsif @result.insufficient?
         %p
           %strong Insufficient data!
         %p We only have #{pluralize @result.size, 'report'} for this result set. We need at least #{Result::MINIMUM_SIZE}, to preserve some semblance of anonymity.

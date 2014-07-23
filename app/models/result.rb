@@ -28,7 +28,19 @@ class Result
   end
 
   def complete?
-    size > MINIMUM_SIZE and representation > MINIMUM_REPRESENTATION
+    representation > MINIMUM_REPRESENTATION
+  end
+
+  def incomplete?
+    not complete?
+  end
+
+  def sufficient?
+    size > MINIMUM_SIZE
+  end
+
+  def insufficient?
+    not sufficient?
   end
 
   def persisted?

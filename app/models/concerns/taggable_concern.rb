@@ -37,6 +37,10 @@ module TaggableConcern
       where('? = ANY (tags)', clean_tag(tag))
     end
 
+    def tags
+      pluck(:tags).flatten.uniq.sort.map(&:to_sym)
+    end
+
     def untagged
       where("tags = '{}'")
     end
@@ -46,7 +50,7 @@ module TaggableConcern
     end
 
     def clean_tag tag
-      tag.to_s.gsub /[^\w\-_]/, ''
+      tag.to_s.gsub(/[^\w\-_]/, '').to_sym
     end
   end
 end
