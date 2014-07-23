@@ -1,7 +1,7 @@
 class Admin::UsersController < Admin::BaseController
 
   def index
-    @users = User.order('email asc')
+    @users = User.order('active desc, email asc')
   end
 
   def edit

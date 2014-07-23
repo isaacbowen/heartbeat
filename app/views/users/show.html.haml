@@ -31,10 +31,11 @@
     = f.text_field :tags_as_string
 
   - if f.object.manager?
-    %h2 My team
-    = f.fields_for :reports do |fr|
-      .input
-        = fr.label :tags, "Tags for #{fr.object.name}"
-        = fr.text_field :tags_as_string
+    %fieldset
+      %legend My team
+      = f.fields_for :reports do |fr|
+        .input
+          = fr.label :tags, "Tags for #{fr.object.name}"
+          = fr.text_field :tags_as_string
 
-  .submit= f.submit
+  .submit= f.submit 'Save'
