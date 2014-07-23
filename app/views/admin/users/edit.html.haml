@@ -23,7 +23,7 @@
 
   .input
     = f.label :reports
-    %input.statebox{type: 'checkbox'}
+    /%input.statebox{type: 'checkbox'}
     .collection
       = f.collection_check_boxes :report_ids, User.order(:email).all, :id, :abbreviated_name do |b|
         - b.label { b.check_box + b.text }
