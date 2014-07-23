@@ -11,7 +11,7 @@ class ResultsController < ApplicationController
     if result_scope == :tag
       redirect_to [:tag, :result, start_date: start_date, tag: result_tag]
     else
-      redirect_to [:result, scope: result_scope]
+      redirect_to [:result, start_date: start_date, scope: result_scope]
     end
   end
 
@@ -28,6 +28,13 @@ class ResultsController < ApplicationController
         meta: metric.attributes.with_indifferent_access,
       )
     end
+  end
+
+
+  # eh
+
+  def tags
+    @tags = result_submissions.tags
   end
 
 
@@ -56,6 +63,10 @@ class ResultsController < ApplicationController
     else
       Submission.none
     end
+  end
+
+  def result_tags
+    @result_tags ||= result_submissions.tags
   end
 
   def result_tag
