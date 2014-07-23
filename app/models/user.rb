@@ -22,6 +22,8 @@ class User < ActiveRecord::Base
   belongs_to :manager, class_name: 'User', foreign_key: :manager_user_id
   has_many   :reports, class_name: 'User', foreign_key: :manager_user_id
 
+  accepts_nested_attributes_for :reports
+
   devise :omniauthable
 
   scope :active,   -> { where(active: true) }
@@ -91,12 +93,12 @@ class User < ActiveRecord::Base
         user = user.manager
       end
 
-      User.where(id: users.reverse.map(&:id))
+      users.reverse
     end
   end
 
   def vertical
-    User.where(id: managers + [self] + reports)
+    managers + [self] + reports
   end
 
 end

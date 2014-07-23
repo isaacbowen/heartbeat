@@ -1,7 +1,7 @@
 class ResultsController < ApplicationController
 
   before_action :authenticate_user!
-  before_action :ensure_valid_result_start_date!, except: :index
+  before_action :ensure_valid_result_start_date!, only: :show
 
   helper_method :result_scope, :result_tag
 
@@ -32,6 +32,10 @@ class ResultsController < ApplicationController
 
 
   # eh
+
+  def index_tags
+    redirect_to [:tags, :result, start_date: default_result_start_date.strftime('%Y%m%d')]
+  end
 
   def tags
     @tags = result_submissions.tags
@@ -67,7 +71,7 @@ class ResultsController < ApplicationController
       when :managers, :reports, :vertical
         # reifying the user list here to reduce complexity down the line.
         # activerecord was generating invalid statements.
-        Submission.where(user: current_user.send(result_scope).pluck(:id))
+        Submission.where(user: current_user.send(result_scope).map(&:id))
       when :all
         Submission.all
       else
