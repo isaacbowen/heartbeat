@@ -30,12 +30,20 @@
       %small (What team are you on? What projects are taking up your time?)
     = f.text_field :tags_as_string
 
-  - if f.object.manager?
+  = f.fields_for :reports do |fr|
     %fieldset
-      %legend My team
-      = f.fields_for :reports do |fr|
-        .input
-          = fr.label :tags, "Tags for #{fr.object.name}"
-          = fr.text_field :tags_as_string
+      %legend= fr.object.name
+
+      .input
+        = fr.label :active do
+          Active?
+          %small (Should they be sent the Heartbeat surveys?)
+        = fr.check_box :active
+
+      .input
+        = fr.label :tags_as_string do
+          Tags
+          %small (Usually the organization, the team, maybe a project - e.g. #rnd #venture #fca)
+        = fr.text_field :tags_as_string
 
   .submit= f.submit 'Save'

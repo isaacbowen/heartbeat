@@ -1,0 +1,32 @@
+%header
+  %h1 Metrics
+
+- @metrics.each do |metric|
+  = form_for [:admin, metric] do |f|
+    %fieldset{class: ('muted' unless f.object.active?)}
+      - if f.object.persisted?
+        %legend= metric.name
+      - else
+        %legend New metric
+
+        .input
+          = f.label :name
+          = f.text_field :name
+
+      .input
+        = f.label :description
+        = f.text_field :description
+
+      .input
+        = f.label :required
+        = f.check_box :required
+
+      .input
+        = f.label :active
+        = f.check_box :active
+
+      .input
+        = f.label :order
+        = f.text_field :order
+
+      .submit= f.submit

@@ -21,7 +21,9 @@ class ResultsController < ApplicationController
       source: result_submissions,
     )
 
-    @metric_results = Metric.active.ordered.map do |metric|
+    metrics = Metric.where(id: SubmissionMetric.where(submission: @result.sample).distinct(:metric_id).pluck(:metric_id)).ordered
+
+    @metric_results = metrics.map do |metric|
       Result.new(
         start_date: result_start_date,
         source: metric.submission_metrics.where(submission: result_submissions),
