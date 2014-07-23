@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 
     resources :results
     resources :submission_reminder_templates
+    resources :metrics, only: [:index, :update, :create]
   end
 
 end
