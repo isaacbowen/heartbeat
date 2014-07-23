@@ -18,5 +18,7 @@
 
   %section.tags
     %ul
-      - @tags.each do |tag|
-        %li= link_to "##{tag}", [:tag_result, tag: tag]
+      - @tags_and_counts.each do |tag, count|
+        %li
+          = link_to "##{tag}", [:tag_result, tag: tag]
+          (#{count})

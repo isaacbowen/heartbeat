@@ -8,11 +8,13 @@
 
 %table
   - @users.each do |user|
-    %tr
+    %tr{class: ('muted strikethrough' if user.inactive?)}
       %td= link_to user.abbreviated_name, [:edit, :admin, user]
       %td= user.email
+      %td.muted= user.tags_as_string
       %td
-        = 'inactive' if user.inactive?
-        = 'no manager' if user.manager.nil?
-      - if Rails.env.development?
-        %td= link_to 'Become', [:become, :admin, user], method: :post
+        - if user.manager.nil?
+          .danger{title: 'no manager!'}= icon('user')
+      %td
+        - if Rails.env.development?
+          = link_to 'Become', [:become, :admin, user], method: :post

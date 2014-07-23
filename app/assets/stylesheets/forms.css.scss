@@ -29,8 +29,17 @@ form {
     margin-top: 1em;
   }
 
-  h2 {
-    margin-top: 20px;
+  fieldset {
+    border: 1px rgba(#000, 0.2) solid;
+    border-radius: 2px;
+    margin: 25px 0;
+    padding: 0 15px 15px;
+
+    legend {
+      font-size: 17px;
+      color: #777;
+      padding: 0 10px;
+    }
   }
 }
 

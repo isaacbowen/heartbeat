@@ -41,6 +41,12 @@ module TaggableConcern
       pluck(:tags).flatten.uniq.sort.map(&:to_sym)
     end
 
+    def tags_and_counts
+      scope = self
+
+      ActiveSupport::OrderedHash[scope.tags.map { |tag| [tag, scope.tagged_with(tag).count] }.sort_by(&:last).reverse]
+    end
+
     def untagged
       where("tags = '{}'")
     end

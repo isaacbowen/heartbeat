@@ -38,12 +38,12 @@ class ResultsController < ApplicationController
   end
 
   def tags
-    @tags = result_submissions.tags
-
     @result = Result.new(
       start_date: result_start_date,
       source: result_submissions,
     )
+
+    @tags_and_counts = @result.sample.tags_and_counts
   end
 
 
