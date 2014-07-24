@@ -10,8 +10,11 @@
       - if mode == :bars
         - padding = 0.02
         - data.each_with_index do |n, i|
-          - rect_height = ((n-(data.min))/(data.max-(data.min))*height)
-          - rect_height = 2 if rect_height < 2 and n > 0
+          - if data.uniq.size == 1
+            - rect_height = height*0.7
+          - else
+            - rect_height = ((n-(data.min))/(data.max-(data.min))*height)
+            - rect_height = 2 if rect_height < 2 and n > 0
           %rect{x: (data.size-(i))/data.size.to_f*width*-1+width+i*(width*padding), y: height - rect_height, width: (width.to_f/data.size) - (width*padding*3), height: rect_height, data: {value: n}}
       - else
         - offset = (data.max - data.min) < 0.5 ? height/2.0*0.9 : 0
