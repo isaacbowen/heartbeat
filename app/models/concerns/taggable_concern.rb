@@ -34,7 +34,7 @@ module TaggableConcern
 
   module ClassMethods
     def tagged_with tag
-      where('? = ANY (tags)', clean_tag(tag))
+      where("? = ANY (\"#{table_name}\".\"tags\")", clean_tag(tag))
     end
 
     def tags
@@ -48,11 +48,11 @@ module TaggableConcern
     end
 
     def untagged
-      where("tags = '{}'")
+      where(tags: "'{}'")
     end
 
     def tagged
-      where("tags != '{}'")
+      where.not(tags: "'{}'")
     end
 
     def clean_tag tag

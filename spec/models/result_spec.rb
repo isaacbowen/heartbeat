@@ -93,12 +93,18 @@ describe Result do
         end
       end
 
-      [:empty?, :any?, :count, :size, :klass].each do |method_name|
+      [:empty?, :any?, :count, :size].each do |method_name|
         describe "##{method_name}" do
           it "should be sample.#{method_name}" do
             subject.stub(:sample) { double(method_name => 'foobar') }
             subject.send(method_name).should == 'foobar'
           end
+        end
+      end
+
+      describe '#klass' do
+        it 'should be the class' do
+          subject.klass.should == model
         end
       end
 
