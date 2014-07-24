@@ -3,7 +3,9 @@ class ResultsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_valid_result_start_date!, only: :show
 
-  helper_method :result_scope, :result_tag
+  helper_method :result_scope, :result_tag, :render_result?
+
+  layout :result_layout
 
   def index
     start_date = default_result_start_date.strftime('%Y%m%d')
@@ -101,6 +103,18 @@ class ResultsController < ApplicationController
   def ensure_valid_result_start_date!
     if result_start_date.at_beginning_of_week != result_start_date
       redirect_to action: :show, start_date: result_start_date.at_beginning_of_week.strftime('%Y%m%d')
+    end
+  end
+
+  def render_result?
+    request.xhr?
+  end
+
+  def result_layout
+    if request.xhr?
+      false
+    else
+      nil # use default layout
     end
   end
 
