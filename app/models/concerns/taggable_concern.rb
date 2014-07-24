@@ -48,11 +48,11 @@ module TaggableConcern
     end
 
     def untagged
-      where(tags: "'{}'")
+      where(tags: '{}')
     end
 
     def tagged
-      where.not(tags: "'{}'")
+      where.not(tags: '{}')
     end
 
     def clean_tag tag
