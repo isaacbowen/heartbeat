@@ -3,6 +3,7 @@ class Result
 
   MINIMUM_REPRESENTATION = 0.5 # %
   MINIMUM_SIZE = 2
+  DEFAULT_MODE = :live
 
   # e.g. 1.week
   attr_accessor :period
@@ -16,11 +17,58 @@ class Result
   # any other crap you want to throw in here
   attr_accessor :meta
 
-  def sample options = {}
-    sample_start_time = options[:start_time] || start_time
-    sample_end_time   = options[:end_time] || end_time
+  # :live (stats are run on the db) or :cached (stats are run in-memory)
+  attr_accessor :mode
 
-    source.where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
+  def mode
+    @mode ||= DEFAULT_MODE
+  end
+
+  def mode= value
+    raise NotImplementedError unless [:live, :cached].include? value
+
+    @mode = value
+  end
+
+  def live_mode?
+    mode == :live
+  end
+
+  def sample options = {}
+    @samples ||= Hash.new do |hash, options|
+      hash[options] = begin
+        sample_start_time = options[:start_time] || start_time
+        sample_end_time   = options[:end_time] || end_time
+
+        scope = source.joins(:user).where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
+
+        if live_mode?
+          scope
+        else
+          scope.to_a
+        end
+      end
+    end
+
+    @samples[options]
+  end
+
+  def completed_sample
+    @completed_sample ||= begin
+      if live_mode?
+        sample.complete
+      else
+        sample.select(&:completed?)
+      end
+    end
+  end
+
+  def sample_count
+    @sample_count ||= sample.size
+  end
+
+  def completed_sample_count
+    @completed_sample_count ||= completed_sample.size
   end
 
   def period
@@ -66,7 +114,8 @@ class Result
     @created_at ||= sample.minimum(:created_at)
   end
 
-  delegate :empty?, :any?, :count, :size, :klass, to: :sample
+  delegate :empty?, :any?, :count, :size, to: :sample
+  delegate :klass, to: :source
 
 
   # date stuff
@@ -98,7 +147,13 @@ class Result
     raise NotImplementedError unless klass.column_names.include?('rating')
 
     @rating_counts ||= begin
-      grouped_counts = sample.complete.group(:rating).count
+      grouped_counts = begin
+        if live_mode?
+          sample.complete.group(:rating).count
+        else
+          completed_sample.inject(Hash.new(0)) { |hash, value| hash[value] += 1; hash }
+        end
+      end
 
       # represent the zero counts
       Hash[Heartbeat::VALID_RATINGS.map { |r| [r, 0] }].merge(grouped_counts)
@@ -121,7 +176,11 @@ class Result
 
   def representation
     @representation ||= begin
-      sample.complete.count.to_f / sample.count
+      if live_mode?
+        sample.complete.count.to_f / sample.count
+      else
+        completed_sample.size.to_f / sample.size
+      end
     end
   end
 
@@ -133,7 +192,21 @@ class Result
       sample_plus_previous_period = sample(start_time: start_time - period)
 
       # pull out the standard deviation for ratings, by user
-      stddev_ratings = sample_plus_previous_period.joins(:user).select('stddev_samp(rating) as stddev_rating').group(:user_id).map(&:stddev_rating)
+      stddev_ratings = begin
+        if live_mode?
+          sample_plus_previous_period.select('stddev_samp(rating) as stddev_rating').group('user_id').map(&:stddev_rating)
+        else
+          sample_plus_previous_period.map { |s| [s.user.id, s.rating] }.group_by(&:first).map do |user_id, user_ids_and_ratings|
+            ratings = user_ids_and_ratings.map(&:last)
+
+            if ratings.all? &:present?
+              ratings.standard_deviation
+            else
+              nil
+            end
+          end
+        end
+      end
 
       # average the non-nils to get our volatility score
       stddev_ratings.reject(&:nil?).mean.round(1).to_f rescue 0.0
@@ -143,9 +216,21 @@ class Result
   def unity
     raise NotImplementedError unless klass.column_names.include?('rating')
 
+    # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
     @unity ||= begin
-      # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
-      unity_ratings = sample.complete.joins(:user).select("1.0 - var_samp(rating) / #{[Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance} as unity").group('users.manager_user_id').map(&:unity)
+      maximum_variance = [Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance
+
+      unity_ratings = begin
+        if live_mode?
+          sample.complete.select("1.0 - var_samp(rating) / #{maximum_variance} as unity").group('users.manager_user_id').map(&:unity)
+        else
+          completed_sample.map { |s| [s.user.manager_user_id, s.rating] }.group_by(&:first).map do |manager_user_id, manager_user_id_and_ratings|
+            ratings = manager_user_id_and_ratings.last.map(&:to_f)
+
+            (1.0 - ratings.variance) / maximum_variance
+          end
+        end
+      end
 
       # average the non-nils to get our volatility score
       unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
@@ -175,19 +260,19 @@ class Result
   # pagination, sort of
 
   def previous n = 1
-    @previous ||= Hash.new do |hash, key|
+    @previous_results ||= Hash.new do |hash, key|
       hash[key] = self.class.new(source: source, period: period, start_date: start_date - (key * period).seconds)
     end
 
-    @previous[n].presence
+    @previous_results[n].presence
   end
 
   def next n = 1
-    @next ||= Hash.new do |hash, key|
+    @next_results ||= Hash.new do |hash, key|
       hash[key] = self.class.new(source: source, period: period, start_date: start_date + (key * period).seconds)
     end
 
-    @next[n].presence
+    @next_results[n].presence
   end
 
 end

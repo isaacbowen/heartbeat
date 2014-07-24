@@ -37,7 +37,7 @@
       - if @result.incomplete?
         %p
           %strong In progress!
-        %p Report is #{number_to_percentage (@result.representation*100).floor, precision: 0} complete, with #{@result.sample.complete.count} of #{@result.sample.count} reporting - come back when we hit #{number_to_percentage (Result::MINIMUM_REPRESENTATION*100), precision: 0}.
+        %p Report is #{number_to_percentage (@result.representation*100).floor, precision: 0} complete, with #{@result.completed_sample_count} of #{@result.sample_count} reporting - come back when we hit #{number_to_percentage (Result::MINIMUM_REPRESENTATION*100), precision: 0}.
       - elsif @result.insufficient?
         %p
           %strong Insufficient data!
@@ -79,7 +79,7 @@
                 - else
                   = metric_result.volatility
               - if metric_result.size > 1
-                %li.representation.value{title: "Response rate: #{metric_result.sample.complete.count} of #{metric_result.sample.count}", data: {sparkline_key: 'representation'}}
+                %li.representation.value{title: "Response rate: #{metric_result.completed_sample_count} of #{metric_result.sample_count}", data: {sparkline_key: 'representation'}}
                   = icon 'user'
                   = number_to_percentage metric_result.representation*100, precision: 0
                 %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
@@ -131,7 +131,7 @@
             %li
               .label Overall response rate:
               .value= number_to_percentage @result.representation*100, precision: 0
-              .context (#{@result.sample.complete.count} of #{@result.sample.count})
+              .context (#{@result.completed_sample_count} of #{@result.sample_count})
           / %li
           /   .label Best response time:
           /   .value= @result.shortest_time_to_completion
