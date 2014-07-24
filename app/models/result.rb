@@ -4,6 +4,7 @@ class Result
   MINIMUM_REPRESENTATION = 0.5 # %
   MINIMUM_SIZE = 2
   DEFAULT_MODE = :live
+  SPARKLINE_MAX_LENGTH = 12
 
   # e.g. 1.week
   attr_accessor :period
@@ -170,7 +171,7 @@ class Result
 
   def sparklines
     @sparklines ||= Hash.new do |hash, key|
-      hash[key] = (0..12).map { |n| previous(n) }.reject(&:nil?).map(&key).reverse
+      hash[key] = (0..SPARKLINE_MAX_LENGTH).map { |n| previous(n) }.reject(&:nil?).map(&key).reverse
     end
   end
 
