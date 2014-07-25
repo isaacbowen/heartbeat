@@ -25,7 +25,8 @@ Rails.application.routes.draw do
   get 'results/tags' => 'results#index_tags', as: :tags_results
   get 'results/:start_date/tags/:tags' => 'results#show', as: :tag_result
   get 'results/:start_date/tags'       => 'results#tags', as: :tags_result
-  get 'results/:start_date(/:scope)' => 'results#show', as: :result
+  get 'results/:start_date/:scope'     => 'results#show', as: :scope_result
+  get 'results/:start_date'            => 'results#show', as: :result
 
   namespace :admin do
     root 'meta#root'

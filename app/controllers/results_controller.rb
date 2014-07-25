@@ -16,7 +16,7 @@ class ResultsController < ApplicationController
     when :all
       redirect_to [:result, start_date: start_date]
     else
-      redirect_to [:result, start_date: start_date, scope: result_scope]
+      redirect_to [:scope, :result, start_date: start_date, scope: result_scope]
     end
   end
 
@@ -41,7 +41,7 @@ class ResultsController < ApplicationController
   # eh
 
   def index_tags
-    redirect_to [:result, scope: :tags, start_date: default_result_start_date.strftime('%Y%m%d')]
+    redirect_to [:scope, :result, scope: :tags, start_date: default_result_start_date.strftime('%Y%m%d')]
   end
 
   def tags
