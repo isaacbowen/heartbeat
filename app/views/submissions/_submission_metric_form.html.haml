@@ -7,8 +7,11 @@
     .rating-bookend.negative
       = icon 'thumbs-o-down fa-flip-horizontal'
 
-    - # hack for the moment
-    - rating_descriptions = {1 => 'Very bad.', 2 => 'Not good.', 3 => 'Pretty good.', 4 => 'Excellent!'}
+    - # even worse hack for the moment
+    - if mf.object.name == 'Happiness'
+      - rating_descriptions = {1 => 'Very bad.', 2 => 'Not good.', 3 => 'Pretty good.', 4 => 'Excellent!'}
+    - else
+      - rating_descriptions = {1 => 'Not at all.', 2 => 'Eh. Could be better.', 3 => 'Yep yep, doing pretty well.', 4 => 'This was awesome this week!'}
     - Heartbeat::VALID_RATINGS.each do |i|
       .rating-option{title: rating_descriptions[i]}
         = mf.radio_button :rating, i
