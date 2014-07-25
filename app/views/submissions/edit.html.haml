@@ -12,7 +12,7 @@
 
         %p.intro <strong>This'll just take a minute.</strong> You'll be asked about #{f.object.submission_metrics.size.to_words} metrics as they relate to your week. Don't think too hard - best thing you can do is to be honest, and think only about how the week went for you.
 
-        .tags{title: 'Tag your projects, teams, etc. Example: #rnd #henchmen #china'}
+        .tags{title: 'Tag your projects, teams, milestones, etc. Example: #rnd #henchmen #china'}
           = f.label :tags_as_string, 'Tags'
           = f.text_field :tags_as_string, placeholder: '#example'
 
