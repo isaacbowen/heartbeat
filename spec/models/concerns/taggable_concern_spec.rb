@@ -18,6 +18,12 @@ describe TaggableConcern do
             klass.tagged_with(:two).size.should == 2
             klass.tagged_with(:one).size.should == 3
           end
+
+          it 'should be able to handle multiple tags' do
+            klass.tagged_with(:one, :two).size.should == 2
+            klass.tagged_with(:one, :two, :four).size.should == 1
+            klass.tagged_with(:one, :two, :three).size.should == 0
+          end
         end
 
         describe '#tags' do

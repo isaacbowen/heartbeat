@@ -41,7 +41,7 @@
         - if user_signed_in? and current_user.tags.any?
           %ul
             - current_user.tags.each do |tag|
-              %li= link_to "##{tag}", [:results, tag: tag]
+              %li= link_to "##{tag}", [:results, tags: tag]
             %li= link_to 'all tags', [:tags, :results]
 
         %ul

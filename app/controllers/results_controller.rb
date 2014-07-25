@@ -3,15 +3,15 @@ class ResultsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_valid_result_start_date!, only: :show
 
-  helper_method :result_scope, :result_tag, :render_uncached_result?
+  helper_method :result_scope, :scope_tags, :render_uncached_result?
 
   layout :result_layout
 
   def index
     start_date = default_result_start_date.strftime('%Y%m%d')
 
-    if result_scope == :tag
-      redirect_to [:tag, :result, start_date: start_date, tag: result_tag]
+    if result_scope == :tags
+      redirect_to [:result, start_date: start_date, tag: result_tag, scope: :tags]
     else
       redirect_to [:result, start_date: start_date, scope: result_scope]
     end
@@ -38,7 +38,7 @@ class ResultsController < ApplicationController
   # eh
 
   def index_tags
-    redirect_to [:tags, :result, start_date: default_result_start_date.strftime('%Y%m%d')]
+    redirect_to [:result, scope: :tags, start_date: default_result_start_date.strftime('%Y%m%d')]
   end
 
   def tags
@@ -55,9 +55,7 @@ class ResultsController < ApplicationController
 
   def result_scope
     @result_scope ||= begin
-      if params[:tag].present?
-        :tag
-      elsif params[:scope].present?
+      if params[:scope].present?
         params[:scope].to_sym
       else
         :all
@@ -70,8 +68,12 @@ class ResultsController < ApplicationController
       case result_scope
       when :me
         Submission.where(user: current_user)
-      when :tag
-        Submission.tagged_with(result_tag)
+      when :tags
+        if scope_tags.any?
+          Submission.tagged_with(scope_tags)
+        else
+          Submission.all
+        end
       when :managers, :reports, :vertical
         # reifying the user list here to reduce complexity down the line.
         # activerecord was generating invalid statements.
@@ -88,8 +90,8 @@ class ResultsController < ApplicationController
     @result_tags ||= result_submissions.tags
   end
 
-  def result_tag
-    params[:tag] if result_scope == :tag
+  def scope_tags
+    params[:tags].try(:split, ',') || []
   end
 
   def default_result_start_date

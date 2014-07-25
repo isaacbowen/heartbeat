@@ -33,8 +33,10 @@ module TaggableConcern
 
 
   module ClassMethods
-    def tagged_with tag
-      where("? = ANY (\"#{table_name}\".\"tags\")", clean_tag(tag))
+    def tagged_with *tags
+      tags.inject(self) do |scope, tag|
+        scope.where("? = ANY (\"#{table_name}\".\"tags\")", clean_tag(tag))
+      end
     end
 
     def tags

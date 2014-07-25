@@ -5,8 +5,8 @@
       Me,
     - when :managers, :vertical, :reports
       My #{result_scope}
-    - when :tag
-      \##{result_tag}
+    - when :tags
+      #{scope_tags.map { |t| "##{t}" }.join(' ')},
     - when :all
       Enova,
     - else
