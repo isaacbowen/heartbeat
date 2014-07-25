@@ -20,5 +20,5 @@
     %ul
       - @tags_and_counts.each do |tag, count|
         %li
-          = link_to "##{tag}", [:tag_result, tag: tag]
+          = link_to "##{tag}", [:tag_result, tags: tag]
           (#{count})
