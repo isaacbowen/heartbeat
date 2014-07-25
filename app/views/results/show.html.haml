@@ -45,7 +45,7 @@
       %p 
   - else
     - if render_uncached_result? or cached? [@result, @metric_results]
-      - cache(@result, @metric_results) do
+      - cache [@result, @metric_results] do
         - @metric_results.each do |metric_result|
           - cache(metric_result) do
             %section.result-metric{id: metric_result.meta[:slug]}
