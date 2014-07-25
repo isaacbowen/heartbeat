@@ -17,8 +17,11 @@
       %span.muted= icon 'arrow-right'
 
   %section.tags
-    %ul
-      - @tags_and_counts.each do |tag, count|
-        %li
-          = link_to "##{tag}", [:tag_result, tags: tag]
-          (#{count})
+    - if @tags_and_counts.any?
+      %ul
+        - @tags_and_counts.each do |tag, count|
+          %li
+            = link_to "##{tag}", [:tag_result, tags: tag]
+            (#{count})
+    - else
+      %p No tags for this period!
