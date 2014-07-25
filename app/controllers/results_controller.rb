@@ -10,8 +10,11 @@ class ResultsController < ApplicationController
   def index
     start_date = default_result_start_date.strftime('%Y%m%d')
 
-    if result_scope == :tags
+    case result_scope
+    when :tags
       redirect_to [:tag, :result, start_date: start_date, tags: scope_tags.join(',')]
+    when :all
+      redirect_to [:result, start_date: start_date]
     else
       redirect_to [:result, start_date: start_date, scope: result_scope]
     end
