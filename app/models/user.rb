@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
   end
 
   def deep_reports
-    reports + reports.map(&:deep_reports).inject([], :+).keep_if(&:present?)
+    reports + reports.map(&:deep_reports).inject([], :+)
   end
 
 end

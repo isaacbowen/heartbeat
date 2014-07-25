@@ -46,7 +46,7 @@ module TaggableConcern
     def tags_and_counts
       scope = self
 
-      ActiveSupport::OrderedHash[scope.tags.map { |tag| [tag, scope.tagged_with(tag).count] }.sort_by(&:last).reverse]
+      ActiveSupport::OrderedHash[scope.tags.map { |tag| [tag, scope.tagged_with(tag).count] }.sort_by { |t, c| [c*-1, t] }]
     end
 
     def untagged
