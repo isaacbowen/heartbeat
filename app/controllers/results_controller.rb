@@ -3,7 +3,7 @@ class ResultsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_valid_result_start_date!, only: :show
 
-  helper_method :result_scope, :result_tag, :render_result?
+  helper_method :result_scope, :result_tag, :render_uncached_result?
 
   layout :result_layout
 
@@ -106,10 +106,12 @@ class ResultsController < ApplicationController
     end
   end
 
-  def render_result?
+  def render_uncached_result?
     request.xhr?
   end
 
+  # hack: let us generate and cache the content when requested over xhr, that
+  # we might show our users a loading spinner whilst that's happening
   def result_layout
     if request.xhr?
       false

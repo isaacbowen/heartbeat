@@ -44,99 +44,100 @@
         %p We only have #{pluralize @result.size, 'report'} for this result set. We need at least #{Result::MINIMUM_SIZE}, to preserve some semblance of anonymity.
       %p 
   - else
-    - if render_result?
-      - @metric_results.each do |metric_result|
-        - cache(metric_result) do
-          %section.result-metric{id: metric_result.meta[:slug]}
-            %header
-              %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
+    - if render_uncached_result? or cached? [@result, @metric_results]
+      - cache(@result, @metric_results) do
+        - @metric_results.each do |metric_result|
+          - cache(metric_result) do
+            %section.result-metric{id: metric_result.meta[:slug]}
+              %header
+                %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
 
-            .data
-              .bar-chart{title: 'Total ratings, from 1 to 4'}
-                = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
+              .data
+                .bar-chart{title: 'Total ratings, from 1 to 4'}
+                  = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
 
-              .rating.value.active{data: {sparkline_key: 'rating'}}
-                - if metric_result.rating.nan?
-                  ?
-                - else
-                  = metric_result.rating
-
-              %ul.stats
-                %li.delta.value{title: 'Delta: Change from last week', data: {sparkline_key: 'delta'}}
-                  - if metric_result.delta == 0
-                    = icon 'pause'
-                  - elsif metric_result.delta > 0
-                    = icon 'arrow-up'
-                  - else
-                    = icon 'arrow-down'
-                  - if metric_result.delta.nan?
+                .rating.value.active{data: {sparkline_key: 'rating'}}
+                  - if metric_result.rating.nan?
                     ?
                   - else
-                    = metric_result.delta
-                %li.volatility.value{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users', data: {sparkline_key: 'volatility'}}
-                  = icon 'bolt'
-                  - if metric_result.volatility.nan?
-                    ?
-                  - else
-                    = metric_result.volatility
-                - if metric_result.size > 1
-                  %li.representation.value{title: "Response rate: #{metric_result.completed_sample_count} of #{metric_result.sample_count}", data: {sparkline_key: 'representation'}}
-                    = icon 'user'
-                    = number_to_percentage metric_result.representation*100, precision: 0
-                  %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
-                    = icon 'dot-circle-o'
-                    - if metric_result.unity.nan?
+                    = metric_result.rating
+
+                %ul.stats
+                  %li.delta.value{title: 'Delta: Change from last week', data: {sparkline_key: 'delta'}}
+                    - if metric_result.delta == 0
+                      = icon 'pause'
+                    - elsif metric_result.delta > 0
+                      = icon 'arrow-up'
+                    - else
+                      = icon 'arrow-down'
+                    - if metric_result.delta.nan?
                       ?
                     - else
-                      = number_to_percentage metric_result.unity*100, precision: 0
+                      = metric_result.delta
+                  %li.volatility.value{title: 'Volatility: The standard deviation of ratings for each user between this and last week, averaged across all users', data: {sparkline_key: 'volatility'}}
+                    = icon 'bolt'
+                    - if metric_result.volatility.nan?
+                      ?
+                    - else
+                      = metric_result.volatility
+                  - if metric_result.size > 1
+                    %li.representation.value{title: "Response rate: #{metric_result.completed_sample_count} of #{metric_result.sample_count}", data: {sparkline_key: 'representation'}}
+                      = icon 'user'
+                      = number_to_percentage metric_result.representation*100, precision: 0
+                    %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
+                      = icon 'dot-circle-o'
+                      - if metric_result.unity.nan?
+                        ?
+                      - else
+                        = number_to_percentage metric_result.unity*100, precision: 0
 
-              .sparklines
-                - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
-                  %div{class: "sparkline-wrapper #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
-                    = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines}
+                .sparklines
+                  - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
+                    %div{class: "sparkline-wrapper #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
+                      = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines}
 
-            - if @scope == :me
-              - comments = metric_result.comments
-            - else
-              - comments = metric_result.public_comments
-            - if comments.any?
+              - if @scope == :me
+                - comments = metric_result.comments
+              - else
+                - comments = metric_result.public_comments
+              - if comments.any?
+                %ul.comments
+                  - comments.each do |comment|
+                    %li.comment
+                      .content= simple_format comment.body
+                      .author{title: comment.user.name}
+                        = comment.user.abbreviated_name
+                        - if comment.private?
+                          (private)
+              - else
+                %p.comments.none
+                  (no comments)
+
+        - cache(@result) do
+          %section.result-comments
+            %header
+              %h1 General Comments
+            - if @result.public_comments.any?
               %ul.comments
-                - comments.each do |comment|
+                - @result.public_comments.each do |comment|
                   %li.comment
                     .content= simple_format comment.body
-                    .author{title: comment.user.name}
-                      = comment.user.abbreviated_name
-                      - if comment.private?
-                        (private)
+                    .author{title: comment.user.name}= comment.user.abbreviated_name
             - else
               %p.comments.none
                 (no comments)
 
-      - cache(@result) do
-        %section.result-comments
-          %header
-            %h1 General Comments
-          - if @result.public_comments.any?
-            %ul.comments
-              - @result.public_comments.each do |comment|
-                %li.comment
-                  .content= simple_format comment.body
-                  .author{title: comment.user.name}= comment.user.abbreviated_name
-          - else
-            %p.comments.none
-              (no comments)
-
-        %section.summary
-          %ul
-            - if @result.size > 1
-              %li
-                .label Overall response rate:
-                .value= number_to_percentage @result.representation*100, precision: 0
-                .context (#{@result.completed_sample_count} of #{@result.sample_count})
-            / %li
-            /   .label Best response time:
-            /   .value= @result.shortest_time_to_completion
-            /   .context
+          %section.summary
+            %ul
+              - if @result.size > 1
+                %li
+                  .label Overall response rate:
+                  .value= number_to_percentage @result.representation*100, precision: 0
+                  .context (#{@result.completed_sample_count} of #{@result.sample_count})
+              / %li
+              /   .label Best response time:
+              /   .value= @result.shortest_time_to_completion
+              /   .context
 
       %section.definitions
         %header
@@ -158,5 +159,5 @@
     - else
       .waiting= icon 'cog fa-spin'
       :javascript
-        $('.result').load(window.location.href, function() { $(document).trigger('contentchange') })
+        $('.content').load(window.location.href, function() { $(document).trigger('contentchange') })
 
