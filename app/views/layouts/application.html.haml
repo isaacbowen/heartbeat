@@ -31,7 +31,7 @@
 
             - if current_user.manager?
               %li{title: 'Those who report directly to you', data: {placement: 'right'}}= link_to 'My reports', [:results, scope: :reports]
-              %li{title: 'You, your reports, and your management chain', data: {placement: 'right'}}= link_to 'My vertical', [:results, scope: :vertical]
+              %li{title: 'You, your reports, their reports (etc), and your management chain', data: {placement: 'right'}}= link_to 'My vertical', [:results, scope: :vertical]
 
             - if current_user.managers.any?
               %li= link_to 'My managers', [:results, scope: :managers]
