@@ -36,7 +36,7 @@
             - if current_user.managers.any?
               %li= link_to 'My managers', [:results, scope: :managers]
 
-          %li= link_to 'Enova', [:results, scope: :all]
+          %li= link_to 'Enova', :results
 
         - if user_signed_in? and current_user.tags.any?
           %ul
