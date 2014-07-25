@@ -8,6 +8,7 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'font-awesome-sass'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
+gem 'jquery-rails'
 gem 'haml'
 gem 'stamp'
 gem 'numbers_and_words'
@@ -21,9 +22,9 @@ gem 'omniauth-google-oauth2'
 # if auto-required, this will monkeypatch the crap out of Enumerable
 gem 'descriptive_statistics', require: false
 
-gem 'jquery-rails'
-
 gem 'newrelic_rpm'
+
+gem 'dalli'
 
 group :development do
   gem 'annotate'
