@@ -91,17 +91,19 @@ describe User do
   end
 
   describe '#vertical' do
-    it 'should be #managers + me + #reports' do
+    it 'should be #managers + me + #reports and their reports' do
       dfish = create :user
-      dhall = create :user, manager: dhall
-      jjon  = create :user, manager: jjon
+      dhall = create :user, manager: dfish
+      jjon  = create :user, manager: dhall
       me    = create :user, manager: jjon
       trogdor = create_list :user, 5, manager: me
+
+      kabal_of_shyam = create_list :user, 2, manager: trogdor.first
 
       blake = create :user, manager: dhall
       shodan = create_list :user, 5, manager: blake
 
-      me.vertical.should == me.managers + [me] + me.reports
+      jjon.vertical.sort_by(&:id).should == ([dfish, dhall, jjon, me] + trogdor + kabal_of_shyam).sort_by(&:id)
     end
   end
 
