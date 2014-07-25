@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
 
+  helper CacheHelper
+
   protect_from_forgery with: :exception
 
 
