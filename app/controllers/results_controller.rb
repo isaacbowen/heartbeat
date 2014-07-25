@@ -11,7 +11,7 @@ class ResultsController < ApplicationController
     start_date = default_result_start_date.strftime('%Y%m%d')
 
     if result_scope == :tags
-      redirect_to [:result, start_date: start_date, tag: result_tag, scope: :tags]
+      redirect_to [:tag, :result, start_date: start_date, tags: scope_tags.join(',')]
     else
       redirect_to [:result, start_date: start_date, scope: result_scope]
     end
@@ -57,6 +57,8 @@ class ResultsController < ApplicationController
     @result_scope ||= begin
       if params[:scope].present?
         params[:scope].to_sym
+      elsif params[:tags].present?
+        :tags
       else
         :all
       end
