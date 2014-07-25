@@ -98,7 +98,11 @@ class User < ActiveRecord::Base
   end
 
   def vertical
-    managers + [self] + reports
+    @vertical ||= managers + [self] + deep_reports
+  end
+
+  def deep_reports
+    reports + reports.map(&:deep_reports).inject([], :+).keep_if(&:present?)
   end
 
 end
