@@ -1,4 +1,4 @@
-$ ->
+$(document).on 'contentchange', ->
   $('.result-metric .value').click ->
     $metric = $(this).closest('.result-metric')
 

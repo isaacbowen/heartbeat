@@ -1,5 +1,3 @@
-$color: #274ec0;
-
 .sparkline {
   background: #fff;
   display: inline-block;
@@ -13,7 +11,7 @@ $color: #274ec0;
 
 .sparkline-lines {
   polyline, line {
-    stroke: $color;
+    stroke: $brand-primary;
     stroke-width: 2px;
     stroke-linecap: round;
     fill: transparent;
@@ -22,7 +20,7 @@ $color: #274ec0;
 
 .sparkline-bars {
   rect {
-    fill: $color;
+    fill: $brand-primary;
   }
 
   padding: 0 5px;

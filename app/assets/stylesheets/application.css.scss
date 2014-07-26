@@ -10,13 +10,22 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require reset
  *= require font-awesome
- *= require_tree .
  *= require_self
  */
 
-@import 'bootstrap/variables';
-@import 'bootstrap/mixins';
-@import 'bootstrap/component-animations';
-@import 'bootstrap/tooltip';
+@import 'variables';
+@import 'mixins';
+
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+
+@import 'layout/wrapper';
+@import 'layout/header';
+@import 'layout/nav';
+@import 'layout/content';
+@import 'layout/footer';
+
+@import 'components/result';
+@import 'components/comment';
+@import 'components/sparkline';

@@ -4,15 +4,19 @@ ruby '2.1.1'
 gem 'rails', '4.1.1'
 gem 'pg'
 gem 'foreigner'
+gem 'dalli'
+
 gem 'sass-rails', '~> 4.0.3'
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
 gem 'font-awesome-sass'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
+
 gem 'haml'
 gem 'stamp'
 gem 'numbers_and_words'
-gem 'bootstrap-sass'
 gem 'liquid'
 
 # auth
@@ -23,8 +27,6 @@ gem 'omniauth-google-oauth2'
 gem 'descriptive_statistics', require: false
 
 gem 'newrelic_rpm'
-
-gem 'dalli'
 
 group :development do
   gem 'annotate'
