@@ -10,56 +10,65 @@
 
 
   %body
-    .container
-      %header
-        .logo
-          = link_to :root do
-            %span.heartbeat Heartbeat
-            %span.tenant for Enova
-        .user
-          - if current_user
-            = link_to current_user.abbreviated_name, :user
-            = link_to icon('sign-out').html_safe, :logout, method: :delete
-          - else
-            = link_to 'Login', :login
+    .wrapper
+      %header.main
+        .container
+          .row
+            .brand.col-xs-6.col-md-offset-2
+              = link_to :root do
+                .heartbeat Heartbeat
+                .tenant for Enova
+            .user.col-md-2.col-md-offset-2.col-lg-offset-0
+              - if current_user
+                .name= link_to current_user.abbreviated_name, :user
+                .sign-out= link_to icon('sign-out').html_safe, :logout, method: :delete
+              - else
+                .sign-in= link_to 'Login', :login
 
-      %nav.main
-        %ul
-          %li= link_to 'Me', [:results, scope: :me]
+      .content.main
+        .container
+          .row
+            %nav.main.col-md-2
+              %ul
+                %li= link_to 'Me', [:results, scope: :me]
 
-          - if user_signed_in?
+                - if user_signed_in?
 
-            - if current_user.manager?
-              %li{title: 'Those who report directly to you', data: {placement: 'right'}}= link_to 'My reports', [:results, scope: :reports]
-              %li{title: 'You, your reports, their reports (etc), and your management chain', data: {placement: 'right'}}= link_to 'My vertical', [:results, scope: :vertical]
+                  - if current_user.manager?
+                    %li{title: 'Those who report directly to you', data: {placement: 'right'}}= link_to 'My reports', [:results, scope: :reports]
+                    %li{title: 'You, your reports, their reports (etc), and your management chain', data: {placement: 'right'}}= link_to 'My vertical', [:results, scope: :vertical]
 
-            - if current_user.managers.any?
-              %li= link_to 'My managers', [:results, scope: :managers]
+                  - if current_user.managers.any?
+                    %li= link_to 'My managers', [:results, scope: :managers]
 
-          %li= link_to 'Enova', :results
+                %li= link_to 'Enova', :results
 
-        - if user_signed_in? and current_user.tags.any?
-          %ul
-            - current_user.tags.each do |tag|
-              %li= link_to "##{tag}", [:results, tags: tag]
-            %li= link_to 'all tags', [:tags, :results]
+              - if user_signed_in? and current_user.tags.any?
+                %ul
+                  - current_user.tags.each do |tag|
+                    %li= link_to "##{tag}", [:results, tags: tag]
+                  %li= link_to 'all tags', [:tags, :results]
 
-        %ul
-          %li= link_to '?', :about
+              %ul
+                %li= link_to '?', :about
 
-          - if current_user.try :admin?
-            %li= link_to 'Admin', [:admin, :root]
+                - if current_user.try :admin?
+                  %li= link_to 'Admin', [:admin, :root]
 
-      - if flash.any?
-        .flashes
-          - flash.each do |key, message|
-            %div{class: "flash flash-#{key}"}
-              %p= message
-              .close= icon 'times'
+            .col-md-10.col-lg-8
+              - if flash.any?
+                .flashes
+                  - flash.each do |key, message|
+                    %div{class: "flash flash-#{key}"}
+                      %p= message
+                      .close= icon 'times'
 
-      .content= yield
+              .content= yield
 
-      %footer
-        %p
-          %span= link_to 'Heartbeat on Github', 'https://github.com/isaacbowen/heartbeat', target: :_blank
-          %span #{icon 'heart'} Isaac
+      %footer.main
+        .container
+          .row
+            .col-md-10.col-md-offset-2
+              %p
+                %span= link_to 'Heartbeat on Github', 'https://github.com/isaacbowen/heartbeat', target: :_blank
+                %span #{icon 'heart'} Isaac

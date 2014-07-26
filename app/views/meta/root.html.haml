@@ -13,5 +13,6 @@
     .prose
       %p <strong>Dev mode!</strong> Need a survey to test?
     %form
-      %div= email_field :user, :email, placeholder: 'foobar@enova.com'
-      .submit= submit_tag 'Yes.'
+      .form-group
+        = email_field :user, :email, placeholder: 'foobar@enova.com', class: 'form-control'
+      .submit= submit_tag 'Yes.', class: 'btn btn-primary'

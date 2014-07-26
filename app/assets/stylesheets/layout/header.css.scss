@@ -1,0 +1,38 @@
+header.main {
+  padding: 10px 0;
+  margin: 10px 0 20px;
+  border-bottom: 2px $gray-lighter solid;
+  line-height: $headings-line-height * $font-size-base * 1.8;
+
+  .brand {
+    div {
+      display: inline;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  .heartbeat {
+    font-size: $font-size-base * 1.8;
+  }
+
+  .tenant {
+    font-size: $font-size-base * 1.6;
+    color: $gray;
+    margin-left: $font-size-base;
+  }
+
+  .user {
+    text-align: right;
+
+    div {
+      display: inline;
+    }
+
+    .sign-out {
+      margin-left: 10px;
+    }
+  }
+}

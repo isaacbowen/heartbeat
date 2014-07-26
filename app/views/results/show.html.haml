@@ -1,5 +1,5 @@
 .result
-  %p.timeframe
+  .timeframe
     - case result_scope
     - when :me
       Me,
@@ -52,17 +52,18 @@
               %header
                 %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
 
-              .data
-                .bar-chart{title: 'Total ratings, from 1 to 4'}
-                  = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
+              .data.row
+                .col-sm-5.col-xs-4.bar-chart-rating
+                  .bar-chart{title: 'Total ratings, from 1 to 4'}
+                    = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
 
-                .rating.value.active{data: {sparkline_key: 'rating'}}
-                  - if metric_result.rating.nan?
-                    ?
-                  - else
-                    = metric_result.rating
+                  .rating.value.active{data: {sparkline_key: 'rating'}}
+                    - if metric_result.rating.nan?
+                      ?
+                    - else
+                      = metric_result.rating
 
-                %ul.stats
+                %ul.stats.col-sm-4.col-xs-4
                   %li.delta.value{title: 'Delta: Change from last week', data: {sparkline_key: 'delta'}}
                     - if metric_result.delta == 0
                       = icon 'pause'
@@ -91,7 +92,7 @@
                       - else
                         = number_to_percentage metric_result.unity*100, precision: 0
 
-                .sparklines
+                .sparklines.col-sm-3.col-xs-4
                   - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
                     %div{class: "sparkline-wrapper #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
                       = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines}
@@ -131,7 +132,7 @@
             %ul
               - if @result.size > 1
                 %li
-                  .label Overall response rate:
+                  .description Overall response rate:
                   .value= number_to_percentage @result.representation*100, precision: 0
                   .context (#{@result.completed_sample_count} of #{@result.sample_count})
               / %li
@@ -159,5 +160,5 @@
     - else
       .waiting= icon 'cog fa-spin'
       :javascript
-        $('.content').load(window.location.href, function() { $(document).trigger('contentchange') })
+        $('.content.main .content').load(window.location.href, function() { $(document).trigger('contentchange') })
 

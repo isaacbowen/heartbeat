@@ -1,5 +1,3 @@
-@import 'mixins';
-
 .result {
   .timeframe {
     text-align: center;
@@ -42,6 +40,9 @@
 
     ul {
       clear: both;
+      list-style: none;
+      margin: 0;
+      padding: 0;
 
       li {
         > * {
@@ -49,7 +50,7 @@
           margin-right: 0.5em;
         }
 
-        .label {
+        .description {
           font-weight: bold;
         }
 
@@ -85,18 +86,14 @@
 
     .data {
       @include clearfix;
-      clear: both;
       height: 50px;
 
-      > * {
-        display: block;
-        height: 50px;
-        float: left;
+      @media (min-width: $screen-md-min) {
+        width: 80%;
       }
 
-      .bar-chart {
-        width: 110px;
-        margin: 0 20px 0 0;
+      > * {
+        height: 50px;
       }
 
       .value {
@@ -118,17 +115,48 @@
         }
       }
 
+      .bar-chart-rating {
+        position: relative;
+      }
+
+      .bar-chart {
+      }
+
       .rating {
-        width: 90px;
         line-height: 46px;
-        font-size: 50px;
+        font-size: $font-size-h1;
         text-align: center;
       }
 
+      @media (min-width: $screen-sm-min) {
+        .bar-chart {
+          width: 50%;
+          float: left;
+        }
+
+        .rating {
+          width: 40%;
+          float: right;
+        }
+      }
+
+      @media (max-width: $screen-xs-max) {
+        .bar-chart {
+          text-align: center;
+          opacity: 0.8;
+        }
+
+        .rating {
+          position: absolute;
+          top: 2px;
+          right: 5px;
+          bottom: 2px;
+          left: 5px;
+          background: rgba(#fff, 0.8);
+        }
+      }
+
       .sparklines {
-        width: 150px;
-        height: 50px;
-        margin-left: 10px;
         position: relative;
 
         .sparkline-wrapper {
@@ -150,10 +178,7 @@
       }
 
       ul.stats {
-        width: 150px;
         list-style: none;
-        margin: 0 0 0 10px;
-        padding: 5px 0 0 0;
 
         li {
           display: block;
@@ -163,6 +188,7 @@
           margin: -1px -1px 0px 0;
           padding: 1px 0;
           width: 50%;
+          white-space: nowrap;
 
           &:nth-child(2n-1) {
             clear: left;

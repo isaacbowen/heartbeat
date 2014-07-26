@@ -1,7 +1,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.autosize.input
-//= require bootstrap/tooltip
+//= require bootstrap-sprockets
 //= require_self
 //= require_tree .
 
