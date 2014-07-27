@@ -1,12 +1,26 @@
+$header-height: 62px;
+
 .result {
+  padding-top: $header-height;
+
   > header {
     @include clearfix;
 
-    margin: -1 * $grid-gutter-width;
-    margin-bottom: $grid-gutter-width;
-
     padding: $grid-gutter-width*0.5 $grid-gutter-width;
     border-bottom: 1px $gray-lighter solid;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+
+    &.affix {
+      position: fixed;
+      z-index: 1;
+      border-right: 1px $gray-lighter solid;
+      border-left: 1px $gray-lighter solid;
+      background: rgba(#fff, 0.95);
+    }
 
     .timeframe {
       text-align: center;
