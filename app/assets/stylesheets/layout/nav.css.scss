@@ -29,9 +29,9 @@ nav.main {
       padding: 0;
       float: none;
       display: inline-block;
+      border: 0;
 
       + ul {
-        border: 0;
         border-left: 1px #ccc solid;
         padding-left: 10px;
       }

@@ -103,14 +103,14 @@
         cursor: pointer;
 
         &:hover {
-          border-color: lighten($blue, 40%);
+          border-color: lighten($brand-primary, 40%);
         }
 
         &.active {
-          border-color: lighten($blue, 40%);
+          border-color: lighten($brand-primary, 20%);
 
           &:hover {
-            border-color: lighten($blue, 30%);
+            border-color: lighten($brand-primary, 30%);
           }
         }
       }
@@ -160,7 +160,7 @@
         position: relative;
 
         .sparkline-wrapper {
-          width: inherit;
+          width: 100%;
           height: inherit;
           opacity: 0;
           transition: opacity 0.1s;
@@ -174,11 +174,16 @@
           &.active {
             opacity: 1;
           }
+
+          svg {
+            width: 100%;
+          }
         }
       }
 
       ul.stats {
         list-style: none;
+        padding-left: 0;
 
         li {
           display: block;

@@ -1,49 +1,51 @@
-.submission.spotlight
-  .progress
-    .meter
+.submission-form-wrapper
+  .submission-form
+    .progress
+      .meter
 
-  - submission = current_submission
-  = form_for submission, html: {class: ['submission-form', ('complete' if submission.completed?)].join(' ')} do |f|
-    .steps
-      .step.intro
-        %h3
-          Your Heartbeat
-          %em Week of #{f.object.created_at.at_beginning_of_week.format_like 'August 4, 2014'}
+    - submission = current_submission
+    = form_for submission, html: {class: ['submission-form', ('complete' if submission.completed?)].join(' ')} do |f|
+      .steps
+        %section.step.intro
+          %header
+            Your Heartbeat
+            %small Week of #{f.object.created_at.at_beginning_of_week.format_like 'August 4, 2014'}
 
-        %p.intro <strong>This'll just take a minute.</strong> You'll be asked about #{f.object.submission_metrics.size.to_words} metrics as they relate to your week. Don't think too hard - best thing you can do is to be honest, and think only about how the week went for you.
+          .content
+            %p.intro <strong>This'll just take a minute.</strong> You'll be asked about #{f.object.submission_metrics.size.to_words} metrics as they relate to your week. Don't think too hard - best thing you can do is to be honest, and think only about how the week went for you.
 
-        .tags{title: 'Tag your projects, teams, milestones, etc. Example: #rnd #henchmen #china'}
-          = f.label :tags_as_string, 'Tags'
-          = f.text_field :tags_as_string, placeholder: '#example'
+            .tags{title: 'Tag your projects, teams, milestones, etc. Example: #rnd #henchmen #china'}
+              = f.label :tags_as_string, 'Tags'
+              = f.text_field :tags_as_string, placeholder: '#example', class: 'form-control'
 
-        .actions
-          .action-next
-            %a
-              = icon 'arrow-right'
-              %span.next
-                Next
+          .actions
+            .action-next
+              %a
+                = icon 'arrow-right'
+                %span.next
+                  Next
 
-      = f.fields_for :submission_metrics, f.object.submission_metrics.ordered do |mf|
-        .step= render partial: 'submission_metric_form', locals: {mf: mf}
-      .step.final
-        .comments
-          %label{for: 'submission_comments'}
-            Anything else to add?
-            %em Anything you didn't get to comment on yet?
+        = f.fields_for :submission_metrics, f.object.submission_metrics.ordered do |mf|
+          %section.step
+            = render partial: 'submission_metric_form', locals: {mf: mf}
 
-          = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)'
+        %section.step.final
+          %header
+            Comments
 
-          %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
-            = f.check_box :comments_public
-            .icon
+          .content
+            .comments
+              = f.label :comments, 'Anything else to add?'
+              = f.text_area :comments, maxlength: 140, placeholder: '(limit 140 chars)', class: 'form-control'
 
-        / .submission-disclaimer
-        /   %p On Monday, the aggregated/anonymized ratings will be publicly posted. Written notes will be included with your name attached.
-        /   %p This data belongs to you, and the more accurate your signal, the better the results for everyone.
+              %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
+                = f.check_box :comments_public
+                .icon
 
-        .actions
-          .action-submit= f.submit(f.object.completed? ? 'Update' : 'Submit')
-          .action-previous
-            %a= icon 'arrow-left'
-      .step.submitting
-        = icon 'cog fa-spin'
+            .actions
+              .action-submit= f.submit (f.object.completed? ? 'Update' : 'Submit'), class: 'btn btn-primary'
+              .action-previous
+                %a= icon 'arrow-left'
+
+        %section.step.submitting
+          = icon 'cog fa-spin'

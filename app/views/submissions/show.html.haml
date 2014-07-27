@@ -1,18 +1,20 @@
-.submission.completed
-  %p Thanks for your submission - appreciate it.
+.submission-form-wrapper
+  .submission-form.completed
+    %section
+      %p Thanks for your submission - appreciate it.
 
-  %p
-    = link_to '/results' do
-      = icon 'arrow-right'
-      %strong Results for this week
+      %p
+        = link_to '/results' do
+          = icon 'arrow-right'
+          %strong Results for this week
 
-  %p.muted This thing is a work in progress. Hit up #{link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} on Slack to join up, talk about what this is and what it could be. (Pull requests welcome!)
+      %p.muted This thing is a work in progress. Hit up #{link_to '#heartbeat', 'https://enova.slack.com/messages/heartbeat/', target: :_blank} on Slack to join up, talk about what this is and what it could be. (Pull requests welcome!)
 
-  - if current_submission.closed?
-    %p (Your submission is closed. Stay tuned for more.)
-  - else
-    %p.submission-toggle
-      Forget something?
-      = link_to [:edit, current_submission] do
-        Update your submission
-        = icon 'angle-right'
+      - if current_submission.closed?
+        %p (Your submission is closed. Stay tuned for more.)
+      - else
+        %p.submission-toggle
+          Forget something?
+          = link_to [:edit, current_submission] do
+            Update your submission
+            = icon 'angle-right'

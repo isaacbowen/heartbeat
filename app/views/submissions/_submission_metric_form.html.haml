@@ -1,32 +1,34 @@
 %div{class: "metric #{'optional' unless mf.object.required?} #{'completed' if mf.object.completed?}"}
-  .rating-value 4
-  .metric-name
+  %header.metric-name
     = mf.object.name
-  .metric-description= mf.object.description
-  %div{class: "rating #{'rated' if mf.object.rating.present?}"}
-    .rating-bookend.negative
-      = icon 'thumbs-o-down fa-flip-horizontal'
 
-    - # even worse hack for the moment
-    - if mf.object.name == 'Happiness'
-      - rating_descriptions = {1 => 'Very bad.', 2 => 'Not good.', 3 => 'Pretty good.', 4 => 'Excellent!'}
-    - else
-      - rating_descriptions = {1 => 'Not at all.', 2 => 'Eh. Could be better.', 3 => 'Yep yep, doing pretty well.', 4 => 'This was awesome this week!'}
-    - Heartbeat::VALID_RATINGS.each do |i|
-      .rating-option{title: rating_descriptions[i]}
-        = mf.radio_button :rating, i
-        = mf.label :rating, i, value: i, 'data-tooltip' => false, title: "Rate '#{mf.object.name}' a #{i}"
-        - if mf.object.previous.try(:rating) == i
-          .previous-rating-marker
-            = icon 'asterisk'
-            %span This was your rating last week.
-    .rating-bookend.positive
-      = icon 'thumbs-o-up'
-  .comments
-    = mf.text_area :comments, placeholder: 'Tell me more - what\'s behind your rating?  (limit 140 chars)', maxlength: 140, data: {'negative-placeholder' => 'You rated this particularly low. What went wrong? How can we handle this?', 'negative-positive' => 'You rated this particularly high. What went well?'}
-    %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
-      = mf.check_box :comments_public
-      .icon
+  .content
+    .metric-description= mf.object.description
+    %div{class: "rating #{'rated' if mf.object.rating.present?}"}
+      .rating-bookend.negative
+        = icon 'thumbs-o-down fa-flip-horizontal'
+
+      - # even worse hack for the moment
+      - if mf.object.name == 'Happiness'
+        - rating_descriptions = {1 => 'Very bad.', 2 => 'Not good.', 3 => 'Pretty good.', 4 => 'Excellent!'}
+      - else
+        - rating_descriptions = {1 => 'Not at all.', 2 => 'Eh. Could be better.', 3 => 'Yep yep, doing pretty well.', 4 => 'This was awesome this week!'}
+      - Heartbeat::VALID_RATINGS.each do |i|
+        .rating-option{title: rating_descriptions[i]}
+          = mf.radio_button :rating, i
+          = mf.label :rating, i, value: i, 'data-tooltip' => false, title: "Rate '#{mf.object.name}' a #{i}"
+          - if mf.object.previous.try(:rating) == i
+            .previous-rating-marker
+              = icon 'asterisk'
+              %span This was your rating last week.
+      .rating-bookend.positive
+        = icon 'thumbs-o-up'
+    .comments
+      = mf.text_area :comments, placeholder: 'Tell me more - what\'s behind your rating?  (limit 140 chars)', maxlength: 140, data: {'negative-placeholder' => 'You rated this particularly low. What went wrong? How can we handle this?', 'negative-positive' => 'You rated this particularly high. What went well?'}, class: 'form-control'
+      %label.public{data: {toggle: 'tooltip'}, title: 'Public (shown in results with your name), or private (shown only to management, anonymously)?'}
+        = mf.check_box :comments_public
+        .icon
+
   .actions
     .action-comment
       %a
