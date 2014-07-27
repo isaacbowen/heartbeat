@@ -1,9 +1,11 @@
 footer.main {
-  background: #777;
-  padding: 10px 0 20px;
+  border-top: 1px darken($footer-bg, 20%);
+  background: $footer-bg;
+  padding: $grid-gutter-width 0 $grid-gutter-width*2;
   text-shadow: 0 2px 2px rgba(#000, 0.4);
 
   color: $gray-lighter;
+  font-weight: $light-font-weight;
 
   .container {
     opacity: 0.8;
@@ -15,6 +17,6 @@ footer.main {
   }
 
   span {
-    margin-left: 20px;
+    margin-right: $grid-gutter-width;
   }
 }

@@ -1,75 +1,46 @@
 .result {
-  .timeframe {
-    text-align: center;
-    font-style: italic;
-    margin: 0 0 -18px;
-    padding-top: 7px;
-  }
+  > header {
+    @include clearfix;
 
-  .previous-link {
-    float: left;
-  }
+    margin: -1 * $grid-gutter-width;
+    margin-bottom: $grid-gutter-width;
 
-  .next-link {
-    float: right;
-  }
+    padding: $grid-gutter-width*0.5 $grid-gutter-width;
+    border-bottom: 1px $gray-lighter solid;
 
-  .previous-link, .next-link {
-    margin: -0.4em 0.5em;
-
-    a, span {
-      display: block;
-      padding: 0.2em 0.5em;
-      text-decoration: none;
+    .timeframe {
+      text-align: center;
+      font-style: italic;
+      padding: 4px 10px;
     }
-  }
 
-  .waiting {
-    text-align: center;
-    margin-top: 20px;
-    padding: 100px 0 120px;
-    font-size: 30px;
-    color: #999;
-  }
+    nav {
+      .previous-link {
+        float: left;
+      }
 
-  .summary {
-    overflow: hidden;
-    padding-top: 1em;
-    margin-bottom: -1em;
-    text-align: center;
+      .next-link {
+        float: right;
+      }
 
-    ul {
-      clear: both;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-
-      li {
-        > * {
-          display: inline;
-          margin-right: 0.5em;
-        }
-
-        .description {
-          font-weight: bold;
-        }
-
-        .value {
-          font-weight: bold;
-        }
-
-        .context {
-          color: #999;
+      .previous-link, .next-link {
+        a, span {
+          display: block;
+          padding: 4px 10px;
+          text-decoration: none;
         }
       }
     }
   }
 
-  .tags {
-  }
-
   section {
     text-align: left;
+
+    + section {
+      border-top: 1px $gray-lighter solid;
+      margin-top: $grid-gutter-width;
+      padding-top: $grid-gutter-width;
+    }
 
     header {
       margin-bottom: 15px;
@@ -78,9 +49,49 @@
       h1 {
         display: inline;
         font-size: 16px;
-        font-weight: bold;
-        color: #777;
+        color: $gray-dark;
         margin: 0;
+      }
+    }
+
+    &.waiting {
+      text-align: center;
+      margin-top: 20px;
+      padding: 100px 0 120px;
+      font-size: 30px;
+      color: #999;
+    }
+
+    &.summary {
+      overflow: hidden;
+      padding-top: 1em;
+      margin-bottom: -1em;
+      text-align: center;
+
+      ul {
+        clear: both;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          > * {
+            display: inline;
+            margin-right: 0.5em;
+          }
+
+          .description {
+            font-weight: bold;
+          }
+
+          .value {
+            font-weight: bold;
+          }
+
+          .context {
+            color: #999;
+          }
+        }
       }
     }
 
@@ -253,11 +264,5 @@
       margin-bottom: 0.5em;
       line-height: 1.5em;
     }
-  }
-
-  section {
-    padding-top: 2em;
-    margin-top: 2em;
-    border-top: 1px #ccc solid;
   }
 }

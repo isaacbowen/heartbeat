@@ -1,10 +1,11 @@
 header.main {
-  padding: 10px 0;
-  margin: 10px 0 20px;
-  border-bottom: 2px $gray-lighter solid;
+  padding: 20px 0 10px;
   line-height: $headings-line-height * $font-size-base * 1.8;
+  background: $body-bg;
 
   .brand {
+    font-family: $headings-font-family;
+
     div {
       display: inline;
     }
@@ -16,16 +17,19 @@ header.main {
 
   .heartbeat {
     font-size: $font-size-base * 1.8;
+    font-weight: $headings-font-weight;
   }
 
   .tenant {
     font-size: $font-size-base * 1.6;
+    font-weight: $light-font-weight;
     color: $gray;
     margin-left: $font-size-base;
   }
 
   .user {
     text-align: right;
+    font-weight: $light-font-weight;
 
     div {
       display: inline;

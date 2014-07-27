@@ -14,18 +14,18 @@
       %header.main
         .container
           .row
-            .brand.col-xs-6.col-md-offset-2
+            .brand.col-xs-9.col-md-6.col-md-offset-2
               = link_to :root do
                 .heartbeat Heartbeat
                 .tenant for Enova
-            .user.col-md-2.col-md-offset-2.col-lg-offset-0
+            .user.col-xs-3.col-md-2.col-md-offset-2.col-lg-offset-0
               - if current_user
                 .name= link_to current_user.abbreviated_name, :user
                 .sign-out= link_to icon('sign-out').html_safe, :logout, method: :delete
               - else
                 .sign-in= link_to 'Login', :login
 
-      .content.main
+      .body.main
         .container
           .row
             %nav.main.col-md-2
@@ -63,7 +63,7 @@
                       %p= message
                       .close= icon 'times'
 
-              .content= yield
+              .content.main= yield
 
       %footer.main
         .container

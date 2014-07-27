@@ -1,3 +1,8 @@
 .content.main {
-  margin-bottom: 40px;
+  background: #fff;
+  border-radius: 3px;
+  padding: $grid-gutter-width;
+  border: 1px $gray-lighter solid;
+  border-bottom-color: $gray-light;
+  margin-bottom: $grid-gutter-width;
 }
