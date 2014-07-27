@@ -15,3 +15,6 @@ $(document).on 'contentchange', ->
       options['delay'] = {show: 10000000000, hide: 100}
 
     $(this).tooltip(options)
+
+$(window).on 'resize', ->
+  $('.tooltip:visible').fadeOut -> $(this).remove()

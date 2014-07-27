@@ -82,10 +82,10 @@
                     - else
                       = metric_result.volatility
                   - if metric_result.size > 1
-                    %li.representation.value{title: "Response rate: #{metric_result.completed_sample_count} of #{metric_result.sample_count}", data: {sparkline_key: 'representation'}}
+                    %li.representation.value{title: "Response rate: #{metric_result.completed_sample_count} of #{metric_result.sample_count}", data: {sparkline_key: 'representation', placement: 'bottom'}}
                       = icon 'user'
                       = number_to_percentage metric_result.representation*100, precision: 0
-                    %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity'}}
+                    %li.unity.value{title: 'Unity: A percentage indicating how closely each team\'s ratings fall', data: {sparkline_key: 'unity', placement: 'bottom'}}
                       = icon 'dot-circle-o'
                       - if metric_result.unity.nan?
                         ?
@@ -95,7 +95,7 @@
                 .sparklines.col-sm-3.col-xs-4
                   - [:rating, :delta, :volatility, :representation, :unity].each do |thing|
                     %div{class: "sparkline-wrapper #{thing} #{'active' if thing == :rating}", title: "The last #{metric_result.sparklines[thing].size} weeks of data"}
-                      = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines}
+                      = render partial: 'sparkline', locals: {data: metric_result.sparklines[thing], mode: :lines, width: 200}
 
               - if @scope == :me
                 - comments = metric_result.comments

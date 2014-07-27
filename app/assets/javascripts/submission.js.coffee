@@ -1,6 +1,6 @@
 class Submission
   constructor: ->
-    @$node = $('.submission')
+    @$node = $('.submission-form')
     @progressTotal = @$('.step:not(.submitting)').length
     @setListeners()
     @detectStep()
@@ -48,10 +48,14 @@ class Submission
           @setStep(i+1)
           false
 
-  setViewport: (step) ->
+  setViewport: (step, animate = true) ->
     $stepNode = @$('.step').eq(step)
 
-    @$('.steps').animate(marginLeft: "-=#{$stepNode.position().left}")
+    if animate
+      @$('.steps').animate(marginLeft: "-=#{$stepNode.position().left}")
+    else
+      @$('.steps').css(marginLeft: "-=#{$stepNode.position().left}")
+
     @$('.steps .metric .comments').not($stepNode.find('.comments')).slideUp('fast')
 
     if $stepNode.find('.comments :input').val()
@@ -64,9 +68,14 @@ class Submission
     @$('.progress .meter').animate(width: "#{(@progress) / @progressTotal * 100}%")
 
   setListeners: ->
-    $(window).resize =>
+    $(window).on 'layoutchange', =>
       @$('.step').outerWidth @$().width()
-    $(window).trigger('resize')
+      @setViewport(@step, false)
+
+    $(window).trigger 'layoutchange'
+
+    # give the doc a second to reflow
+    $(window).on 'resize', => setTimeout((=> $(window).trigger('layoutchange')), 100)
 
     @$('.tags :input').autosizeInput(space: 10)
     setTimeout (=> @$('.tags :input').addClass('autosized')), 1000
