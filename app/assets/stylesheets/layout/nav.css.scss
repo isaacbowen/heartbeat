@@ -1,5 +1,13 @@
 nav.main {
   text-align: right;
+  font-weight: $light-font-weight;
+
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
 
   ul {
     list-style: none;
@@ -32,7 +40,7 @@ nav.main {
       border: 0;
 
       + ul {
-        border-left: 1px #ccc solid;
+        border-left: 1px $gray-lighter solid;
         padding-left: 10px;
       }
 

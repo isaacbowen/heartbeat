@@ -1,31 +1,33 @@
 .result
-  .timeframe
-    - case result_scope
-    - when :me
-      Me,
-    - when :managers, :vertical, :reports
-      My #{result_scope}
-    - when :tags
-      #{scope_tags.map { |t| "##{t}" }.join(' ')},
-    - when :all
-      Enova,
-    - else
-      ?
-    for the week of #{@result.start_date.format_like 'August 4, 2014'}
+  %header
+    %nav
+      .previous-link
+        - if @result.previous.present?
+          = link_to start_date: @result.previous.to_param do
+            = icon 'arrow-left'
+        - else
+          %span.muted= icon 'arrow-left'
 
-  .previous-link
-    - if @result.previous.present?
-      = link_to start_date: @result.previous.to_param do
-        = icon 'arrow-left'
-    - else
-      %span.muted= icon 'arrow-left'
+      .next-link
+        - if @result.next.present?
+          = link_to start_date: @result.next.to_param do
+            = icon 'arrow-right'
+        - else
+          %span.muted= icon 'arrow-right'
 
-  .next-link
-    - if @result.next.present?
-      = link_to start_date: @result.next.to_param do
-        = icon 'arrow-right'
-    - else
-      %span.muted= icon 'arrow-right'
+    .timeframe
+      - case result_scope
+      - when :me
+        Me,
+      - when :managers, :vertical, :reports
+        My #{result_scope}
+      - when :tags
+        #{scope_tags.map { |t| "##{t}" }.join(' ')},
+      - when :all
+        Enova,
+      - else
+        ?
+      for the week of #{@result.start_date.format_like 'August 4, 2014'}
 
   - if @result.empty?
     %section.summary
@@ -160,5 +162,5 @@
     - else
       .waiting= icon 'cog fa-spin'
       :javascript
-        $('.content.main .content').load(window.location.href, function() { $(document).trigger('contentchange') })
+        $('.content.main').load(window.location.href, function() { $(document).trigger('contentchange') })
 

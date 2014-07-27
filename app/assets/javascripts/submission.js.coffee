@@ -1,9 +1,12 @@
 class Submission
   constructor: ->
-    @$node = $('.submission-form')
-    @progressTotal = @$('.step:not(.submitting)').length
-    @setListeners()
-    @detectStep()
+    @$node  = $('.submission-form')
+    @active = @$node.length
+
+    if @active
+      @progressTotal = @$('.step:not(.submitting)').length
+      @setListeners()
+      @detectStep()
 
   $: (selector) ->
     if selector
