@@ -10,8 +10,10 @@
 
     .timeframe {
       text-align: center;
-      font-style: italic;
       padding: 4px 10px;
+      font-family: $headings-font-family;
+      font-weight: $light-font-weight;
+      font-size: $font-size-base * 1.2;
     }
 
     nav {
@@ -100,7 +102,7 @@
       height: 50px;
 
       @media (min-width: $screen-md-min) {
-        width: 80%;
+        width: 90%;
       }
 
       > * {
@@ -194,7 +196,6 @@
 
       ul.stats {
         list-style: none;
-        padding-left: 0;
 
         li {
           display: block;

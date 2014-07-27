@@ -28,32 +28,33 @@
       .body.main
         .container
           .row
-            %nav.main.col-md-2
-              %ul
-                %li= link_to 'Me', [:results, scope: :me]
-
-                - if user_signed_in?
-
-                  - if current_user.manager?
-                    %li{title: 'Those who report directly to you', data: {placement: 'right'}}= link_to 'My reports', [:results, scope: :reports]
-                    %li{title: 'You, your reports, their reports (etc), and your management chain', data: {placement: 'right'}}= link_to 'My vertical', [:results, scope: :vertical]
-
-                  - if current_user.managers.any?
-                    %li= link_to 'My managers', [:results, scope: :managers]
-
-                %li= link_to 'Enova', :results
-
-              - if user_signed_in? and current_user.tags.any?
+            .col-md-2
+              %nav.main
                 %ul
-                  - current_user.tags.each do |tag|
-                    %li= link_to "##{tag}", [:results, tags: tag]
-                  %li= link_to 'all tags', [:tags, :results]
+                  %li= link_to 'Me', [:results, scope: :me]
 
-              %ul
-                %li= link_to '?', :about
+                  - if user_signed_in?
 
-                - if current_user.try :admin?
-                  %li= link_to 'Admin', [:admin, :root]
+                    - if current_user.manager?
+                      %li{title: 'Those who report directly to you', data: {placement: 'right'}}= link_to 'My reports', [:results, scope: :reports]
+                      %li{title: 'You, your reports, their reports (etc), and your management chain', data: {placement: 'right'}}= link_to 'My vertical', [:results, scope: :vertical]
+
+                    - if current_user.managers.any?
+                      %li= link_to 'My managers', [:results, scope: :managers]
+
+                  %li= link_to 'Enova', :results
+
+                - if user_signed_in? and current_user.tags.any?
+                  %ul
+                    - current_user.tags.each do |tag|
+                      %li= link_to "##{tag}", [:results, tags: tag]
+                    %li= link_to 'all tags', [:tags, :results]
+
+                %ul
+                  %li= link_to '?', :about
+
+                  - if current_user.try :admin?
+                    %li= link_to 'Admin', [:admin, :root]
 
             .col-md-10.col-lg-8
               - if flash.any?

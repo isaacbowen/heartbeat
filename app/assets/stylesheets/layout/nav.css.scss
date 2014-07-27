@@ -9,6 +9,16 @@ nav.main {
     opacity: 1;
   }
 
+  &.affix {
+    position: static;
+
+    @media(min-width: $screen-md-min) {
+      position: fixed;
+      padding: 0 15px;
+      top: 15px;
+    }
+  }
+
   ul {
     list-style: none;
     margin: 0 0 15px 0;
