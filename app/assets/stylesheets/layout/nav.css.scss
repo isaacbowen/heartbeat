@@ -17,6 +17,11 @@ nav.main {
       padding: 0 15px;
       top: 15px;
     }
+
+    @media(max-width: $screen-sm-max) {
+      position: static;
+      width: auto !important;
+    }
   }
 
   ul {

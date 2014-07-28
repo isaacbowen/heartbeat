@@ -3,7 +3,7 @@
     .meter
 
   - submission = current_submission
-  = form_for submission, html: {class: ['submission-form', ('complete' if submission.completed?)].join(' ')} do |f|
+  = form_for submission, html: {class: ('complete' if submission.completed?)} do |f|
     .steps
       %section.step.intro
         %header

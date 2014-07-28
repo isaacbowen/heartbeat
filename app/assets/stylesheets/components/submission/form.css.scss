@@ -6,7 +6,8 @@ $actions-height: 20px;
 .submission-form {
   overflow: hidden;
   position: relative;
-  box-shadow: 0 2px 5px $gray-lighter;
+  margin: -1 * $grid-gutter-width;
+  border-radius: 3px;
 
   section {
     padding: $grid-gutter-width/2 $grid-gutter-width;
