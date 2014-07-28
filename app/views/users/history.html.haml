@@ -1,29 +1,10 @@
-%header
-  %h1 My History
-
-  %nav
-    %ul
-      %li= link_to 'Profile', :user
-      %li= link_to 'History', [:history, :user]
+= render partial: 'nav'
 
 .user
   .history
-    / %table
-    /   %thead
-    /     %tr
-    /       %th
-    /       - @submissions.each do |submission|
-    /         %th= submission.created_at.at_beginning_of_week.strftime('%m/%d')
-    /   %tbody
-    /     - @metrics.each do |metric|
-    /       %tr
-    /         %th= metric.name
-    /         - @submissions.each do |submission|
-    /           %td= submission.submission_metrics.find_by_metric_id(metric).rating
-
     - @submissions.each do |submission|
       %section.user-submission
-        %h3
+        %h4
           = submission.created_at.format_like 'August 3, 2014'
           - if submission.open?
             = link_to submission do
@@ -32,8 +13,8 @@
         - submission.submission_metrics.ordered.each do |submission_metric|
           %ul.metrics
             %li.metric
-              .name= submission_metric.name
-              .rating= submission_metric.rating.presence || 'n/a'
+              <strong>#{submission_metric.name}</strong>:
+              = submission_metric.rating.presence || 'n/a'
               - if submission_metric.comments.present?
                 .comment
                   .content= submission_metric.comments
