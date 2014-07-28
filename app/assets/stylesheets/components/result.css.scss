@@ -116,6 +116,12 @@ $header-height: 62px;
         width: 90%;
       }
 
+      @media (max-width: $screen-xs-max) {
+        > * {
+          padding: 0;
+        }
+      }
+
       > * {
         height: 50px;
       }
@@ -144,6 +150,9 @@ $header-height: 62px;
       }
 
       .bar-chart {
+        svg {
+          width: 100%;
+        }
       }
 
       .rating {

@@ -55,7 +55,7 @@
                 %h1{title: metric_result.meta[:description]}= metric_result.meta[:name]
 
               .data.row
-                .col-sm-5.col-xs-4.bar-chart-rating
+                .col-sm-5.col-xs-3.bar-chart-rating
                   .bar-chart{title: 'Total ratings, from 1 to 4'}
                     = render partial: 'sparkline', locals: {data: metric_result.rating_counts, mode: :bars, width: 100}
 
@@ -65,7 +65,7 @@
                     - else
                       = metric_result.rating
 
-                %ul.stats.col-sm-4.col-xs-4
+                %ul.stats.col-sm-4.col-xs-5
                   %li.delta.value{title: 'Delta: Change from last week', data: {sparkline_key: 'delta'}}
                     - if metric_result.delta == 0
                       = icon 'pause'
