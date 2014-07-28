@@ -105,4 +105,8 @@ class User < ActiveRecord::Base
     reports + reports.map(&:deep_reports).inject([], :+)
   end
 
+  def pending_submission
+    @pending_submission ||= submissions.incomplete.order('created_at desc').first
+  end
+
 end

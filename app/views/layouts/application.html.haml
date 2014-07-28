@@ -14,11 +14,19 @@
       %header.main
         .container
           .row
-            .brand.col-xs-9.col-md-6.col-md-offset-2
+            .brand.col-xs-8.col-sm-6.col-sm-offset-0.col-md-5.col-md-offset-2.col-lg-4
               = link_to :root do
                 .heartbeat Heartbeat
                 .tenant for Enova
-            .user.col-xs-3.col-md-2.col-md-offset-2.col-lg-offset-0
+
+            .pending-submission.hidden-xs.col-sm-3.col-md-3.col-lg-2
+              - if current_user and current_user.pending_submission.present?
+                - unless params[:controller] == 'submissions' and params[:id] == current_user.pending_submission.id
+                  = link_to [:edit, current_user.pending_submission] do
+                    Me, week of #{current_user.pending_submission.created_at.at_beginning_of_week.format_like 'August 4'}
+                    = icon 'arrow-right'
+
+            .user.col-xs-3.col-md-2.col-lg-2
               - if current_user
                 .name= link_to current_user.abbreviated_name, :user
                 .sign-out= link_to icon('sign-out').html_safe, :logout, method: :delete

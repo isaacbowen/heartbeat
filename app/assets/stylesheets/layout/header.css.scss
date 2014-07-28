@@ -26,6 +26,16 @@ header.main {
     margin-left: $font-size-base;
   }
 
+  .pending-submission {
+    font-weight: $headings-font-weight;
+    font-family: $headings-font-family;
+    white-space: nowrap;
+
+    .fa {
+      padding-left: 5px;
+    }
+  }
+
   .user {
     white-space: nowrap;
     text-align: right;
