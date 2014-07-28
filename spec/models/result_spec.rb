@@ -14,8 +14,8 @@ describe Result do
       before(:each) do
         # heads up, this only makes sense for subs and their ilk
         Timecop.travel(start_date + 1.day) do
-          create_list(:submission, 10)
-          create_list(:completed_submission, 10)
+          create_list(:submission, 3)
+          create_list(:completed_submission, 3)
         end
       end
 
@@ -110,7 +110,7 @@ describe Result do
 
       describe '#sample' do
         it 'should be the result of querying the source within the given period' do
-          subject.sample.to_a.should == subject.source.where('created_at >= ?', start_date.at_beginning_of_day).where('created_at <= ?', (start_date + period).at_end_of_day).to_a
+          subject.sample.to_a.sort_by(&:id).should == subject.source.where('created_at >= ?', start_date.at_beginning_of_day).where('created_at <= ?', (start_date + period).at_end_of_day).to_a.sort_by(&:id)
         end
       end
 
@@ -158,10 +158,10 @@ describe Result do
         it 'should be an array of Comments, sourced from the sample, sorted by the rating' do
           source.update_all comments: '', comments_public: false
 
-          subs = source.sample(5)
+          subs = source.sample(2)
           subs.each { |s| s.comments = 'foobar'; s.save! }
 
-          subject.comments.size.should == 5
+          subject.comments.size.should == 2
           subject.comments.map(&:class).uniq.should == [Comment]
           subject.comments.map { |c| c.source.rating }.map(&:to_f).should == subs.map(&:rating).map(&:to_f).sort.reverse
         end
@@ -171,13 +171,13 @@ describe Result do
         it 'should be an array of public Comments, sourced from the sample' do
           source.update_all comments: '', comments_public: false
 
-          subs = source.sample(5)
+          subs = source.sample(2)
           subs.each { |s| s.comments = 'foobar'; s.save! }
 
-          subs = source.sample(3)
+          subs = source.sample(1)
           subs.each { |s| s.comments = 'foobar'; s.comments_public = true; s.save! }
 
-          subject.public_comments.size.should == 3
+          subject.public_comments.size.should == 1
           subject.public_comments.map(&:class).uniq.should == [Comment]
           subject.public_comments.all?(&:public?).should be_true
         end
