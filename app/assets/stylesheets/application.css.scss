@@ -21,6 +21,12 @@
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
 
+@import 'theme';
+@import 'helpers';
+
+@import 'components/tags/dl';
+@import 'components/tags/strong';
+
 @import 'layout/wrapper';
 @import 'layout/header';
 @import 'layout/nav';
@@ -31,4 +37,5 @@
 @import 'components/result';
 @import 'components/comment';
 @import 'components/sparkline';
+@import 'components/form';
 @import 'components/submission/form';

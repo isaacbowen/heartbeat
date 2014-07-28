@@ -6,4 +6,36 @@
   border: 1px $gray-lighter solid;
   border-bottom-color: $gray-light;
   margin-bottom: $grid-gutter-width;
+
+  > header:first-child {
+    @include clearfix;
+
+    margin: -1 * $grid-gutter-width;
+    margin-bottom: $grid-gutter-width;
+    padding: $grid-gutter-width*0.5 $grid-gutter-width;
+    border-bottom: 1px $gray-lighter solid;
+
+    h1 {
+      float: left;
+      font-family: $headings-font-family;
+      font-weight: $light-font-weight;
+      font-size: $font-size-base * 1.2;
+      margin: 0;
+    }
+
+    nav {
+      float: right;
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          display: inline-block;
+          margin-left: $grid-gutter-width/2;
+        }
+      }
+    }
+  }
 }

@@ -11,3 +11,7 @@ $normal-font-weight: 400;
 $light-font-weight:  300;
 
 $headings-font-weight: 700;
+
+h1:first-child {
+  margin-top: 0;
+}

@@ -1,32 +1,27 @@
-%header
-  %h1 Users
-
-  %nav
-    %ul
-      %li= link_to 'All', [:admin, :users]
-      %li= link_to 'Import', [:import, :admin, :users]
-
-%h2 #{@user.name} (#{@user.email})
+= render partial: 'nav'
 
 = form_for [:admin, @user] do |f|
-  .input
-    = f.label :active
-    = f.check_box :active
+  %fieldset
+    %legend #{@user.name} (#{@user.email})
 
-  .input
+  .checkbox
+    = f.label :active do
+      = f.check_box :active
+      Active
+
+  .form-group
     = f.label :manager
-    = f.select :manager_user_id, User.all.order(:email).collect { |u| [u.email, u.id] }, include_blank: '(none)'
+    = f.select :manager_user_id, User.all.order(:email).collect { |u| [u.email, u.id] }, {include_blank: '(none)'}, {class: 'form-control'}
 
-  .input
+  .form-group
     = f.label :tags_as_string, 'Tags'
-    = f.text_field :tags_as_string
+    = f.text_field :tags_as_string, class: 'form-control'
 
-  .input
+  .form-group
     = f.label :reports
     /%input.statebox{type: 'checkbox'}
     .collection
       = f.collection_check_boxes :report_ids, User.order(:email).all, :id, :abbreviated_name do |b|
-        - b.label { b.check_box + b.text }
+        .checkbox= b.label { b.check_box + b.text }
 
-
-  .submit= f.submit
+  .submit= f.submit class: 'btn btn-primary'

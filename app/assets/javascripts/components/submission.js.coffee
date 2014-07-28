@@ -55,9 +55,9 @@ class Submission
     $stepNode = @$('.step').eq(step)
 
     if animate
-      @$('.steps').animate(marginLeft: "-=#{$stepNode.position().left}")
+      @$('.steps').animate(marginLeft: "-=#{$stepNode.position()?.left}")
     else
-      @$('.steps').css(marginLeft: "-=#{$stepNode.position().left}")
+      @$('.steps').css(marginLeft: "-=#{$stepNode.position()?.left}")
 
     @$('.steps .metric .comments').not($stepNode.find('.comments')).slideUp('fast')
 

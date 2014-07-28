@@ -1,12 +1,6 @@
-%header
-  %h1 Users
+= render partial: 'nav'
 
-  %nav
-    %ul
-      %li= link_to 'All', [:admin, :users]
-      %li= link_to 'Import', [:import, :admin, :users]
-
-%table
+%table.table
   - @users.each do |user|
     %tr{class: ('muted strikethrough' if user.inactive?)}
       %td= link_to user.abbreviated_name, [:edit, :admin, user]

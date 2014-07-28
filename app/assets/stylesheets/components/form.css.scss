@@ -1,0 +1,45 @@
+fieldset {
+  margin-top: 20px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+label {
+  font-family: $headings-font-family;
+  font-weight: $headings-font-weight;
+}
+
+.form-group {
+  .collection {
+    @include clearfix;
+
+    .checkbox {
+      margin-bottom: 5px;
+
+      &, & + .checkbox {
+        margin-top: 0;
+      }
+
+      width: 120px;
+      margin-right: 10px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      float: left;
+
+      input {
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.form-control {
+  &:focus {
+    box-shadow: none;
+  }
+}
+

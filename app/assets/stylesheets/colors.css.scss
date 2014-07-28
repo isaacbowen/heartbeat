@@ -6,10 +6,13 @@ $gray-dark:     lighten($black, 20%);
 $gray:          lighten($black, 33.5%);
 $gray-light:    lighten($black, 46.7%);
 $gray-lighter:  lighten($black, 70%);
+$gray-lightest: lighten($black, 80%);
 
-$brand-primary: #175373;
+$brand-primary: #1d6393;
 $brand-info:    #3CA2A2;
 $brand-success: #92C7A3;
 
 $body-bg:       $white;
-$footer-bg:     $gray-dark;
+$footer-bg:     $gray-darker;
+
+$input-border-focus: $brand-info;

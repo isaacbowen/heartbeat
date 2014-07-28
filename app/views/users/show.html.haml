@@ -7,43 +7,43 @@
       %li= link_to 'History', [:history, :user]
 
 = form_for @user do |f|
-  .input
+  .form-group
     = f.label :name
-    .text= f.object.name
+    %p.form-control-static= f.object.name
 
-  .input
+  .form-group
     = f.label :email
-    .text= f.object.email
+    %p.form-control-static= f.object.email
 
-  .input
+  .form-group
     = f.label :manager
-    .text
+    %p.form-control-static
       - if f.object.manager.present?
         = f.object.manager.name
         (#{f.object.manager.email})
       - else
         n/a
 
-  .input
+  .form-group
     = f.label :tags do
       Tags
       %small (What team are you on? What projects are taking up your time?)
-    = f.text_field :tags_as_string
+    = f.text_field :tags_as_string, class: 'form-control'
 
   = f.fields_for :reports do |fr|
     %fieldset
       %legend= fr.object.name
 
-      .input
+      .form-group
         = fr.label :active do
+          = fr.check_box :active
           Active?
           %small (Should they be sent the Heartbeat surveys?)
-        = fr.check_box :active
 
-      .input
+      .form-group
         = fr.label :tags_as_string do
           Tags
           %small (Usually the organization, the team, maybe a project - e.g. #rnd #venture #fca)
-        = fr.text_field :tags_as_string
+        = fr.text_field :tags_as_string, class: 'form-control'
 
-  .submit= f.submit 'Save'
+  .submit= f.submit 'Save', class: 'btn btn-primary'
