@@ -4,10 +4,16 @@
   padding: 0;
 }
 
+$indent: 22px;
+
 .comment {
+  text-indent: -1 * $indent;
+  margin-left: $indent;
+
   .author {
     display: inline-block;
-    color: #999;
+    color: $gray;
+    margin-left: $indent;
 
     &:before {
       content: '\2013';
@@ -20,13 +26,13 @@
 
     p {
       display: inline;
-      color: #555;
+      color: $gray-dark;
     }
 
     &:before {
       display: inline;
       font-family: 'FontAwesome';
-      color: #999;
+      color: $gray-light;
       margin: 0 0.5em 0 0;
       content: '\f10d';
     }

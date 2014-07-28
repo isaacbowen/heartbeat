@@ -1,20 +1,22 @@
 .result
-  %p.timeframe
-    Tags for the week of #{@result.start_date.format_like 'August 4, 2014'}
+  %header
+    %nav
+      .previous-link
+        - if @result.previous.present?
+          = link_to start_date: @result.previous.to_param do
+            = icon 'arrow-left'
+        - else
+          %span.muted= icon 'arrow-left'
 
-  .previous-link
-    - if @result.previous.present?
-      = link_to start_date: @result.previous.to_param do
-        = icon 'arrow-left'
-    - else
-      %span.muted= icon 'arrow-left'
+      .next-link
+        - if @result.next.present?
+          = link_to start_date: @result.next.to_param do
+            = icon 'arrow-right'
+        - else
+          %span.muted= icon 'arrow-right'
 
-  .next-link
-    - if @result.next.present?
-      = link_to start_date: @result.next.to_param do
-        = icon 'arrow-right'
-    - else
-      %span.muted= icon 'arrow-right'
+    .timeframe
+      Tags for the week of #{@result.start_date.format_like 'August 4, 2014'}
 
   %section.tags
     - if @tags_and_counts.any?

@@ -72,16 +72,13 @@ $header-height: 62px;
 
     &.waiting {
       text-align: center;
-      margin-top: 20px;
-      padding: 100px 0 120px;
+      padding: 60px 0 80px;
       font-size: 30px;
       color: #999;
     }
 
     &.summary {
       overflow: hidden;
-      padding-top: 1em;
-      margin-bottom: -1em;
       text-align: center;
 
       ul {
@@ -97,11 +94,11 @@ $header-height: 62px;
           }
 
           .description {
-            font-weight: bold;
+            font-weight: $heavy-font-weight;
           }
 
           .value {
-            font-weight: bold;
+            font-weight: $heavy-font-weight;
           }
 
           .context {
@@ -130,14 +127,14 @@ $header-height: 62px;
         cursor: pointer;
 
         &:hover {
-          border-color: lighten($brand-primary, 40%);
+          border-color: desaturate(lighten($brand-primary, 40%), 40%);
         }
 
         &.active {
-          border-color: lighten($brand-primary, 20%);
+          border-color: desaturate(lighten($brand-primary, 20%), 20%);
 
           &:hover {
-            border-color: lighten($brand-primary, 30%);
+            border-color: desaturate(lighten($brand-primary, 30%), 30%);
           }
         }
       }
@@ -215,14 +212,15 @@ $header-height: 62px;
           display: block;
           float: left;
           font-size: 1.2em;
-          color: #999;
+          color: $gray-light;
           margin: -1px -1px 0px 0;
           padding: 1px 0;
-          width: 50%;
+          width: 48%;
           white-space: nowrap;
 
           &:nth-child(2n-1) {
             clear: left;
+            margin-right: 2px;
           }
 
           .fa {
@@ -251,7 +249,7 @@ $header-height: 62px;
       margin: 0 20px;
 
       dt {
-        font-weight: bold;
+        font-weight: $heavy-font-weight;
         color: #555;
       }
 
@@ -269,6 +267,13 @@ $header-height: 62px;
 
     margin: 20px;
     text-align: left;
+
+    opacity: 0.9;
+    transition: opacity 0.1s;
+
+    &:hover {
+      opacity: 1;
+    }
 
     &.none {
       color: #777;

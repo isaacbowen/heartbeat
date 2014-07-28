@@ -1,0 +1,18 @@
+header.main, .body.main {
+  background-color: $body-bg;
+  background-image: image-url('white_wall_hash.png');
+  background-attachment: fixed;
+
+  @media (-webkit-min-device-pixel-ratio: 2) {
+    background-image: image-url('white_wall_hash_@2X.png');
+  }
+}
+
+body {
+  background-color: darken($footer-bg, 10%);
+}
+
+footer.main {
+  background-color: $footer-bg;
+  border-bottom: 15px darken($footer-bg, 10%) solid;
+}

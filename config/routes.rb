@@ -10,11 +10,6 @@ Rails.application.routes.draw do
     delete 'logout' => 'devise/sessions#destroy'
   end
 
-  # haaaack
-  if Rails.env.development?
-    post '/hit-me', to: 'meta#hit_me'
-  end
-
   resource :user, path: '/me', only: [:show, :update] do
     get 'history', on: :member
   end
@@ -30,6 +25,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root 'meta#root'
+
+    # haaaack
+    if Rails.env.development?
+      post 'hit-me', to: 'meta#hit_me'
+    end
 
     resources :users do
       collection do

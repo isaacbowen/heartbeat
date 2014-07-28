@@ -5,3 +5,12 @@
       %li= link_to 'Users', [:admin, :users]
       %li= link_to 'Results', [:admin, :results]
       %li= link_to 'Metrics', [:admin, :metrics]
+
+- if Rails.env.development?
+  = form_tag [:admin, :hit_me] do
+    .prose
+      %p <strong>Dev mode!</strong> Need a survey to test?
+    %form
+      .form-group
+        = email_field :user, :email, placeholder: 'foobar@enova.com', class: 'form-control'
+      .submit= submit_tag 'Yes.', class: 'btn btn-primary'

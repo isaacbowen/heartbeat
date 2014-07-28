@@ -160,7 +160,7 @@
             %p The standard deviation of ratings for each user between this and last week, averaged across all users.
 
     - else
-      .waiting= icon 'cog fa-spin'
+      %section.waiting= icon 'cog fa-spin'
       :javascript
         $('.content.main').load(window.location.href, function() { $(document).trigger('contentchange') })
 

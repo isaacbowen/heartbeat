@@ -1,18 +1,6 @@
 .prose
-  %p
-    %strong Goal: Monitor our own collective pulse on a few core metrics.
+  %p.lead Goal: Monitor our own collective pulse on a few core metrics.
 
   %p We'll do this by hitting you up every Friday morning for a ten-second review. Couple clicks, that's it. (You'll have the chance to add more comments too, if you want.)
 
   %p The data belongs to you. We'll publish anonymized summaries of everything, for everyone.
-
-- if Rails.env.development?
-  %hr
-
-  = form_tag :hit_me do
-    .prose
-      %p <strong>Dev mode!</strong> Need a survey to test?
-    %form
-      .form-group
-        = email_field :user, :email, placeholder: 'foobar@enova.com', class: 'form-control'
-      .submit= submit_tag 'Yes.', class: 'btn btn-primary'

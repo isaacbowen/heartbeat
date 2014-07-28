@@ -3,20 +3,10 @@ $step-height: 260px;
 $rating-height: 50px;
 $actions-height: 20px;
 
-.submission-form-wrapper {
-  background: rgba(#000, 0.1);
-  border-radius: 3px;
-  padding: $grid-gutter-width;
-}
-
 .submission-form {
   overflow: hidden;
-  margin: 0 auto;
-  padding: 0;
-  background: #fff;
-  border-radius: 3px;
-  box-shadow: 0 2px 5px rgba(#000, 0.1);
   position: relative;
+  box-shadow: 0 2px 5px $gray-lighter;
 
   section {
     padding: $grid-gutter-width/2 $grid-gutter-width;
@@ -275,7 +265,7 @@ $actions-height: 20px;
       }
 
       &.submitting {
-        padding-top: 75px;
+        padding-top: 100px;
 
         .fa {
           font-size: 30px;
@@ -350,8 +340,11 @@ $actions-height: 20px;
 
     label {
       @include button($brand-primary);
+
+      font-family: $font-family-sans-serif;
+      font-weight: $heavy-font-weight;
       color: rgba(#fff, 0.8);
-      font-size: 1.4em;
+      font-size: $font-size-base * 1.2;
       cursor: pointer;
 
       position: relative;

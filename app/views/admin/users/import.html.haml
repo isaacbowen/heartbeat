@@ -1,8 +1,13 @@
-%h1 Import users
-
-%p We'll create user records for each email address. (Spam free, no email sent.)
+= render partial: 'nav'
 
 = form_tag [:import, :admin, :users] do |f|
-  = label_tag 'emails', 'Emails'
-  = text_area_tag 'emails', nil, rows: 5
-  .submit= submit_tag 'Submit'
+  %fieldset
+    %legend Import users
+
+    %p We'll create user records for each email address. (Spam free, no email sent.)
+
+    .form-group
+      = label_tag 'emails', 'Emails'
+      = text_area_tag 'emails', nil, rows: 5, class: 'form-control'
+
+    .form-group= submit_tag 'Submit', class: 'btn btn-primary'
