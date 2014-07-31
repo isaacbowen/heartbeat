@@ -32,6 +32,8 @@ class Submission < ActiveRecord::Base
 
   after_initialize :set_tags_from_user, unless: -> { persisted? or tags.any? }
 
+  before_save :copy_tags_to_user, if: -> { tags_changed? }
+
 
   include CompletedConcern
 
@@ -89,6 +91,11 @@ class Submission < ActiveRecord::Base
 
   def set_tags_from_user
     self.tags = user.try(:tags)
+  end
+
+  def copy_tags_to_user
+    user.tags = tags
+    user.save
   end
 
 end

@@ -184,4 +184,14 @@ describe Submission do
     end
   end
 
+  describe 'saving tags should update the user' do
+    it 'should update the user with the new tags' do
+      submission = create :submission
+      submission.tags = ['one', 'two', 'three']
+      submission.user.tags.should_not == submission.tags
+      submission.save!
+      submission.user.reload.tags.should == submission.tags
+    end
+  end
+
 end
