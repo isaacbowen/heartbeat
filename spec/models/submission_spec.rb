@@ -171,8 +171,11 @@ describe Submission do
       user.submissions.new.tags.should == user.tags
     end
 
-    it 'should preserve saved tags' do
-      user.submissions.create(tags: ['foo', 'bar'])
+    it 'should preserve existing tags' do
+      # neither for a new object
+      Submission.create!(user: user, tags: ['foo', 'bar']).tags.should_not == user.tags
+
+      # nor for an old one
       Submission.first.tags.should_not == user.tags
     end
 

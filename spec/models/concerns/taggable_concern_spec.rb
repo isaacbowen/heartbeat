@@ -46,15 +46,32 @@ describe TaggableConcern do
       end
 
       describe '#tags_as_string=' do
-        specify { build(factory, tags_as_string: '#enova #rnd').tags.should == [:enova, :rnd] }
-        specify { build(factory, tags_as_string: '#enova! #rnd?').tags.should == [:enova, :rnd] }
-        specify { build(factory, tags_as_string: '#eno^va #rnd').tags.should == [:enova, :rnd] }
+        specify { build(factory, tags_as_string: '#enova #rnd').tags.should == ['enova', 'rnd'] }
+        specify { build(factory, tags_as_string: '#enova! #rnd?').tags.should == ['enova', 'rnd'] }
+        specify { build(factory, tags_as_string: '#eno^va #rnd').tags.should == ['enova', 'rnd'] }
       end
 
       describe '#tags_as_string' do
         specify { build(factory, tags: %w(enova rnd)).tags_as_string.should == '#enova #rnd' }
         specify { build(factory, tags: %w(enova)).tags_as_string.should == '#enova' }
         specify { build(factory, tags: %w()).tags_as_string.should == '' }
+      end
+
+      describe '#suggested_tags' do
+        it 'should suggest tags present' do
+          create factory, tags: %w(trolls rnd)
+          create factory, tags: %w(trolls rnd baz)
+          create factory, tags: %w(rnd trogdor foo)
+          create factory, tags: %w(rnd trogdor foo)
+          create factory, tags: %w(rnd trogdor foo)
+          create factory, tags: %w(rnd trogdor baz)
+          create factory, tags: %w(rnd trogdor bar)
+          create factory, tags: %w(rnd trogdor bar)
+
+          build(factory, tags: %w(rnd trogdor)).suggested_tags.should == ['foo', 'bar', 'baz']
+          build(factory, tags: %w(rnd trolls)).suggested_tags.should == ['baz']
+          build(factory, tags: %w(rnd)).suggested_tags.should == ['trogdor', 'foo', 'bar', 'baz', 'trolls']
+        end
       end
     end
   end

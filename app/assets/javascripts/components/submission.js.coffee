@@ -16,8 +16,8 @@ class Submission
 
   step: 0
 
-  nextStep: -> @setStep(@step + 1)
-  prevStep: -> @setStep(@step - 1)
+  nextStep: (protectMe = false) -> @setStep(@step + 1, protectMe)
+  prevStep: (protectMe = false) -> @setStep(@step - 1, protectMe)
 
   setStep: (step, protectMe = false) ->
     step = Math.max(step, 0)
@@ -80,8 +80,28 @@ class Submission
     # give the doc a second to reflow
     $(window).on 'resize', => setTimeout((=> $(window).trigger('layoutchange')), 100)
 
+    # [enter] skips to the next step
+    @$().on 'keydown', ':input:visible', (e) =>
+      if e.keyCode == 13
+        e.preventDefault()
+        $(e.currentTarget).blur()
+        @nextStep(true)
+
+    # autosize the tags input
     @$('.tags :input').autosizeInput(space: 10)
     setTimeout (=> @$('.tags :input').addClass('autosized')), 1000
+
+    # clicking on a tag suggestion appends it to your tag list
+    @$('.tags .suggestions').on 'click', 'li', ->
+      tag = $(this).text().replace(/^\s+|\s+$/g, '')
+      $input = $(this).closest('.tags').find(':input')
+      $input.val("#{$input.val()} #{tag}").trigger('keyup').trigger('change').focus()
+      $(this).remove()
+
+    # disable tabbing on the tags box for the moment, since this force-skips
+    # to the next step in an un-pretty way
+    @$('.tags :input').on 'keydown', (e) ->
+      e.preventDefault() if e.keyCode == 9
 
     @$('.action-next a').click => @nextStep()
     @$('.action-previous a').click => @prevStep()
