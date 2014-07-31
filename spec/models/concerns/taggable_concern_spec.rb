@@ -72,6 +72,12 @@ describe TaggableConcern do
           build(factory, tags: %w(rnd trolls)).suggested_tags.should == ['baz']
           build(factory, tags: %w(rnd)).suggested_tags.should == ['trogdor', 'foo', 'bar', 'baz', 'trolls']
         end
+
+        it 'should return nothin if we have zero or one tags' do
+          create factory, tags: %w(trolls rnd)
+          create factory, tags: %w(trogdor rnd baz)
+          build(factory, tags: %w(rnd)).suggested_tags.should == []
+        end
       end
     end
   end

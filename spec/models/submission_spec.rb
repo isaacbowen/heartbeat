@@ -173,10 +173,10 @@ describe Submission do
 
     it 'should preserve existing tags' do
       # neither for a new object
-      Submission.create!(user: user, tags: ['foo', 'bar']).tags.should_not == user.tags
+      Submission.create!(user: user, tags: ['foo', 'bar']).tags.should_not == ['one', 'two']
 
       # nor for an old one
-      Submission.first.tags.should_not == user.tags
+      Submission.first.tags.should_not == ['one', 'two']
     end
 
     it 'should not freak out when missing a user' do
