@@ -1,6 +1,17 @@
 class SubmissionsController < ApplicationController
 
   helper_method :current_submission
+  before_action :authenticate_user!, only: :mine
+
+  def mine
+    submission = current_user.submissions.order('created_at desc').first
+
+    if submission
+      redirect_to submission
+    else
+      redirect_to :root
+    end
+  end
 
   def show
     redirect_to action: :edit unless current_submission.completed?
@@ -35,7 +46,7 @@ class SubmissionsController < ApplicationController
   protected
 
   def current_user
-    current_submission.user
+    super || current_submission.user
   end
 
   def current_submission

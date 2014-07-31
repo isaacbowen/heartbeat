@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     get 'history', on: :member
   end
 
-  resources :submissions, only: [:show, :edit, :update]
+  resources :submissions, only: [:show, :edit, :update] do
+    get 'mine', on: :collection
+  end
 
   get 'results'      => 'results#index', as: :results
   get 'results/tags' => 'results#index_tags', as: :tags_results
