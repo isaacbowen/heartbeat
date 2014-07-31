@@ -30,7 +30,7 @@ class Submission < ActiveRecord::Base
   before_create :seed_metrics!
   before_save -> { false }, if: :closed?
 
-  after_initialize :set_tags_from_user, unless: :persisted?
+  after_initialize :set_tags_from_user, unless: -> { persisted? or tags.any? }
 
 
   include CompletedConcern

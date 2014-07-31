@@ -91,6 +91,37 @@ $actions-height: 20px;
               border-color: rgba(#000, 0.3);
             }
           }
+
+          .suggestions {
+            display: inline;
+
+            ul {
+              display: inline;
+              list-style: none;
+              margin: 0;
+              padding: 0;
+
+              li {
+                display: inline;
+                cursor: pointer;
+                margin-left: 5px;
+
+                a {
+                  color: $gray-light;
+                  text-decoration: underline;
+
+                  &:after {
+                    content: '?';
+                    text-decoration: none;
+                  }
+
+                  &:hover {
+                    color: $gray;
+                  }
+                }
+              }
+            }
+          }
         }
 
         .actions {

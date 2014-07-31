@@ -23,6 +23,10 @@ module TaggableConcern
     clean_tags!
   end
 
+  def suggested_tags
+    (self.class.tagged_with(*tags).tags_and_counts.to_a.map(&:first).map(&:to_s) - tags)
+  end
+
 
   protected
 
@@ -40,7 +44,7 @@ module TaggableConcern
     end
 
     def tags
-      pluck(:tags).flatten.uniq.sort.map(&:to_sym)
+      pluck(:tags).flatten.uniq.sort.reject(&:nil?).map(&:to_sym)
     end
 
     def tags_and_counts
@@ -58,7 +62,7 @@ module TaggableConcern
     end
 
     def clean_tag tag
-      tag.to_s.gsub(/[^\w\-_]/, '').to_sym
+      tag.to_s.gsub(/[^\w\-_]/, '')
     end
   end
 end

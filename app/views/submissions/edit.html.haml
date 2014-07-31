@@ -16,6 +16,11 @@
           .tags{title: 'Tag your projects, teams, milestones, etc. Example: #rnd #henchmen #china'}
             = f.label :tags_as_string, 'Tags'
             = f.text_field :tags_as_string, placeholder: '#example', class: 'form-control'
+            .suggestions
+              %ul
+                - f.object.suggested_tags.first(3).each do |tag|
+                  %li
+                    %a ##{tag}
 
         .actions
           .action-next
