@@ -24,7 +24,11 @@ module TaggableConcern
   end
 
   def suggested_tags
-    (self.class.tagged_with(*tags).tags_and_counts.to_a.map(&:first).map(&:to_s) - tags)
+    if tags.size <= 1
+      []
+    else
+      (self.class.tagged_with(*tags).tags_and_counts.to_a.map(&:first).map(&:to_s) - tags)
+    end
   end
 
 
