@@ -1,12 +1,12 @@
-%h1 Submission Reminder Templates
+%header
+  %h1 Submission Reminder Templates
 
 = render partial: 'form'
 
-%ul
+%table.table
   - @templates.each do |template|
-    %li{style: ('text-decoration: line-through;' if template.reified?)}
-      #{template.reify_at} via #{template.medium}
-      %br
-      #{template.meta}
-      %br
-      #{simple_format template.template}
+    %tr{class: ('strikethrough' if template.reified?)}
+      %td #{template.reify_at} via #{template.medium}
+      %td= template.meta
+      %td
+        %pre.wrap= template.template

@@ -1,14 +1,14 @@
 class Admin::SubmissionReminderTemplatesController < Admin::BaseController
 
   def index
-    @templates = SubmissionReminderTemplate.all
+    @templates = SubmissionReminderTemplate.all.order('reify_at desc')
     @new_template = SubmissionReminderTemplate.new(
       submissions_start_date: Date.today.at_beginning_of_week,
       submissions_end_date: Date.today.at_end_of_week,
       medium: 'email',
-      subject: 'Heartbeat time: week of 2014/06/30',
-      from: 'Isaac Bowen <ibowen@enova.com>',
-      template: "Hey {{user.first_name}},\n\nasdfasdfasdf\n\nYour submission for this week:\n{{submission.url}}\n\nLast week\'s results:\nhttp://enova.heartbeat.im/results/20140623\n\nCheers!\n\n--\nIsaac Bowen",
+      subject: @templates.first.subject,
+      from: @templates.first.from,
+      template: @templates.first.template,
       reify_at: Time.zone.now,
     )
   end
