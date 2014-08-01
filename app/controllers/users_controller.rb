@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   protected
 
   def user_params
-    params.require(:user).permit(:tags_as_string, reports_attributes: [:id, :tags_as_string])
+    params.require(:user).permit(:tags_as_string, reports_attributes: [:id, :tags_as_string, :active])
   end
 
 end
