@@ -33,6 +33,7 @@ class ResultsController < ApplicationController
         start_date: result_start_date,
         source: metric.submission_metrics.where(submission: result_submissions),
         meta: metric.attributes.with_indifferent_access,
+        eager: true,
       )
     end
   end

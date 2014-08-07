@@ -18,22 +18,16 @@ class Result
   # any other crap you want to throw in here
   attr_accessor :meta
 
-  # :live (stats are run on the db) or :cached (stats are run in-memory)
-  attr_accessor :mode
+  # boolean - should we preload our history (hint: speeds up sparklines)
+  attr_accessor :eager
 
-  def mode
-    @mode ||= DEFAULT_MODE
-  end
-
-  def mode= value
-    raise NotImplementedError unless [:live, :cached].include? value
-
-    @mode = value
-  end
+  attr_accessor :cached_source
 
   def live_mode?
-    mode == :live
+    not cached_source.present?
   end
+
+  alias :eager? :eager
 
   # reset everything except the attributes with accessors
   def reload
@@ -45,23 +39,37 @@ class Result
     end
   end
 
-  def sample options = {}
-    @samples ||= Hash.new do |hash, options|
-      hash[options] = begin
-        sample_start_time = options[:start_time] || start_time
-        sample_end_time   = options[:end_time] || end_time
+  def cached_source
+    if eager?
+      @cached_source ||= begin
+        scope = source.includes(:user).where("#{source.klass.table_name}.created_at <= ?", end_time + period)
 
-        scope = source.joins(:user).where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
-
-        if live_mode?
-          scope
+        if eager?
+          scope = scope.where("#{source.klass.table_name}.created_at >= ?", start_time - SPARKLINE_MAX_LENGTH * period)
         else
-          scope.to_a
+          scope = scope.where("#{source.klass.table_name}.created_at >= ?", start_time)
         end
-      end
-    end
 
-    @samples[options]
+        scope.to_a
+      end
+    else
+      @cached_source
+    end
+  end
+
+  def sample options = {}
+    sample_start_time = options[:start_time] || start_time
+    sample_end_time   = options[:end_time] || end_time
+
+    if live_mode?
+      source.joins(:user).where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
+    else
+      @cached_samples ||= Hash.new do |hash, options|
+        hash[options] = cached_source.select { |o| o.created_at >= sample_start_time and o.created_at <= sample_end_time }
+      end
+
+      @cached_samples[options]
+    end
   end
 
   def completed_sample
@@ -138,8 +146,17 @@ class Result
     end
   end
 
+  def klass
+    @klass ||= begin
+      if live_mode?
+        source.klass
+      else
+        @cached_source.first.class
+      end
+    end
+  end
+
   delegate :empty?, :any?, :count, :size, to: :sample
-  delegate :klass, to: :source
 
 
   # date stuff
@@ -218,7 +235,7 @@ class Result
       # pull out the standard deviation for ratings, by user
       stddev_ratings = begin
         if live_mode?
-          sample_plus_previous_period.select('stddev_pop(rating) as stddev_rating').group('user_id').map(&:stddev_rating)
+          sample_plus_previous_period.select("stddev_pop(rating) as stddev_rating").group('user_id').map(&:stddev_rating)
         else
           users_and_ratings = sample_plus_previous_period.map { |s| [s.user.id, s.rating] }
 
@@ -288,19 +305,33 @@ class Result
   # pagination, sort of
 
   def previous n = 1
-    @previous_results ||= Hash.new do |hash, key|
-      hash[key] = self.class.new(source: source, period: period, start_date: start_date - (key * period).seconds)
-    end
-
-    @previous_results[n].presence
+    sibling(-n)
   end
 
   def next n = 1
-    @next_results ||= Hash.new do |hash, key|
-      hash[key] = self.class.new(source: source, period: period, start_date: start_date + (key * period).seconds)
+    sibling(n)
+  end
+
+  protected
+
+  def sibling n
+    @siblings ||= Hash.new do |hash, key|
+      options = {
+        period: period,
+        start_date: start_date + (key * period).seconds,
+        eager: false,
+      }
+
+      if cached_source.present?
+        options[:cached_source] = cached_source
+      else
+        options[:source] = source
+      end
+
+      hash[key] = self.class.new(options)
     end
 
-    @next_results[n].presence
+    @siblings[n].presence
   end
 
 end

@@ -22,7 +22,15 @@ describe Result do
     [:live, :cached].each do |mode|
       describe "for #{model.name} in #{mode} mode" do
         let(:source) { model.all }
-        let(:subject) { Result.new source: source, period: period, start_date: start_date, mode: mode }
+
+        let(:subject) do
+          if mode == :live
+            Result.new source: source, period: period, start_date: start_date
+          else
+            Result.new cached_source: source.to_a, period: period, start_date: start_date
+          end
+        end
+
         let(:sample) { subject.sample }
 
         describe '#start_date' do
@@ -48,16 +56,18 @@ describe Result do
         end
 
         describe '#cache_key' do
-          it 'should change when a thing changes' do
-            subject.cache_key.should_not be_nil
+          if mode == :live
+            it 'should change when a thing changes' do
+              subject.cache_key.should_not be_nil
 
-            cache_key = subject.cache_key
+              cache_key = subject.cache_key
 
-            create :submission, created_at: start_date + 1.day
+              create :submission, created_at: start_date + 1.day
 
-            subject.reload
-            subject.cache_key.should_not be_nil
-            subject.cache_key.should_not == cache_key
+              subject.reload
+              subject.cache_key.should_not be_nil
+              subject.cache_key.should_not == cache_key
+            end
           end
         end
 
@@ -112,7 +122,7 @@ describe Result do
 
         describe '#sample' do
           it 'should be the result of querying the source within the given period' do
-            subject.sample.to_a.sort_by(&:id).should == subject.source.where('created_at >= ?', start_date.at_beginning_of_day).where('created_at <= ?', (start_date + period).at_end_of_day).to_a.sort_by(&:id)
+            subject.sample.to_a.sort_by(&:id).should == (subject.source || subject.cached_source).select { |s| s.created_at >= start_date.at_beginning_of_day and s.created_at <= (start_date + period).at_end_of_day }.to_a.sort_by(&:id)
           end
         end
 
@@ -240,8 +250,8 @@ describe Result do
     end
 
     describe 'modes vs cached' do
-      let(:live_result) { Result.new source: model.all, period: period, start_date: start_date, mode: :live }
-      let(:cached_result) { Result.new source: model.all, period: period, start_date: start_date, mode: :cached }
+      let(:live_result)   { Result.new source: model.all,             period: period, start_date: start_date }
+      let(:cached_result) { Result.new cached_source: model.all.to_a, period: period, start_date: start_date }
 
       # get some historical data in there
       before(:each) do
@@ -258,6 +268,10 @@ describe Result do
           rescue NotImplementedError
             # it's cool
           end
+        end
+
+        it 'should have the same sample' do
+          live_result.sample.to_a.sort_by(&:id).should == cached_result.sample.to_a.sort_by(&:id)
         end
 
         it "should have the same sparkline for #{thing}" do
