@@ -3,7 +3,7 @@ class Result
 
   MINIMUM_REPRESENTATION = 0.5 # %
   MINIMUM_SIZE = 2
-  DEFAULT_MODE = :live
+  DEFAULT_MODE = :cached
   SPARKLINE_MAX_LENGTH = 12
 
   # e.g. 1.week
@@ -33,6 +33,16 @@ class Result
 
   def live_mode?
     mode == :live
+  end
+
+  # reset everything except the attributes with accessors
+  def reload
+    instance_variables.each do |instance_variable|
+      # skip if, for :@foo, the object responds to foo=
+      next if respond_to?(instance_variable.to_s.gsub(/^@/, '') + '=')
+
+      instance_variable_set instance_variable, nil
+    end
   end
 
   def sample options = {}
@@ -102,17 +112,30 @@ class Result
 
   def cache_key
     @cache_key ||= begin
-      digest = Digest::MD5.hexdigest(sample.pluck(:id).join)
+      ids = if live_mode? then sample.pluck(:id) else sample.map(&:id) end
+      digest = Digest::MD5.hexdigest(ids.join)
       "result/#{klass.name.underscore}/#{digest}/#{updated_at.to_i}"
     end
   end
 
   def updated_at
-    @updated_at ||= sample.maximum(:updated_at)
+    @updated_at ||= begin
+      if live_mode?
+        sample.maximum(:updated_at)
+      else
+        sample.map(&:updated_at).max
+      end
+    end
   end
 
   def created_at
-    @created_at ||= sample.minimum(:created_at)
+    @created_at ||= begin
+      if live_mode?
+        sample.minimum(:created_at)
+      else
+        sample.map(&:created_at).min
+      end
+    end
   end
 
   delegate :empty?, :any?, :count, :size, to: :sample
@@ -152,7 +175,7 @@ class Result
         if live_mode?
           sample.complete.group(:rating).count
         else
-          completed_sample.inject(Hash.new(0)) { |hash, value| hash[value] += 1; hash }
+          completed_sample.map(&:rating).inject(Hash.new(0)) { |hash, value| hash[value] += 1; hash }
         end
       end
 
@@ -195,11 +218,13 @@ class Result
       # pull out the standard deviation for ratings, by user
       stddev_ratings = begin
         if live_mode?
-          sample_plus_previous_period.select('stddev_samp(rating) as stddev_rating').group('user_id').map(&:stddev_rating)
+          sample_plus_previous_period.select('stddev_pop(rating) as stddev_rating').group('user_id').map(&:stddev_rating)
         else
-          sample_plus_previous_period.map { |s| [s.user.id, s.rating] }.group_by(&:first).map do |user_id, user_ids_and_ratings|
-            ratings = user_ids_and_ratings.map(&:last)
+          users_and_ratings = sample_plus_previous_period.map { |s| [s.user.id, s.rating] }
 
+          ratings_by_user = users_and_ratings.group_by(&:first).map { |user_id, pairs| pairs.map(&:last) }
+
+          ratings_by_user.map do |ratings|
             if ratings.all? &:present?
               ratings.standard_deviation
             else
@@ -223,18 +248,20 @@ class Result
 
       unity_ratings = begin
         if live_mode?
-          sample.complete.select("1.0 - var_samp(rating) / #{maximum_variance} as unity").group('users.manager_user_id').map(&:unity)
+          sample.complete.select("1.0 - (var_pop(rating) / #{maximum_variance}) as unity").group('users.manager_user_id').map(&:unity)
         else
-          completed_sample.map { |s| [s.user.manager_user_id, s.rating] }.group_by(&:first).map do |manager_user_id, manager_user_id_and_ratings|
-            ratings = manager_user_id_and_ratings.last.map(&:to_f)
+          sample_managers_and_ratings = completed_sample.map { |s| [s.user.manager_user_id, s.rating.to_f] }
 
-            (1.0 - ratings.variance) / maximum_variance
+          ratings_by_manager = sample_managers_and_ratings.group_by(&:first).map { |manager_user_id, pairs| pairs.map(&:last) }
+
+          ratings_by_manager.map do |ratings|
+            1.0 - (ratings.variance / maximum_variance)
           end
         end
       end
 
-      # average the non-nils to get our volatility score
-      unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
+      # average the non-nils to get our unity score
+      unity_ratings.reject(&:nil?).mean.round(2).to_f rescue 0.0
     end
   end
 
