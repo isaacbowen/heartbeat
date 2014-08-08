@@ -156,7 +156,12 @@ class Result
     end
   end
 
-  delegate :empty?, :any?, :count, :size, to: :sample
+  [:empty?, :any?, :count, :size].each do |method|
+    define_method(method) do
+      var = :"@#{method.to_s.gsub(/[^\w]/, '')}"
+      instance_variable_get(var) || instance_variable_set(var, sample.send(method))
+    end
+  end
 
 
   # date stuff
@@ -181,7 +186,7 @@ class Result
   # stats
 
   def rating
-    sample.select(&:completed?).map(&:rating).mean.round(1)
+    sample.select(&:completed?).map(&:rating).reject(&:nil?).mean.round(1)
   end
 
   def rating_counts

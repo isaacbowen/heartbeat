@@ -264,7 +264,8 @@ describe Result do
       [:volatility, :unity, :representation, :delta, :rating_counts].each do |thing|
         it "should have the same #{thing}" do
           begin
-            live_result.send(thing).should == cached_result.send(thing)
+            # using #inspect as a hack to handle NaN's, which are not ==
+            live_result.send(thing).inspect.should == cached_result.send(thing).inspect
           rescue NotImplementedError
             # it's cool
           end
@@ -276,7 +277,8 @@ describe Result do
 
         it "should have the same sparkline for #{thing}" do
           begin
-            live_result.sparklines[thing].should == cached_result.sparklines[thing]
+            # using #inspect as a hack to handle NaN's, which are not ==
+            live_result.sparklines[thing].inspect.should == cached_result.sparklines[thing].inspect
           rescue NotImplementedError
             # it's cool
           end
