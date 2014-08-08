@@ -297,7 +297,7 @@ class Result
   # comments
 
   def comments
-    sample.select { |s| s.comments.present? }.sort_by { |s| s.rating.to_f * -1 }.map { |s| Comment.new source: s }
+    sample.select { |s| s.comments.present? }.sort_by { |s| (s.rating.to_f * -1) rescue s.updated_at }.map { |s| Comment.new source: s }
   end
 
   def public_comments

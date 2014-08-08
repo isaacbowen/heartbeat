@@ -185,7 +185,10 @@ describe Result do
 
             subject.comments.size.should == 2
             subject.comments.map(&:class).uniq.should == [Comment]
-            subject.comments.map { |c| c.source.rating }.map(&:to_f).should == subs.map(&:rating).map(&:to_f).sort.reverse
+
+            if subject.klass.column_names.include? 'rating'
+              subject.comments.map { |c| c.source.rating }.map(&:to_f).should == subs.map(&:rating).map(&:to_f).sort.reverse
+            end
           end
         end
 
