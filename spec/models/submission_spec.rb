@@ -140,18 +140,6 @@ describe Submission do
     end
   end
 
-  # describe '#rating' do
-  #   it 'should be the average of all ratings, if complete' do
-  #     submission = create :submission
-  #     submission.should_not be_completed
-  #     submission.rating.should be_nil
-
-  #     submission = create :completed_submission
-  #     submission.should be_completed
-  #     submission.rating.should == submission.submission_metrics.average(:rating)
-  #   end
-  # end
-
   describe '#url' do
     specify { subject.url.should == "http://heartbeat.dev/submissions/#{subject.id}" }
   end

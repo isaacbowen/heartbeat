@@ -127,10 +127,20 @@ describe Result do
         end
 
         describe '#rating' do
-          it 'should be the average of all ratings' do
-            ratings = sample.select(&:completed?).map(&:rating)
+          if model == SubmissionMetric
+            context 'with ratings available' do
+              it 'should be the average of all ratings' do
+                ratings = sample.select(&:completed?).map(&:rating)
 
-            subject.rating.should == (ratings.sum.to_f / ratings.size).round(1)
+                subject.rating.should == (ratings.sum.to_f / ratings.size).round(1)
+              end
+            end
+          else
+            context 'without ratings available' do
+              it 'should be nil' do
+                subject.rating.should be_nil
+              end
+            end
           end
         end
 

@@ -70,14 +70,6 @@ class Submission < ActiveRecord::Base
     not closed?
   end
 
-  def rating
-    # disabling this for now to shave some time off result loading
-    # if completed?
-    #   submission_metrics.average(:rating).round(1).to_f
-    # end
-    nil
-  end
-
   def url
     "http://#{ENV['HEARTBEAT_DOMAIN']}/submissions/#{id}"
   end

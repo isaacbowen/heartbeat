@@ -186,7 +186,9 @@ class Result
   # stats
 
   def rating
-    sample.select(&:completed?).map(&:rating).reject(&:nil?).mean.round(1)
+    if sample.first.respond_to? :rating
+      sample.select(&:completed?).map(&:rating).reject(&:nil?).mean.round(1)
+    end
   end
 
   def rating_counts
@@ -207,7 +209,7 @@ class Result
   end
 
   def delta
-    if previous.present?
+    if previous.try(:rating).present?
       (rating - previous.rating).round(1)
     else
       0.0
