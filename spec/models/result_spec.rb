@@ -262,7 +262,7 @@ describe Result do
       end
     end
 
-    describe 'modes vs cached' do
+    describe 'live vs cached modes' do
       let(:live_result)   { Result.new source: model.all,             period: period, start_date: start_date }
       let(:cached_result) { Result.new cached_source: model.all.to_a, period: period, start_date: start_date }
 
@@ -276,11 +276,27 @@ describe Result do
 
       [:volatility, :unity, :representation, :delta, :rating_counts].each do |thing|
         it "should have the same #{thing}" do
-          begin
-            # using #inspect as a hack to handle NaN's, which are not ==
-            live_result.send(thing).inspect.should == cached_result.send(thing).inspect
+          a = begin
+            live_result.send(thing)
           rescue NotImplementedError
-            # it's cool
+            NotImplementedError
+          end
+
+          b = begin
+            cached_result.send(thing)
+          rescue NotImplementedError
+            NotImplementedError
+          end
+
+          if a.is_a? Float
+            if a.nan?
+              b.should be_nan
+            else
+              # I'm calling a difference of 0.1 acceptable.
+              (a-b).abs.round(1).should be < 0.1
+            end
+          else
+            a.should == b
           end
         end
 
