@@ -4,6 +4,11 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  if Rails.env.development?
+    before_filter :set_query_trace
+    before_filter :clear_cache
+  end
+
 
   protected
 
@@ -12,6 +17,19 @@ class ApplicationController < ActionController::Base
       session['user_return_to'] = request.fullpath
       redirect_to :login
     end
+  end
+
+  def set_query_trace
+    if params[:query_trace].present?
+      ActiveRecordQueryTrace.enabled = true
+      ActiveRecordQueryTrace.level   = :app
+    else
+      ActiveRecordQueryTrace.enabled = false
+    end
+  end
+
+  def clear_cache
+    Rails.cache.clear
   end
 
 end

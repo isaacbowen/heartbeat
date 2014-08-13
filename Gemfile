@@ -36,6 +36,7 @@ group :development do
 
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'active_record_query_trace'
 
   gem 'guard'
   gem 'guard-rspec'

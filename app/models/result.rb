@@ -1,5 +1,6 @@
 class Result
   include ActiveModel::Model
+  include CacheConcern
 
   MINIMUM_REPRESENTATION = 0.5 # %
   MINIMUM_SIZE = 2
@@ -19,18 +20,22 @@ class Result
 
 
   def sample options = {}
-    sample_start_time = options[:start_time] || start_time
-    sample_end_time   = options[:end_time] || end_time
+    @samples ||= Hash.new do |hash, options|
+      sample_start_time = options[:start_time] || start_time
+      sample_end_time   = options[:end_time] || end_time
 
-    source.joins(:user).where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
+      hash[options] = source.joins(:user).where("#{source.klass.table_name}.created_at >= ?", sample_start_time).where("#{source.klass.table_name}.created_at <= ?", sample_end_time)
+    end
+
+    @samples[options]
   end
 
   def sample_count
-    @sample_count ||= sample.size
+    sample.count
   end
 
   def completed_sample_count
-    @completed_sample_count ||= sample.complete.size
+    sample.complete.count
   end
 
   def period
@@ -63,9 +68,16 @@ class Result
 
   def cache_key
     @cache_key ||= begin
-      digest = Digest::MD5.hexdigest(sample.pluck(:id).join)
-      "result/#{klass.name.underscore}/#{digest}/#{updated_at.to_i}"
+      sample_digest, sample_updated_at = begin
+        sample.group('1=1').pluck("encode(digest(string_agg(#{klass.table_name}.id::text, ','), 'md5'), 'hex'), max(#{klass.table_name}.updated_at)")[0]
+      end
+
+      "result/#{klass.name.underscore}/#{sample_digest}/#{sample_updated_at.to_i}"
     end
+  end
+
+  def reset_cache_key
+    @cache_key = nil
   end
 
   def updated_at
@@ -78,6 +90,8 @@ class Result
 
   delegate :empty?, :any?, :count, :size, to: :sample
   delegate :klass, to: :source
+
+  cache_attribute :sample_count, :completed_sample_count, :complete?, :size, :count, :empty?, :any?
 
 
   # date stuff
@@ -102,21 +116,25 @@ class Result
   # stats
 
   def rating
-    sample.select(&:completed?).map(&:rating).mean.round(1)
+    return unless klass.column_names.include? 'rating'
+    
+    sample.complete.average(:rating).try(:round, 1)
   end
+
+  cache_attribute :rating
+
 
   def rating_counts
-    raise NotImplementedError unless klass.column_names.include?('rating')
+    return unless klass.column_names.include? 'rating'
 
-    @rating_counts ||= begin
-      grouped_counts = begin
-        sample.complete.group(:rating).count
-      end
+    grouped_counts = sample.complete.group(:rating).count
 
-      # represent the zero counts
-      Hash[Heartbeat::VALID_RATINGS.map { |r| [r, 0] }].merge(grouped_counts)
-    end
+    # represent the zero counts
+    Hash[Heartbeat::VALID_RATINGS.map { |r| [r, 0] }].merge(grouped_counts)
   end
+
+  cache_attribute :rating_counts
+
 
   def delta
     if previous.present?
@@ -126,50 +144,54 @@ class Result
     end
   end
 
+  cache_attribute :delta
+
+
   def sparklines
-    @sparklines ||= Hash.new do |hash, key|
-      hash[key] = (0..SPARKLINE_MAX_LENGTH).map { |n| previous(n) }.reject(&:nil?).map(&key).reverse
-    end
+    Hash[[:delta, :representation, :volatility, :unity].map { |thing|
+      [thing, (0..SPARKLINE_MAX_LENGTH).map { |n| previous(n) }.reject(&:nil?).map(&thing).reverse]
+    }]
   end
+
+  cache_attribute :sparklines
+
 
   def representation
-    @representation ||= begin
-      sample.complete.count.to_f / sample.count
-    end
+    sample.complete.count.to_f / sample.count
   end
+
+  cache_attribute :representation
+
 
   def volatility
-    raise NotImplementedError unless klass.column_names.include?('rating')
+    return unless klass.column_names.include? 'rating'
 
-    @volatility ||= begin
-      # use data from the current period and the previous period
-      sample_plus_previous_period = sample(start_time: start_time - period)
+    # use data from the current period and the previous period
+    sample_plus_previous_period = sample(start_time: start_time - period)
 
-      # pull out the standard deviation for ratings, by user
-      stddev_ratings = sample_plus_previous_period.select('stddev_samp(rating) as stddev_rating').group('user_id').map(&:stddev_rating)
+    # pull out the standard deviation for ratings, by user
+    stddev_ratings = sample_plus_previous_period.select('stddev_samp(rating) as stddev_rating').group('user_id').map(&:stddev_rating)
 
-      # average the non-nils to get our volatility score
-      stddev_ratings.reject(&:nil?).mean.round(1).to_f rescue 0.0
-    end
+    # average the non-nils to get our volatility score
+    stddev_ratings.reject(&:nil?).mean.round(1).to_f rescue 0.0
   end
+
+  cache_attribute :volatility
+
 
   def unity
-    raise NotImplementedError unless klass.column_names.include?('rating')
+    return unless klass.column_names.include? 'rating'
 
     # unity = 1 - variance(ratings) / variance(max_rating, min_rating)
-    @unity ||= begin
-      maximum_variance = [Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance
+    maximum_variance = [Heartbeat::VALID_RATINGS.min, Heartbeat::VALID_RATINGS.max].variance
 
-      unity_ratings = sample.complete.select("1.0 - var_samp(rating) / #{maximum_variance} as unity").group('users.manager_user_id').map(&:unity)
+    unity_ratings = sample.complete.select("1.0 - var_samp(rating) / #{maximum_variance} as unity").group('users.manager_user_id').map(&:unity)
 
-      # average the non-nils to get our volatility score
-      unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
-    end
+    # average the non-nils to get our volatility score
+    unity_ratings.reject(&:nil?).mean.round(2) rescue 0.0
   end
 
-  def shortest_time_to_completion
-    sample.complete.select('min(completed_at - created_at) as completion_time')[0][:completion_time].try(:gsub, /^(\d+):(\d+):(\d+)\..*$/, '\1h \2m \3s')
-  end
+  cache_attribute :unity
 
 
   # comments
@@ -190,6 +212,8 @@ class Result
   # pagination, sort of
 
   def previous n = 1
+    return self if n == 0
+
     @previous_results ||= Hash.new do |hash, key|
       hash[key] = self.class.new(source: source, period: period, start_date: start_date - (key * period).seconds)
     end
@@ -198,6 +222,8 @@ class Result
   end
 
   def next n = 1
+    return self if n == 0
+
     @next_results ||= Hash.new do |hash, key|
       hash[key] = self.class.new(source: source, period: period, start_date: start_date + (key * period).seconds)
     end

@@ -86,17 +86,18 @@ describe Result do
       describe '#complete?' do
         it 'should hinge at 50% on #representation' do
           subject.stub(:representation) { 0.2 }
-          subject.should_not be_complete
+          subject.should_not be_complete_without_cache
 
           subject.stub(:representation) { 0.51 }
-          subject.should be_complete
+          subject.should be_complete_without_cache
         end
       end
 
       [:empty?, :any?, :count, :size].each do |method_name|
         describe "##{method_name}" do
           it "should be sample.#{method_name}" do
-            subject.stub(:sample) { double(method_name => 'foobar') }
+            binding.pry
+            subject.sample.should_receive(method_name) { 'foobar' }
             subject.send(method_name).should == 'foobar'
           end
         end
@@ -152,7 +153,6 @@ describe Result do
       # these... I don't know how to test these.
       it { should respond_to :volatility }
       it { should respond_to :unity }
-      it { should respond_to :shortest_time_to_completion }
 
       describe '#comments' do
         it 'should be an array of Comments, sourced from the sample, sorted by the rating' do
