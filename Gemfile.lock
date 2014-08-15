@@ -279,7 +279,6 @@ DEPENDENCIES
   database_cleaner
   descriptive_statistics
   devise
-  dotenv-deployment
   dotenv-rails
   factory_girl_rails
   faker
