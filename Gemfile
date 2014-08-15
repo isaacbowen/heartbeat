@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.1'
+ruby '2.1.2'
 
 gem 'rails', '4.1.1'
 gem 'pg'
@@ -28,6 +28,9 @@ gem 'descriptive_statistics', require: false
 
 gem 'newrelic_rpm'
 
+gem 'dotenv-rails'
+gem 'dotenv-deployment'
+
 group :development do
   gem 'annotate'
   
@@ -42,7 +45,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rspec-rails'
   gem 'shoulda'
   gem 'factory_girl_rails'
