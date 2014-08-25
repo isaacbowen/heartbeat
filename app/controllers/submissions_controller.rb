@@ -9,7 +9,7 @@ class SubmissionsController < ApplicationController
     if submission
       redirect_to submission
     else
-      redirect_to :root
+      redirect_to :login
     end
   end
 
@@ -46,11 +46,11 @@ class SubmissionsController < ApplicationController
   protected
 
   def current_user
-    super || current_submission.user
+    super || current_submission.try(:user)
   end
 
   def current_submission
-    Submission.find params[:id]
+    Submission.find params[:id] if params[:id].present?
   end
 
   def submission_params
