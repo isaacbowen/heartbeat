@@ -9,6 +9,11 @@
       = f.check_box :active
       Active
 
+  .checkbox
+    = f.label :admin do
+      = f.check_box :admin
+      Admin
+
   .form-group
     = f.label :manager
     = f.select :manager_user_id, User.all.order(:email).collect { |u| [u.email, u.id] }, {include_blank: '(none)'}, {class: 'form-control'}

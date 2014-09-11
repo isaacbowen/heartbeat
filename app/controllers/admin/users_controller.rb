@@ -47,7 +47,7 @@ class Admin::UsersController < Admin::BaseController
   protected
 
   def user_params
-    params.require(:user).permit(:name, :manager_user_id, :tags_as_string, :active, report_ids: [])
+    params.require(:user).permit(:name, :manager_user_id, :tags_as_string, :active, :admin, report_ids: [])
   end
 
 end
