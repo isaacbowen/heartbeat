@@ -4,6 +4,10 @@
   %fieldset
     %legend #{@user.name} (#{@user.email})
 
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+
   .checkbox
     = f.label :active do
       = f.check_box :active
