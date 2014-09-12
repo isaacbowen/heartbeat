@@ -1,7 +1,7 @@
 class Result
   include ActiveModel::Model
 
-  MINIMUM_REPRESENTATION = 0.5 # %
+  MINIMUM_REPRESENTATION = 0.33 # %
   MINIMUM_SIZE = 2
   DEFAULT_MODE = :live
   SPARKLINE_MAX_LENGTH = 12
