@@ -11,7 +11,7 @@ feature 'Viewing results' do
     # for later
     Timecop.travel(Time.now.at_beginning_of_week-1.week+3.days) do
       create_list :submission, 10
-      create_list :completed_submission, 5
+      create_list :completed_submission, 3
     end
   end
 
